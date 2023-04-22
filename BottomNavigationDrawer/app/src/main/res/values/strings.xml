@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BottomNavigationDrawer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="call_fragment">Call fragment</string>
+    <string name="home_fragment">home_fragment</string>
+    <string name="chat_fragment">chat_fragment</string>
+    <string name="status_fragment">status_fragment</string>
+    <string name="open" />
+    <string name="close" />
+</resources>

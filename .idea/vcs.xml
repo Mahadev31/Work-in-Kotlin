@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Bill" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/InstaGramProject" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/MyResumeCreator" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ShayriApp" vcs="Git" />
+  </component>
+</project>
