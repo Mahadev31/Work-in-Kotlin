@@ -31,13 +31,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(i)
         }
         val ConnectionManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
         val networkInfo = ConnectionManager.activeNetworkInfo
 
         if (networkInfo != null && networkInfo.isConnected) {
-
             Toast.makeText(this@MainActivity, "Connection is available", Toast.LENGTH_LONG).show()
-            apiInterface = APIClient.getClient().create(APIInterface::class.java)
+
 
             apiInterface.getAllProducts().enqueue(object : Callback<AllProductsResponse<Any?>> {
                 override fun onResponse(
@@ -45,10 +43,6 @@ class MainActivity : AppCompatActivity() {
                     response: Response<AllProductsResponse<Any?>>
                 ) {
                     var productList = response.body()?.products
-
-//               for (i in 0 until list.size){
-//                   Log.e("TAG", "onResponse: "+list[i].title )
-//               }
                     var adapterClass = ProductsAdapterClass(this@MainActivity, productList)
                     {
                         var i = Intent(this@MainActivity, ItemDisplayActivity::class.java)
@@ -65,9 +59,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         } else {
-
             Toast.makeText(this@MainActivity, "Please Check Your Internet Connection  ", Toast.LENGTH_LONG).show()
-
         }
 
 
