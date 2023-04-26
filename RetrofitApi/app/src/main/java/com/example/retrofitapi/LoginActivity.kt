@@ -1,13 +1,18 @@
 package com.example.retrofitapi
 
+import android.app.Dialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import android.view.View
+import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.retrofitapi.databinding.ActivityLoginBinding
+import com.example.retrofitapi.databinding.ProgressBarBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var loginBinding: ActivityLoginBinding
 
+    //    lateinit var dialog: Dialog
     lateinit var apiInterface: APIInterface
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,11 +29,38 @@ class LoginActivity : AppCompatActivity() {
         setContentView(loginBinding.root)
         apiInterface = APIClient.getClient().create(APIInterface::class.java)
 
+
         initView()
     }
 
     private fun initView() {
+
+
+        var sharedPreferences = getSharedPreferences("MySharePref", MODE_PRIVATE)
+        if (sharedPreferences.getBoolean("isLogin", false) == true) {
+            var intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+//            loginBinding.chkRemember.setChecked(true)
+            finish()
+        }
+        if (loginBinding.chkRemember.isChecked){
+            loginBinding.edtUsername.text = sharedPreferences.getString("userName")
+        }
+
         loginBinding.btnLogin.setOnClickListener {
+
+            var dialog = Dialog(this)
+            var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
+            dialog.setContentView(progressBarBinding.root)
+
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.setLayout(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            dialog.show()
+
+
             var username = loginBinding.edtUsername.text.toString()
             var password = loginBinding.edtPassword.text.toString()
 
@@ -53,35 +86,47 @@ class LoginActivity : AppCompatActivity() {
                             var token = response.body()?.token
 
                             Log.e("TAG", "onResponse: " + userNameD + " " + email)
-                            Handler().postDelayed(Runnable {
-                                var i = Intent(this@LoginActivity, ProfileActivity::class.java)
-                                i.putExtra("id", id)
-                                i.putExtra("userName", userNameD)
-                                i.putExtra("email", email)
-                                i.putExtra("firstName", firstName)
-                                i.putExtra("lastName", lastName)
-                                i.putExtra("gender", gender)
-                                i.putExtra("image", image)
-                                i.putExtra("token", token)
 
-                                // visible the progress bar
-                                loginBinding.prProcess.visibility = View.VISIBLE
-                                startActivity(i)
-                                Toast.makeText(
-                                    this@LoginActivity,
-                                    "login success",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                            var i = Intent(this@LoginActivity, MainActivity::class.java)
 
 
+                            var myEdit: SharedPreferences.Editor = sharedPreferences.edit()
+                            myEdit.putBoolean("isLogin", true)
+                            myEdit.putString("userName", userNameD)
+                            myEdit.putString("email", email)
+                            myEdit.putString("firstName", firstName)
+                            myEdit.putString("lastName", lastName)
+                            myEdit.putString("gender", gender)
+                            myEdit.putString("image", image)
+                            myEdit.putString("token", token)
+                            myEdit.commit()
 
-                            }, 2000)
+
+                            startActivity(i)
+                            finish()
+
+                            if (loginBinding.chkRemember.isChecked) {
+                                myEdit.putBoolean("isLogin", true)
+                                myEdit.putString("userName", username)
+                                myEdit.putString("password", password)
+                                myEdit.commit()
+                                Toast.makeText(this@LoginActivity, "remember add", Toast.LENGTH_SHORT).show()
+                            }
+                            dialog.dismiss()
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "login success",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+
                         } else {
                             Toast.makeText(
                                 this@LoginActivity,
                                 "username and password is incorrect",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            dialog.dismiss()
                         }
                     }
 
@@ -90,13 +135,13 @@ class LoginActivity : AppCompatActivity() {
                     }
                 })
 
+
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        // visible the progress bar
-        loginBinding.prProcess.visibility = View.GONE
+//      dialog.dismiss()
     }
 }
