@@ -1,4 +1,4 @@
-package com.example.retrofitapi
+package com.example.retrofitapi.activity
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.example.retrofitapi.R
 import com.example.retrofitapi.databinding.ActivityProfileBinding
 
 
@@ -22,12 +23,14 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun initView() {
         var sharedPreferences = getSharedPreferences("MySharePref", MODE_PRIVATE)
+
         profileBinding.btnLogout.setOnClickListener {
             var myEdit: SharedPreferences.Editor = sharedPreferences.edit()
             myEdit.remove("isLogin")
             myEdit.commit()
-            var intent=Intent(this,LoginActivity::class.java)
+            var intent=Intent(this, LoginActivity::class.java)
             startActivity(intent)
+
             Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show()
         }
         profileBinding.imgBackP.setOnClickListener {

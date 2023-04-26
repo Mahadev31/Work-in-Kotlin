@@ -1,10 +1,12 @@
-package com.example.retrofitapi
+package com.example.retrofitapi.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.retrofitapi.ProductsItem
+import com.example.retrofitapi.R
 import com.example.retrofitapi.databinding.RcvProductsListBinding
 
 class ProductsAdapterClass(

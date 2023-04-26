@@ -1,7 +1,10 @@
-package com.example.retrofitapi
+package com.example.retrofitapi.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.retrofitapi.*
+import com.example.retrofitapi.APIClient
+import com.example.retrofitapi.adapter.ItemProductsAdapter
 import com.example.retrofitapi.databinding.ActivityItemDisplayBinding
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import retrofit2.Call

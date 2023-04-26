@@ -1,4 +1,4 @@
-package com.example.retrofitapi
+package com.example.retrofitapi.activity
 
 import android.app.Dialog
 import android.content.Intent
@@ -6,11 +6,13 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.retrofitapi.APIClient
+import com.example.retrofitapi.APIInterface
+import com.example.retrofitapi.LoginResponse
 import com.example.retrofitapi.databinding.ActivityLoginBinding
 import com.example.retrofitapi.databinding.ProgressBarBinding
 import retrofit2.Call
@@ -44,7 +46,8 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
         if (loginBinding.chkRemember.isChecked){
-            loginBinding.edtUsername.text = sharedPreferences.getString("userName")
+            loginBinding.edtUsername.setText(sharedPreferences.getString("userName",""))
+            loginBinding.edtPassword.setText(sharedPreferences.getString("password",""))
         }
 
         loginBinding.btnLogin.setOnClickListener {
@@ -107,6 +110,7 @@ class LoginActivity : AppCompatActivity() {
 
                             if (loginBinding.chkRemember.isChecked) {
                                 myEdit.putBoolean("isLogin", true)
+                                myEdit.putBoolean("remember", true)
                                 myEdit.putString("userName", username)
                                 myEdit.putString("password", password)
                                 myEdit.commit()

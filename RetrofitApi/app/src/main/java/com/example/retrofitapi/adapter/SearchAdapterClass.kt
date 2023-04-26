@@ -1,15 +1,17 @@
-package com.example.retrofitapi
+package com.example.retrofitapi.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.retrofitapi.ProductsItem
+import com.example.retrofitapi.R
 import com.example.retrofitapi.databinding.RcvSearchListBinding
 
 class SearchAdapterClass(
     var context: Context,
-   var searchList: ArrayList<ProductsItem>?,
+    var searchList: ArrayList<ProductsItem>?,
 //    var click: (ProductsItem) -> Unit
 ) :
     RecyclerView.Adapter<SearchAdapterClass.MyViewHolder>() {

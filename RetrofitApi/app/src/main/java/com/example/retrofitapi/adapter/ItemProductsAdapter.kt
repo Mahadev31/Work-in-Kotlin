@@ -1,4 +1,4 @@
-package com.example.retrofitapi
+package com.example.retrofitapi.adapter
 
 import android.content.Context
 import android.util.Log
@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
+import com.example.retrofitapi.R
 import java.util.*
 import kotlin.collections.ArrayList
 

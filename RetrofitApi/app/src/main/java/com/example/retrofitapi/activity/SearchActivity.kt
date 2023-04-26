@@ -1,9 +1,12 @@
-package com.example.retrofitapi
+package com.example.retrofitapi.activity
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.retrofitapi.*
+import com.example.retrofitapi.APIClient
+import com.example.retrofitapi.adapter.SearchAdapterClass
 import com.example.retrofitapi.databinding.ActivitySearchBinding
 import retrofit2.Call
 import retrofit2.Callback

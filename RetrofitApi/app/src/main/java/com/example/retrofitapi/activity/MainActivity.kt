@@ -1,4 +1,4 @@
-package com.example.retrofitapi
+package com.example.retrofitapi.activity
 
 import android.content.Context
 import android.content.Intent
@@ -11,6 +11,9 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.retrofitapi.*
+import com.example.retrofitapi.APIClient
+import com.example.retrofitapi.adapter.ProductsAdapterClass
 import com.example.retrofitapi.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback

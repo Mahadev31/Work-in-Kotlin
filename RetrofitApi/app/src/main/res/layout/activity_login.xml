@@ -7,7 +7,7 @@
     android:background="#BAE5F8"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".activity.LoginActivity">
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
