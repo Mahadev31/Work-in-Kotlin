@@ -23,7 +23,7 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var loginBinding: ActivityLoginBinding
 
-    //    lateinit var dialog: Dialog
+
     lateinit var apiInterface: APIInterface
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
