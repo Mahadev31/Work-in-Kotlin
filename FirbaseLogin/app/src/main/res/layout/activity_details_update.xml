@@ -4,69 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BAE5F8"
-    android:gravity="center_horizontal"
+    android:background="#E5DDF4"
     android:orientation="vertical"
-    tools:context=".HomeScreenActivity">
-
+    tools:context=".DetailsUpdateActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#19ACED">
+        android:background="#C1A7EF">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_arrow_back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Add Details "
+            android:text="Edit Details "
             android:textSize="@dimen/_20ssp"
             android:textStyle="bold" />
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:layout_gravity="end"
-            android:layout_marginHorizontal="@dimen/_20sdp"
-            android:id="@+id/btnGoogleLogout"/>
     </androidx.appcompat.widget.Toolbar>
 
-
-    <ImageView
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_100sdp"
-        android:layout_margin="@dimen/_10sdp"
-        android:src="@drawable/ic_image"
-        android:layout_gravity="center"
-        android:id="@+id/imgShow"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="wrap_content">
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Select image"
-            android:layout_margin="@dimen/_10sdp"
-            android:id="@+id/btnSelectImage"/>
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upload image"
-            android:layout_margin="@dimen/_10sdp"
-            android:id="@+id/btnUploadImage"/>
-
-    </LinearLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/_40sdp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="10dp"
+        android:layout_marginBottom="10dp"
         android:hint="Enter Name"
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtName"
+            android:id="@+id/edtNameUpdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
@@ -83,7 +55,7 @@
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtEmail"
+            android:id="@+id/edtEmailUpdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
@@ -100,7 +72,7 @@
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtMobile"
+            android:id="@+id/edtMobileUpdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
@@ -117,34 +89,22 @@
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtAddress"
+            android:id="@+id/edtAddressUpdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnInsertRecord"
+            android:id="@+id/btnUpdateRecord"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#0676A8"
+            android:layout_gravity="center"
+            android:background="#5B2EAA"
             android:textColor="@color/white"
             android:paddingHorizontal="@dimen/_10sdp"
-            android:layout_margin="10dp"
-            android:text="Insert Record" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnDisplayRecord"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="Display Record" />
-    </LinearLayout>
-
+            android:text="Update Record" />
 </LinearLayout>
