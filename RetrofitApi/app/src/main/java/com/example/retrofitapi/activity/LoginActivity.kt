@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.widget.CompoundButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,7 +24,7 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var loginBinding: ActivityLoginBinding
 
-
+    private var isLogin: Boolean? = null
     lateinit var apiInterface: APIInterface
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +82,7 @@ class LoginActivity : AppCompatActivity() {
                         if (response.isSuccessful) {
                             var id = response.body()?.id
                             var userNameD = response.body()?.username
+                            var passwordD = response.body()?.username
                             var email = response.body()?.email
                             var firstName = response.body()?.firstName
                             var lastName = response.body()?.lastName
@@ -96,6 +98,7 @@ class LoginActivity : AppCompatActivity() {
                             var myEdit: SharedPreferences.Editor = sharedPreferences.edit()
                             myEdit.putBoolean("isLogin", true)
                             myEdit.putString("userName", userNameD)
+                            myEdit.putString("passwordD", passwordD)
                             myEdit.putString("email", email)
                             myEdit.putString("firstName", firstName)
                             myEdit.putString("lastName", lastName)
@@ -108,14 +111,14 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(i)
                             finish()
 
-                            if (loginBinding.chkRemember.isChecked) {
-                                myEdit.putBoolean("isLogin", true)
-                                myEdit.putBoolean("remember", true)
-                                myEdit.putString("userName", username)
-                                myEdit.putString("password", password)
-                                myEdit.commit()
-                                Toast.makeText(this@LoginActivity, "remember add", Toast.LENGTH_SHORT).show()
+                            isLogin = sharedPreferences.getBoolean("isLogin", false);
+                            if (isLogin == true) {
+                              loginBinding.edtUsername  .setText(sharedPreferences.getString("username", ""));
+                                loginBinding.edtPassword.setText(sharedPreferences.getString("passwordD", ""));
+                                loginBinding.chkRemember.setChecked(true);
                             }
+                                Toast.makeText(this@LoginActivity, "remember add", Toast.LENGTH_SHORT).show()
+
                             dialog.dismiss()
                             Toast.makeText(
                                 this@LoginActivity,
