@@ -1,4 +1,4 @@
-package com.example.firbaselogin
+package com.example.firbaselogin.activity
 
 import android.app.Dialog
 import android.app.ProgressDialog
@@ -13,6 +13,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
+import com.example.firbaselogin.StudentModelClass
 import com.example.firbaselogin.databinding.ActivityHomeScreenBinding
 import com.example.firbaselogin.databinding.SelecteImageDialogBinding
 import com.facebook.login.LoginManager
@@ -40,7 +41,7 @@ class HomeScreenActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     var studentList: ArrayList<StudentModelClass> = ArrayList()
 
-    lateinit var image:String
+     var image:String=""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         homeScreenBinding=ActivityHomeScreenBinding.inflate(layoutInflater)
@@ -101,10 +102,7 @@ class HomeScreenActivity : AppCompatActivity() {
 
             uploadImage()
         }
-
         homeScreenBinding.btnInsertRecord.setOnClickListener {
-
-
 
             var name = homeScreenBinding.edtName.text.toString()
             var email = homeScreenBinding.edtEmail.text.toString()
@@ -112,6 +110,7 @@ class HomeScreenActivity : AppCompatActivity() {
             var address = homeScreenBinding.edtAddress.text.toString()
             var key = firebaseDatabase.reference.child("StudentTb").push().key ?: ""
             var data = StudentModelClass(key, name, email, mobile, address,image)
+            Log.e("TAG", "initView:Model "+image )
 
             if (name.isEmpty()) {
                 Toast.makeText(this, "please Enter Name", Toast.LENGTH_SHORT).show()
@@ -135,9 +134,7 @@ class HomeScreenActivity : AppCompatActivity() {
                 homeScreenBinding.edtMobile.setText("").toString()
                 homeScreenBinding.edtAddress.setText("").toString()
 
-
             }
-
 
         }
         homeScreenBinding.btnDisplayRecord.setOnClickListener {
@@ -154,40 +151,6 @@ class HomeScreenActivity : AppCompatActivity() {
 
 
     private fun selectImage() {
-
-
-        var selectDialog = Dialog(this)
-
-        var dialogBinding= SelecteImageDialogBinding.inflate(layoutInflater)
-        selectDialog.setContentView(dialogBinding.root)
-
-        dialogBinding.linCancel.setOnClickListener {
-            selectDialog.dismiss()
-            Toast.makeText(this, "Cansel", Toast.LENGTH_SHORT).show()
-        }
-        dialogBinding.imgGallery.setOnClickListener {
-            galleryView()
-            selectDialog.dismiss()
-        }
-        dialogBinding.imgCamera.setOnClickListener {
-            cameraView()
-            selectDialog.dismiss()
-        }
-
-        selectDialog. window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        selectDialog.window?.setBackgroundDrawable( ColorDrawable(Color.TRANSPARENT))
-        selectDialog.show()
-
-
-    }
-
-    private fun cameraView() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(cameraIntent, CAMERA_REQUEST)
-    }
-
-    private fun galleryView() {
-
         // Defining Implicit Intent to mobile gallery
         val intent = Intent()
         intent.type = "image/*"
@@ -204,10 +167,7 @@ class HomeScreenActivity : AppCompatActivity() {
             filePath = data?.data!!
             homeScreenBinding.imgShow.setImageURI(filePath)
         }
-        if (requestCode === CAMERA_REQUEST && resultCode === RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            homeScreenBinding.imgShow.setImageBitmap(imageBitmap)
-        }
+
     }
 
 

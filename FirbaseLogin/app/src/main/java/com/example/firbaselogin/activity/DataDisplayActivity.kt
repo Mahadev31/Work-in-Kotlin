@@ -1,4 +1,4 @@
-package com.example.firbaselogin
+package com.example.firbaselogin.activity
 
 import android.app.Dialog
 import android.content.Intent
@@ -10,6 +10,8 @@ import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.firbaselogin.AdapterClass
+import com.example.firbaselogin.StudentModelClass
 import com.example.firbaselogin.databinding.ActivityDataDisplayBinding
 import com.example.firbaselogin.databinding.DeleteDialogBinding
 import com.google.firebase.database.DataSnapshot
@@ -67,8 +69,9 @@ class DataDisplayActivity : AppCompatActivity() {
             editIntent.putExtra("mobile", it.mobile)
             editIntent.putExtra("address", it.address)
             startActivity(editIntent)
-        }, {
+        }, {it,image->
             id = it
+            image
             deleteRecordFromDatabase()
 
         })
@@ -90,7 +93,7 @@ class DataDisplayActivity : AppCompatActivity() {
             Toast.makeText(this, "Cansel", Toast.LENGTH_SHORT).show()
         }
         dialogBinding.btnDelete.setOnClickListener {
-            firebaseDatabase.reference.child("StudentTb").child(id).removeValue()
+            firebaseDatabase.reference.child("StudentTb").child(id,).removeValue()
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         Toast.makeText(this, "Record Deleted Successfully", Toast.LENGTH_SHORT).show()

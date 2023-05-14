@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 
 class AdapterClass(var context: Context,
     var onEditClick: (StudentModelClass) -> Unit,
-    var onDeleteClick: (String) -> Unit
+    var onDeleteClick: (String,String) -> Unit
 ) : RecyclerView.Adapter<AdapterClass.MyViewHolder>() {
     private var list = ArrayList<StudentModelClass>()
 
@@ -46,14 +46,14 @@ class AdapterClass(var context: Context,
             txtMobileDisplay.text = list[position].mobile
             txtAddressDisplay.text = list[position].address
 
-            Glide.with(context).load(list[position].image).into(imgDp)
+            Glide.with(context).load(list[position].image).placeholder(R.drawable.ic_image).into(imgDp)
 
             imgEdit.setOnClickListener {
                 onEditClick.invoke(list[position])
 
             }
             imgDelete.setOnClickListener {
-                onDeleteClick.invoke(list[position].id)
+                onDeleteClick.invoke(list[position].id,list[position].image)
 
             }
         }

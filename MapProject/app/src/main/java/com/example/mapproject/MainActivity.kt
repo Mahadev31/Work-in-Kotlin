@@ -26,5 +26,9 @@ class MainActivity : AppCompatActivity() {
             var search=Intent(this,SearchMapsActivity::class.java)
             startActivity(search)
         }
+        mainBinding.btnDrawingRoute.setOnClickListener{
+            var route=Intent(this,RouteMapsActivity::class.java)
+            startActivity(route)
+        }
     }
 }

@@ -14,15 +14,21 @@
         android:theme="@style/Theme.FirbaseLogin"
         tools:targetApi="31">
         <activity
-            android:name=".HomeScreenActivity"
+            android:name=".activity.DetailsUpdateActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateAccountActivity"
+            android:name=".activity.DataDisplayActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.HomeScreenActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.CreateAccountActivity"
             android:exported="true" >
 
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

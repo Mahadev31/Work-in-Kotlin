@@ -1,10 +1,11 @@
-package com.example.firbaselogin
+package com.example.firbaselogin.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import com.example.firbaselogin.StudentModelClass
 import com.example.firbaselogin.databinding.ActivityDetailsUpdateBinding
 import com.google.firebase.database.FirebaseDatabase
 

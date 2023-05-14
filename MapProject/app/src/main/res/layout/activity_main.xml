@@ -30,4 +30,13 @@
         android:layout_margin="@dimen/_10sdp"
         android:text="Address  Search"
         android:textStyle="bold" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDrawingRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:text="Drawing Route"
+        android:textStyle="bold" />
 </LinearLayout>

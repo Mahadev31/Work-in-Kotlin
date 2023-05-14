@@ -25,7 +25,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     var longitude: Double = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -41,15 +40,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         binding.btnSearch.setOnClickListener {
         mMap = googleMap
@@ -74,7 +64,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             val postalCode = addresses!![0].postalCode
             val knownName = addresses!![0].featureName
 
-            mMap.addMarker(MarkerOptions().position(sydney).title(address))
+              mMap.addMarker(MarkerOptions().position(sydney).title(address))
             mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
             val zoomLevel = 13.0f //This goes up to 21

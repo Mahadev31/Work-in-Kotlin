@@ -3,6 +3,7 @@ package com.example.mapproject
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -10,6 +11,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import java.io.IOException
 
@@ -20,6 +22,8 @@ class SearchMapsActivity : FragmentActivity(), OnMapReadyCallback {
     // creating a variable
     // for search view.
     lateinit var searchView: SearchView
+
+    var addedMarker: Marker? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_maps)
@@ -37,12 +41,13 @@ class SearchMapsActivity : FragmentActivity(), OnMapReadyCallback {
         // when the map is ready to be used.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
 
+
         // adding on query listener for our search view.
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(/* listener = */ object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 // on below line we are getting the
                 // location name from search view.
-                val location = searchView.getQuery().toString()
+                val location = searchView.query.toString()
 
                 // below line is to create a list of address
                 // where we will store the list of all address.
@@ -67,24 +72,43 @@ class SearchMapsActivity : FragmentActivity(), OnMapReadyCallback {
                     // where we will add our locations latitude and longitude.
                     val latLng = LatLng(address.latitude, address.longitude)
 
+                    Log.e(
+                        "TAG",
+                        "latitude:-  " + address.latitude + " " + "longitude:- " + address.longitude
+                    )
+
+
                     // on below line we are adding marker to that position.
-                    mMap!!.addMarker(MarkerOptions().position(latLng).title(location))
+                    addedMarker = mMap.addMarker(MarkerOptions().position(latLng).title(location))!!
 
                     // below line is to animate camera to that position.
-                    mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13f))
+
+
                 }
+
                 return false
+
             }
 
+
             override fun onQueryTextChange(newText: String): Boolean {
+                addedMarker?.remove()
                 return false
+
             }
+
         })
+
         // at last we calling our map fragment to update.
         mapFragment!!.getMapAsync(this)
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+
+
         mMap = googleMap
+
     }
 }

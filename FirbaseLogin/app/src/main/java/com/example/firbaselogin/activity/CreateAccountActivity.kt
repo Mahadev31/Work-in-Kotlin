@@ -1,4 +1,4 @@
-package com.example.firbaselogin
+package com.example.firbaselogin.activity
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -74,7 +74,7 @@ class CreateAccountActivity : AppCompatActivity() {
 
 
         createAccountBinding.txtLoginPage.setOnClickListener {
-            var i= Intent(this,MainActivity::class.java)
+            var i= Intent(this, MainActivity::class.java)
             startActivity(i)
         }
     }

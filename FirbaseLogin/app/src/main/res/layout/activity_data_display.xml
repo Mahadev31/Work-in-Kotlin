@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".DataDisplayActivity">
+    android:background="#BAE5F8"
+    tools:context=".activity.DataDisplayActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#C1A7EF">
+        android:background="#19ACED">
 
         <ImageView
             android:id="@+id/imgBack"
