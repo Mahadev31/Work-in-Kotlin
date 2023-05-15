@@ -44,11 +44,11 @@ class MainActivity : AppCompatActivity() {
     private fun initView() {
 //
         var sharedPreferences = getSharedPreferences("MySharePref", MODE_PRIVATE)
-//        if (sharedPreferences.getBoolean("isLogin", false) == true) {
-//            var intent = Intent(this, HomeScreenActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
+        if (sharedPreferences.getBoolean("isLogin", false) == true) {
+            var intent = Intent(this, HomeScreenActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 // Initialize Firebase Auth
         auth = Firebase.auth
         mainBinding.btnLogin.setOnClickListener {

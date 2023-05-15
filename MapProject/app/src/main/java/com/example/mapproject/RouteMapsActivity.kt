@@ -5,10 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.location.Address
 import android.location.Geocoder
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
