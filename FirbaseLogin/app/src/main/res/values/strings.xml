@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FirbaseLogin</string>
 
-    <string name="facebook_app_id">262988939522263</string>
+    <string name="facebook_app_id">634770431440322</string>
     <string name="fb_login_protocol_scheme">fb1234</string>
-    <string name="facebook_client_token">126003bb98eab1a7d82b8a52c668862c</string>
+    <string name="facebook_client_token">34cf04ce7d5f13437ce52e1bc45d1ce3</string>
 </resources>

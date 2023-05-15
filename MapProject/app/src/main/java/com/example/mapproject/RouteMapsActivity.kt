@@ -261,7 +261,7 @@ class RouteMapsActivity : FragmentActivity(), OnMapReadyCallback {
                                 this,
                                 directionPositionList,
                                 4,
-                                ContextCompat.getColor(this, R.color.purple_200)
+                                ContextCompat.getColor(this, R.color.Blue)
                             )
                         )
                         setCameraWithCoordinationBounds(route)
