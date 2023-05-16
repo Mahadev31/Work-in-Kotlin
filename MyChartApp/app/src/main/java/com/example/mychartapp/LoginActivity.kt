@@ -24,7 +24,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-
+        var sharedPreferences = getSharedPreferences("MySharePref", MODE_PRIVATE)
+        if (sharedPreferences.getBoolean("isLogin", false) == true) {
+            var intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
         loginBinding.txtCreateAccountPage.setOnClickListener {
             var i=Intent(this, CreateAccountActivity::class.java)
             startActivity(i)
@@ -46,6 +51,13 @@ class LoginActivity : AppCompatActivity() {
                     if (it.isSuccessful) {
                         Toast.makeText(this, "login success", Toast.LENGTH_SHORT).show()
                         var i = Intent(this, MainActivity::class.java)
+
+                        var myEdit: SharedPreferences.Editor = sharedPreferences.edit()
+                        myEdit.putBoolean("isLogin", true)
+                        myEdit.putString("email", email)
+//                        myEdit.putString("firstName", it.firstName)
+//            myEdit.putString("lastName", lastName)
+                        myEdit.commit()
                         finish()
                         startActivity(i)
 

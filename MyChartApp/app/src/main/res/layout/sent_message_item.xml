@@ -3,17 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/txtMessageSend"
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/_10sdp"
+        app:cardBackgroundColor="#59C1F4"
+        android:layout_margin="@dimen/_2sdp"
         android:layout_gravity="end"
-        android:layout_marginHorizontal="@dimen/_20sdp"
-        android:layout_marginVertical="@dimen/_5sdp"
-        android:textSize="@dimen/_15ssp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        tools:text="Hello" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/txtMessageSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginVertical="@dimen/_5sdp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold"
+            tools:text="Hello" />
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

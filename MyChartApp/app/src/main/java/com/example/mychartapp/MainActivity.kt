@@ -1,6 +1,7 @@
 package com.example.mychartapp
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -77,6 +78,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId  == R.id.logout){
+            var sharedPreferences = getSharedPreferences("MySharePref", MODE_PRIVATE)
+            var myEdit: SharedPreferences.Editor = sharedPreferences.edit()
+            myEdit.remove("isLogin")
+            myEdit.commit()
             mAuth.signOut()
             finish()
         return true

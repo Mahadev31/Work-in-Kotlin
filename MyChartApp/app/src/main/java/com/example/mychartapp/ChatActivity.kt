@@ -38,7 +38,8 @@ class ChatActivity : AppCompatActivity() {
         senderRoom = receiverUid + senderUid
         receiverRoom = senderUid + receiverUid
 
-        supportActionBar?.title = name
+
+        chatBinding.txtUserName.text=name
 
         messageList = ArrayList()
         adapter = MessageAdapterClass(this, messageList)
@@ -66,7 +67,7 @@ class ChatActivity : AppCompatActivity() {
             })
 
         //adding the message for database
-        chatBinding.btnSend.setOnClickListener {
+        chatBinding.imgSend.setOnClickListener {
             var message = chatBinding.edtMessageBox.text.toString()
             var messageObject = MessageModelClass(message, senderUid)
 
