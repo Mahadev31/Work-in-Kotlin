@@ -7,14 +7,59 @@
     android:background="#BAE5F8"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".activity.MainActivity">
+    tools:context=".activity.CreateAccountActivity">
 
     <ImageView
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
         android:layout_marginTop="@dimen/_100sdp"
         android:src="@drawable/user" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_30sdp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:hint="First Name"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/colorPrimaryDark"
+        app:shapeAppearance="@style/Rounded">
 
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtFirstC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginEnd="@dimen/_30sdp"
+        android:layout_marginStart="10dp"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:hint="Last Name"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/colorPrimaryDark"
+        app:shapeAppearance="@style/Rounded">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtLastNameC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
@@ -27,7 +72,7 @@
         app:shapeAppearance="@style/Rounded">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtEmail"
+            android:id="@+id/edtEmailC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionNext"
@@ -47,7 +92,7 @@
         app:shapeAppearance="@style/Rounded">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtPassword"
+            android:id="@+id/edtPasswordC"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
@@ -55,36 +100,13 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <CheckBox
-        android:id="@+id/chkRemember"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="@dimen/_30sdp"
-        android:text="Remember me"
-        android:textStyle="bold" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnCreateAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/_10sdp"
-        android:text="Login" />
-
-
-<!--    <com.google.android.gms.common.SignInButton-->
-<!--        android:id="@+id/btnGoogleLogin"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="@dimen/_20sdp" />-->
-
-<!--    <com.facebook.login.widget.LoginButton-->
-<!--        android:id="@+id/btnLogin_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="center_horizontal"-->
-<!--        android:layout_marginTop="30dp"-->
-<!--        android:layout_marginBottom="30dp" />-->
+        android:text="Create Account" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -94,13 +116,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Don't have an account?" />
+            android:text="Already have a account?" />
 
         <TextView
-            android:id="@+id/txtCreateAccountPage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="  Create Account "
+            android:text="  Login "
+            android:id="@+id/txtLoginPage"
             android:textColor="@color/black"
             android:textStyle="bold" />
     </LinearLayout>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "339443775027",
+    "project_id": "mychartapp-8bc08",
+    "storage_bucket": "mychartapp-8bc08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:339443775027:android:1dce6eacf958e2d6109546",
+        "android_client_info": {
+          "package_name": "com.example.mychartapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "339443775027-upqkvoujovb852tcpdh05f1squh9dfba.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mychartapp",
+            "certificate_hash": "16283ac3a486db88d6e68ba358f89e327fb23b3c"
+          }
+        },
+        {
+          "client_id": "339443775027-vvlpm2ilu5ij1e5ems8cnk1fafbgnsd1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW4rpuE7-l5gyhpFriQuYXVcR6ARDSQ0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "339443775027-vvlpm2ilu5ij1e5ems8cnk1fafbgnsd1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
