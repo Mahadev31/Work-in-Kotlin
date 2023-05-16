@@ -28,7 +28,9 @@ class ChatActivity : AppCompatActivity() {
 
     private fun initView() {
 
-
+chatBinding.imgBack.setOnClickListener{
+    onBackPressed()
+}
         var name = intent.getStringExtra("name")
         var receiverUid = intent.getStringExtra("uid")
 

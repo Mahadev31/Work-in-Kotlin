@@ -2,6 +2,7 @@ package com.example.mychartapp
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -37,7 +38,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun initView() {
 
-
+        setSupportActionBar(mainBinding.toolbarMain)
+        mainBinding.toolbarMain.overflowIcon?.setTint(Color.WHITE)  //option manu 3 dot's color change
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
 
 

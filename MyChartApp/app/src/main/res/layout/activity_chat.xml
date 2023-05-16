@@ -24,7 +24,7 @@
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginHorizontal="@dimen/_5sdp"
-            android:src="@drawable/parsuram" />
+            android:src="@drawable/name" />
 
         <TextView
             android:id="@+id/txtUserName"
