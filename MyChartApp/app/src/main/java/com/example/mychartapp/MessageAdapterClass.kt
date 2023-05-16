@@ -18,18 +18,20 @@ class MessageAdapterClass(var context: Context, var messageList: ArrayList<Messa
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-       if (viewType == 1){
-           var r=LayoutInflater.from(parent.context).inflate(R.layout.recevie_message_item,parent,false)
-           return ReceiveViewHolder(r)
-       }else{
-           var v=LayoutInflater.from(parent.context).inflate(R.layout.sent_message_item,parent,false)
-           return SentViewHolder(v)
-       }
+        if (viewType == 1) {
+            var r = LayoutInflater.from(parent.context)
+                .inflate(R.layout.recevie_message_item, parent, false)
+            return ReceiveViewHolder(r)
+        } else {
+            var v = LayoutInflater.from(parent.context)
+                .inflate(R.layout.sent_message_item, parent, false)
+            return SentViewHolder(v)
+        }
     }
 
 
     override fun getItemCount(): Int {
-       return  messageList.size
+        return messageList.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -54,7 +56,7 @@ class MessageAdapterClass(var context: Context, var messageList: ArrayList<Messa
         if (FirebaseAuth.getInstance().currentUser?.uid.equals(currentMessage.senderId)) {
             return itemSent
         } else {
-            return  itemReceive
+            return itemReceive
         }
     }
 

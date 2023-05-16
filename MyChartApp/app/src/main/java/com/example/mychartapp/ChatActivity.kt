@@ -11,6 +11,7 @@ import com.google.firebase.database.*
 class ChatActivity : AppCompatActivity() {
 
     lateinit var chatBinding: ActivityChatBinding
+    lateinit var adapter: MessageAdapterClass
     lateinit var messageList: ArrayList<MessageModelClass>
 
     lateinit var mDbRef: DatabaseReference
@@ -40,9 +41,11 @@ class ChatActivity : AppCompatActivity() {
         supportActionBar?.title = name
 
         messageList = ArrayList()
-        chatBinding.chatRecyclerView.adapter = MessageAdapterClass(this, messageList)
+        adapter = MessageAdapterClass(this, messageList)
+
         chatBinding.chatRecyclerView.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        chatBinding.chatRecyclerView.adapter = adapter
 
         //logic for adding data to recyclerView
         mDbRef.child("chats").child(senderRoom!!).child("messages")
@@ -54,6 +57,7 @@ class ChatActivity : AppCompatActivity() {
                         val message = postSnapshot.getValue(MessageModelClass::class.java)
                         messageList.add(message!!)
                     }
+                    adapter.notifyDataSetChanged()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
