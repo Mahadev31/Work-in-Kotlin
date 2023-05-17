@@ -1,4 +1,4 @@
-package com.example.mychartapp
+package com.example.mychartapp.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mychartapp.R
+import com.example.mychartapp.model.MessageModelClass
 import com.google.firebase.auth.FirebaseAuth
 
 class MessageAdapterClass(var context: Context, var messageList: ArrayList<MessageModelClass>) :

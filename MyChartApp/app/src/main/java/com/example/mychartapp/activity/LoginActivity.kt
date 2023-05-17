@@ -1,4 +1,4 @@
-package com.example.mychartapp
+package com.example.mychartapp.activity
 
 import android.content.Intent
 import android.content.SharedPreferences

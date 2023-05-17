@@ -3,4 +3,5 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="title_activity_search_maps">SearchMapsActivity</string>
     <string name="title_activity_route_maps">RouteMapsActivity</string>
+    <string name="title_activity_current_location">CurrentLocationActivity</string>
 </resources>

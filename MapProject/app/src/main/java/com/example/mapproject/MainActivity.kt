@@ -30,5 +30,9 @@ class MainActivity : AppCompatActivity() {
             var route=Intent(this,RouteMapsActivity::class.java)
             startActivity(route)
         }
+        mainBinding.btnCurrentLocation.setOnClickListener{
+            var current=Intent(this,CurrentLocationActivity::class.java)
+            startActivity(current)
+        }
     }
 }

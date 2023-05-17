@@ -1,9 +1,10 @@
-package com.example.mychartapp
+package com.example.mychartapp.activity
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mychartapp.adapter.MessageAdapterClass
+import com.example.mychartapp.model.MessageModelClass
 import com.example.mychartapp.databinding.ActivityChatBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -31,7 +32,8 @@ class ChatActivity : AppCompatActivity() {
 chatBinding.imgBack.setOnClickListener{
     onBackPressed()
 }
-        var name = intent.getStringExtra("name")
+        var firstName = intent.getStringExtra("firstName")
+        var lastName = intent.getStringExtra("lastName")
         var receiverUid = intent.getStringExtra("uid")
 
         mDbRef = FirebaseDatabase.getInstance().getReference()
@@ -41,7 +43,8 @@ chatBinding.imgBack.setOnClickListener{
         receiverRoom = senderUid + receiverUid
 
 
-        chatBinding.txtUserName.text=name
+        chatBinding.txtUserFirstName.text=firstName
+        chatBinding.txtUserLastName.text=lastName
 
         messageList = ArrayList()
         adapter = MessageAdapterClass(this, messageList)

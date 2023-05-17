@@ -1,16 +1,14 @@
-package com.example.mychartapp
+package com.example.mychartapp.activity
 
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.example.mychartapp.model.UserModelClass
 import com.example.mychartapp.databinding.ActivityCreateAccountBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
 
 class CreateAccountActivity : AppCompatActivity() {
 
@@ -50,7 +48,7 @@ class CreateAccountActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful) {
 
-                        addUserToDatabase(firstName,email,auth.currentUser?.uid!!)
+                        addUserToDatabase(firstName,lastName,email,auth.currentUser?.uid!!)
 
                         Toast.makeText(this, " Account Create successfully", Toast.LENGTH_SHORT).show()
                         var i = Intent(this, MainActivity::class.java)
@@ -74,10 +72,10 @@ class CreateAccountActivity : AppCompatActivity() {
         }
     }
 
-    private fun addUserToDatabase(firstName: String,  email: String, uid: String) {
+    private fun addUserToDatabase(firstName: String,lastName: String,  email: String, uid: String) {
 
         mDbRef=FirebaseDatabase.getInstance().getReference()
 
-        mDbRef.child("user").child(uid).setValue(UserModelClass(firstName,email, uid))
+        mDbRef.child("user").child(uid).setValue(UserModelClass(firstName,lastName,email, uid))
     }
 }

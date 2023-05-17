@@ -1,4 +1,4 @@
-package com.example.mychartapp
+package com.example.mychartapp.model
 
 class MessageModelClass {
     var message:String?=null
