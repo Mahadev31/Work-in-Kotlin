@@ -83,20 +83,26 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-         if (item.itemId == R.id.profile) {
-            var profile = Intent(this, ProfileActivity::class.java)
-            startActivity(profile)
-        } else if (item.itemId == R.id.createGroup) {
-            var create = Intent(this, CreateGroupActivity::class.java)
-            startActivity(create)
-        }  else if (item.itemId == R.id.logout) {
-            var sharedPreferences = getSharedPreferences("MySharePref", MODE_PRIVATE)
-            var myEdit: SharedPreferences.Editor = sharedPreferences.edit()
-            myEdit.remove("isLogin")
-            myEdit.commit()
-            mAuth.signOut()
-            finish()
-            return true
+        when (item.itemId) {
+            R.id.profile -> {
+                var profile = Intent(this, ProfileActivity::class.java)
+                startActivity(profile)
+            }
+            R.id.createGroup -> {
+                var create = Intent(this, CreateGroupActivity::class.java)
+                startActivity(create)
+            }
+            R.id.logout -> {
+                var sharedPreferences = getSharedPreferences("MySharePref", MODE_PRIVATE)
+                var myEdit: SharedPreferences.Editor = sharedPreferences.edit()
+                myEdit.remove("isLogin")
+                myEdit.commit()
+                mAuth.signOut()
+                var i = Intent(this, LoginActivity::class.java)
+                startActivity(i)
+                finish()
+                return true
+            }
         }
         return true
     }

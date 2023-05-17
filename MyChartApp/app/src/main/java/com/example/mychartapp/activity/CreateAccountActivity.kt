@@ -7,18 +7,19 @@ import android.widget.Toast
 import com.example.mychartapp.model.UserModelClass
 import com.example.mychartapp.databinding.ActivityCreateAccountBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 class CreateAccountActivity : AppCompatActivity() {
 
-    lateinit var  createAccountBinding: ActivityCreateAccountBinding
+    lateinit var createAccountBinding: ActivityCreateAccountBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var mDbRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        createAccountBinding= ActivityCreateAccountBinding.inflate(layoutInflater)
+        createAccountBinding = ActivityCreateAccountBinding.inflate(layoutInflater)
         setContentView(createAccountBinding.root)
 
         initView()
@@ -33,24 +34,40 @@ class CreateAccountActivity : AppCompatActivity() {
             var email = createAccountBinding.edtEmailC.text.toString()
             var password = createAccountBinding.edtPasswordC.text.toString()
             if (firstName.isEmpty()) {
-                Toast.makeText(this, "FirstName value is empty. please fill firstName ", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    this,
+                    "FirstName value is empty. please fill firstName ",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
-            }else if (lastName.isEmpty()) {
-            Toast.makeText(this, "LastName value is empty. please fill LastName ", Toast.LENGTH_SHORT)
-                .show()
+            } else if (lastName.isEmpty()) {
+                Toast.makeText(
+                    this,
+                    "LastName value is empty. please fill LastName ",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
             } else if (email.isEmpty()) {
                 Toast.makeText(this, "email value is empty. please fill email ", Toast.LENGTH_SHORT)
                     .show()
             } else if (password.isEmpty()) {
-                Toast.makeText(this, "password value is empty. please fill password ", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    this,
+                    "password value is empty. please fill password ",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             } else {
                 auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful) {
 
-                        addUserToDatabase(firstName,lastName,email,auth.currentUser?.uid!!)
 
-                        Toast.makeText(this, " Account Create successfully", Toast.LENGTH_SHORT).show()
+                        addUserToDatabase(firstName, lastName, email, auth.currentUser?.uid!!)
+
+
+
+                        Toast.makeText(this, " Account Create successfully", Toast.LENGTH_SHORT)
+                            .show()
                         var i = Intent(this, MainActivity::class.java)
                         finish()
                         startActivity(i)
@@ -67,15 +84,18 @@ class CreateAccountActivity : AppCompatActivity() {
 
 
         createAccountBinding.txtLoginPage.setOnClickListener {
-            var i= Intent(this, MainActivity::class.java)
+            var i = Intent(this, MainActivity::class.java)
             startActivity(i)
         }
     }
 
-    private fun addUserToDatabase(firstName: String,lastName: String,  email: String, uid: String) {
+    private fun addUserToDatabase(firstName: String, lastName: String, email: String, uid: String) {
 
-        mDbRef=FirebaseDatabase.getInstance().getReference()
+        mDbRef = FirebaseDatabase.getInstance().getReference()
 
-        mDbRef.child("user").child(uid).setValue(UserModelClass(firstName,lastName,email, uid))
+        mDbRef.child("user").child(uid).setValue(UserModelClass(firstName, lastName, email, uid))
+
+
+
     }
 }

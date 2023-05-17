@@ -55,14 +55,15 @@ tools:context=".activity.LoginActivity">
 
 </com.google.android.material.textfield.TextInputLayout>
 
-<CheckBox
-    android:id="@+id/chkRemember"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="start"
-    android:layout_marginStart="@dimen/_30sdp"
-    android:text="Remember me"
-    android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtForgotPass"
+        android:text="Forgot Password?. Recover"
+        android:layout_marginHorizontal="@dimen/_25sdp"
+        android:textStyle="bold"
+        android:layout_gravity="end"
+        android:textColor="#BD0505"/>
 
 <androidx.appcompat.widget.AppCompatButton
     android:id="@+id/btnLogin"
