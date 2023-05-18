@@ -1,4 +1,4 @@
-package com.example.bottomnavigationdrawer.fragment
+package com.mytrip.myindiatrip.fragment
 
 import android.R
 import android.media.MediaPlayer
@@ -30,9 +30,14 @@ class HomeFragment : Fragment() {
         homeBinding = FragmentHomeBinding.inflate(layoutInflater, container, false)
 
         initView()
+        category()
         return homeBinding.root
 
 
+
+    }
+
+    private fun category() {
 
     }
 

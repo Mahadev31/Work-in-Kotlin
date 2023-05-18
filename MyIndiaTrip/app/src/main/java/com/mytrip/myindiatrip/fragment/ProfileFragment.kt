@@ -1,4 +1,4 @@
-package com.example.bottomnavigationdrawer.fragment
+package com.mytrip.myindiatrip.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

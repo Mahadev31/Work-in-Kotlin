@@ -48,6 +48,7 @@
             android:src="@drawable/search6" />
     </androidx.appcompat.widget.Toolbar>
 
+<!--    Video View-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -70,14 +71,17 @@
             android:src="@drawable/ic_volume_off" />
     </RelativeLayout>
 
-
+<androidx.recyclerview.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:listitem="@layout/category_list"
+    android:id="@+id/rcvCategory"/>
 
     <!--    image show -->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_200sdp" />
-
     <!--image count-->
     <TextView
         android:id="@+id/txtCount"
