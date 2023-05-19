@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">My India Trip</string>
+    <string name="profile_fragment">Profile fragment</string>
+    <string name="home_fragment">home_fragment</string>
+    <string name="cart_fragment">save_fragment</string>
+    <string name="status_fragment">my Trip Plan_fragment</string>
+    <string name="open" />
+    <string name="close" />
+</resources>
