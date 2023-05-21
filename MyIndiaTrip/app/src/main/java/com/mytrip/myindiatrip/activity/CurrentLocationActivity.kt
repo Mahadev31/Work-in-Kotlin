@@ -5,8 +5,9 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,11 +18,10 @@ import androidx.core.content.ContextCompat
 import com.akexorcist.googledirection.DirectionCallback
 import com.akexorcist.googledirection.GoogleDirection
 import com.akexorcist.googledirection.constant.AvoidType
-import com.akexorcist.googledirection.constant.TransportMode
 import com.akexorcist.googledirection.model.Direction
 import com.akexorcist.googledirection.model.Route
 import com.akexorcist.googledirection.util.DirectionConverter
-
+import com.google.android.gms.location.LocationListener
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -29,12 +29,15 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.databinding.ActivityCurrentLocationBinding
+import java.util.*
 
 class CurrentLocationActivity : AppCompatActivity(), OnMapReadyCallback {
+
+    lateinit var binding: ActivityCurrentLocationBinding
     lateinit var myLocation: LatLng
     lateinit var addeddMarker: Marker
     private lateinit var mMap: GoogleMap
-    private lateinit var binding: ActivityCurrentLocationBinding
+
     private var locationManager: LocationManager? = null
     private var location: Location? = null
     var curr_latLng: LatLng? = null
@@ -42,7 +45,6 @@ class CurrentLocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private val LOCATION_MIN_UPDATE_TIME = 10
     private val LOCATION_MIN_UPDATE_DISTANCE = 1000
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,36 +58,13 @@ class CurrentLocationActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
         // Add a marker in Sydney and move the camera
-        displayDefaultMarker()
 
-
-        //getLatLong()
-
-        mMap.setOnMapClickListener {
-
-
-            mMap.clear()
-
-            displayDefaultMarker()
-
-            drawMarker(it,false)
-
-
-            drawline(it.latitude,it.longitude, TransportMode.DRIVING)
-
-        }
         locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
         getCurrentLocation()
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(22.337999814991345, 73.18046360001335)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
     }
 
     private fun getCurrentLocation() {
@@ -114,7 +93,7 @@ class CurrentLocationActivity : AppCompatActivity(), OnMapReadyCallback {
                             LocationManager.GPS_PROVIDER,
                             LOCATION_MIN_UPDATE_TIME.toLong(),
                             LOCATION_MIN_UPDATE_DISTANCE.toFloat(),
-                            object : LocationListener {
+                            object : android.location.LocationListener {
                                 override fun onLocationChanged(location: Location) {
                                     var latLng =
                                         LatLng(location.getLatitude(), location.getLongitude());
@@ -132,7 +111,7 @@ class CurrentLocationActivity : AppCompatActivity(), OnMapReadyCallback {
                             LocationManager.NETWORK_PROVIDER,
                             LOCATION_MIN_UPDATE_TIME.toLong(),
                             LOCATION_MIN_UPDATE_DISTANCE.toFloat(),
-                            object : LocationListener {
+                            object : android.location.LocationListener {
                                 override fun onLocationChanged(location: Location) {
                                     var latLng =
                                         LatLng(location.getLatitude(), location.getLongitude());
@@ -152,11 +131,25 @@ class CurrentLocationActivity : AppCompatActivity(), OnMapReadyCallback {
                         curr_latLng = LatLng(location!!.latitude, location!!.longitude)
                         drawMarker(curr_latLng!!, false)
 
+                        val geocoder: Geocoder = Geocoder(this, Locale.getDefault())
+                        val addresses: List<Address>? = geocoder.getFromLocation(location!!.latitude, location!!.longitude, 1) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
+                      var  address =
+                            addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+
+                        val city = addresses!![0].locality
+                        val state = addresses!![0].adminArea
+                        val country = addresses!![0].countryName
+                        val postalCode = addresses!![0].postalCode
+                        val knownName = addresses!![0].featureName
+
+                        mMap.addMarker(MarkerOptions().position(curr_latLng!!).title(address))
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(curr_latLng))
 //                        drawline(21.226920897072215, 72.83169425889456, TransportMode.DRIVING)
+
                         return
                     } else {
-                        getCurrentLocation()
+//                        getCurrentLocation()
                     }
 
 
@@ -204,7 +197,7 @@ class CurrentLocationActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun drawMarker(latLng: LatLng, flag: Boolean) {
         if (mMap != null) {
-            mMap.clear()
+//            mMap!!.clear()
             val markerOptions = MarkerOptions()
             markerOptions.position(latLng)
             //            markerOptions.title(title);
@@ -216,8 +209,7 @@ class CurrentLocationActivity : AppCompatActivity(), OnMapReadyCallback {
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
             }
             mMap!!.addMarker(markerOptions)
-            //            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-//            mMap.animateCamera(CameraUpdateFactory.zoomTo(12));
+
             mMap!!.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5f))
 
 
@@ -308,7 +300,7 @@ class CurrentLocationActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap!!.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100))
     }
 
-
+//
 //    private fun getLatLong() {
 //        val locationAddress = GeoCodeLocation()
 //        locationAddress.getAddressFromLocation(

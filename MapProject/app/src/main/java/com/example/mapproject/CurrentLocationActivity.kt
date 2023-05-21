@@ -32,10 +32,11 @@ import com.example.mapproject.databinding.ActivityCurrentLocationBinding
 import com.google.android.gms.maps.model.*
 
 class CurrentLocationActivity : AppCompatActivity(), OnMapReadyCallback {
+    private lateinit var binding: ActivityCurrentLocationBinding
+
     lateinit var myLocation: LatLng
     lateinit var addeddMarker: Marker
     private lateinit var mMap: GoogleMap
-    private lateinit var binding: ActivityCurrentLocationBinding
     private var locationManager: LocationManager? = null
     private var location: Location? = null
     var curr_latLng: LatLng? = null
