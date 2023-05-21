@@ -15,9 +15,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.adapter.CategoryAdapter
 import com.mytrip.myindiatrip.adapter.ImageSliderAdapter
+import com.mytrip.myindiatrip.adapter.PopularPlaceAdapter
 import com.mytrip.myindiatrip.databinding.FragmentHomeBinding
 import com.mytrip.myindiatrip.model.CategoryModelClass
 import com.mytrip.myindiatrip.model.ImageSliderModel
+import com.mytrip.myindiatrip.model.PopularModelClass
 import java.util.*
 
 
@@ -25,13 +27,17 @@ class HomeFragment : Fragment() {
 
 
     lateinit var homeBinding: FragmentHomeBinding
-    lateinit var firebaseDatabase: FirebaseDatabase
-    lateinit var mDbRef: DatabaseReference
-    lateinit var mAuth: FirebaseAuth
-    lateinit var adapter: CategoryAdapter
-    var categoryList=ArrayList<CategoryModelClass>()
-    var imageSliderList=ArrayList<ImageSliderModel>()
 
+    lateinit var mDbRef: DatabaseReference
+    lateinit var adapter: CategoryAdapter
+    var categoryList = ArrayList<CategoryModelClass>()
+    var imageSliderList = ArrayList<ImageSliderModel>()
+
+    lateinit var popularAdapter: PopularPlaceAdapter
+    var popularList = ArrayList<PopularModelClass>()
+
+    val handler = Handler()
+    var sliderRunnable = Runnable {}
     var currentPage = 0
     var timer: Timer? = null
     val DELAY_MS: Long = 500 //delay in milliseconds before task is to be executed
@@ -48,19 +54,17 @@ class HomeFragment : Fragment() {
     ): View? {
         homeBinding = FragmentHomeBinding.inflate(layoutInflater, container, false)
 
-        firebaseDatabase = FirebaseDatabase.getInstance()
-        mAuth = FirebaseAuth.getInstance()
+
         mDbRef = FirebaseDatabase.getInstance().getReference()
 
         autoVideoPlay()
         category()
         autoImageSlider()
+        popularPlace()
         return homeBinding.root
 
 
     }
-
-
 
 
     private fun autoVideoPlay() {
@@ -106,24 +110,24 @@ class HomeFragment : Fragment() {
 
     private fun category() {
 
-        adapter = CategoryAdapter(this,categoryList)
-        homeBinding.rcvCategory.layoutManager =
+        popularAdapter = PopularPlaceAdapter(this, popularList)
+        homeBinding.rcvPopularPlace.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        homeBinding.rcvCategory.adapter = adapter
+        homeBinding.rcvPopularPlace.adapter = popularAdapter
 
-        mDbRef.child("category_data").addValueEventListener(object : ValueEventListener {
+        mDbRef.child("popular_place").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                categoryList.clear()
+                popularList.clear()
                 for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
+                    val currentUser = postSnapshot.getValue(PopularModelClass::class.java)
 //                    if (mAuth.currentUser?.uid != currentUser?.uid) {
-                    currentUser?.categoryImage= postSnapshot.child("category_image").value.toString()
-                    currentUser?.categoryName=postSnapshot.child("category_name").value.toString()
-                    categoryList.add(currentUser!!)
+                    currentUser?.popularImage = postSnapshot.child("p_image").value.toString()
+                    currentUser?.popularName = postSnapshot.child("p_name").value.toString()
+                    popularList.add(currentUser!!)
 
 //                    }
                 }
-                adapter.notifyDataSetChanged()
+                popularAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -148,7 +152,7 @@ class HomeFragment : Fragment() {
 
             override fun onPageSelected(position: Int) {
                 Log.e("TAG", "onPageSelected: ")
-                homeBinding.txtCount.text = " ${position + 1}/6"
+//                homeBinding.txtCount.text = " ${position + 1}/6"
             }
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -156,10 +160,14 @@ class HomeFragment : Fragment() {
             }
         })
 
-        var sliderAdapter = ImageSliderAdapter(this,imageSliderList)
+        var sliderAdapter = ImageSliderAdapter(this, imageSliderList)
 //        homeBinding.rcvCategory.layoutManager =
 //            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         homeBinding.viewPager.adapter = sliderAdapter
+
+        homeBinding.wormDotsIndicator.attachTo(homeBinding.viewPager)
+
+
 
         mDbRef.child("image_slider").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -167,8 +175,8 @@ class HomeFragment : Fragment() {
                 for (postSnapshot in snapshot.children) {
                     val currentUser = postSnapshot.getValue(ImageSliderModel::class.java)
 //                    if (mAuth.currentUser?.uid != currentUser?.uid) {
-                    currentUser?.image= postSnapshot.child("image").value.toString()
-//                    currentUser?.categoryName=postSnapshot.child("category_name").value.toString()
+                    currentUser?.image = postSnapshot.child("image").value.toString()
+                    currentUser?.name = postSnapshot.child("name").value.toString()
                     imageSliderList.add(currentUser!!)
 
 //                    }
@@ -182,29 +190,55 @@ class HomeFragment : Fragment() {
 
         })
 
+//
+//        /*After setting the adapter use the timer */
+//
+//         sliderRunnable = Runnable {
+//            if (currentPage ===  - 1) {
+//                currentPage = 0
+//            }
+//            homeBinding.viewPager.setCurrentItem(currentPage++, true)
+//        }
+//
+//        timer = Timer() // This will create a new Thread
+//
+//        timer!!.schedule(object : TimerTask() {
+//            // task to be scheduled
+//            override fun run() {
+//                handler.post(sliderRunnable)
+//            }
+//        }, DELAY_MS, PERIOD_MS)
 
-
-
-
-
-        /*After setting the adapter use the timer */
-
-        /*After setting the adapter use the timer */
-        val handler = Handler()
-        val Update = Runnable {
-            if (currentPage ===  - 1) {
-                currentPage = 0
-            }
-            homeBinding.viewPager.setCurrentItem(currentPage++, true)
-        }
-
-        timer = Timer() // This will create a new Thread
-
-        timer!!.schedule(object : TimerTask() {
-            // task to be scheduled
-            override fun run() {
-                handler.post(Update)
-            }
-        }, DELAY_MS, PERIOD_MS)
     }
+
+    private fun popularPlace() {
+        adapter = CategoryAdapter(this, categoryList)
+        homeBinding.rcvCategory.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        homeBinding.rcvCategory.adapter = adapter
+
+        mDbRef.child("category_data").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                categoryList.clear()
+                for (postSnapshot in snapshot.children) {
+                    val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
+//                    if (mAuth.currentUser?.uid != currentUser?.uid) {
+                    currentUser?.categoryImage =
+                        postSnapshot.child("category_image").value.toString()
+                    currentUser?.categoryName = postSnapshot.child("category_name").value.toString()
+                    categoryList.add(currentUser!!)
+
+//                    }
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
+    }
+
+
 }

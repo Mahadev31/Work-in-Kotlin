@@ -1,20 +1,36 @@
 package com.mytrip.myindiatrip.fragment
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.mytrip.myindiatrip.R
+import androidx.fragment.app.Fragment
+import com.mytrip.myindiatrip.activity.CurrentLocationActivity
+import com.mytrip.myindiatrip.databinding.FragmentHomeBinding
+import com.mytrip.myindiatrip.databinding.FragmentMyTripPlanBinding
+
 
 class MyTripPlanFragment : Fragment() {
+
+    lateinit var tripBinding: FragmentMyTripPlanBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_trip_plan, container, false)
+        tripBinding = FragmentMyTripPlanBinding.inflate(layoutInflater, container, false)
+initView()
+        return tripBinding.root
     }
+
+    private fun initView() {
+
+        tripBinding.cdCurrentLocation.setOnClickListener {
+            var i=Intent(context,CurrentLocationActivity::class.java)
+            startActivity(i)
+        }
+    }
+
 
 }

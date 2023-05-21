@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.mytrip.myindiatrip.R
@@ -32,7 +33,9 @@ class ImageSliderAdapter(var homeFragment: HomeFragment, var imageSliderList: Ar
 
 
         val imageView: ImageView = itemView.findViewById<View>(R.id.imgSliderView) as ImageView
+        val name: TextView = itemView.findViewById<View>(R.id.txtSliderName) as TextView
 
+        name.text=imageSliderList[position].name.toString()
 
 
 
