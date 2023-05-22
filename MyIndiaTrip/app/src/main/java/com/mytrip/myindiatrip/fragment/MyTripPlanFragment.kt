@@ -11,20 +11,22 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
-import com.mytrip.myindiatrip.activity.CurrentLocationActivity
+import com.google.firebase.database.*
+import com.mytrip.myindiatrip.adapter.HotelSearchAdapter
 import com.mytrip.myindiatrip.databinding.FragmentMyTripPlanBinding
+import com.mytrip.myindiatrip.model.HotelSearchModelClass
 import java.util.*
 
 
@@ -32,10 +34,12 @@ class MyTripPlanFragment : Fragment() {
 
     lateinit var tripBinding: FragmentMyTripPlanBinding
 
+    lateinit var mDbRef: DatabaseReference
+
+    lateinit var adapter: HotelSearchAdapter
+    var hotelList = ArrayList<HotelSearchModelClass>()
     // Initialize variables
-    var btLocation: Button? = null
-//    var tvLatitude: TextView? = null
-//    var tvLongitude:TextView? = null
+
     var client: FusedLocationProviderClient? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,55 +47,46 @@ class MyTripPlanFragment : Fragment() {
     ): View? {
         tripBinding = FragmentMyTripPlanBinding.inflate(layoutInflater, container, false)
 
-
-        // Initialize location client
-
+        mDbRef = FirebaseDatabase.getInstance().getReference()
         // Initialize location client
         client = LocationServices
             .getFusedLocationProviderClient(
                 requireActivity()
             )
 
-                // check condition
-                if (ContextCompat.checkSelfPermission(
-                        requireActivity(),
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    )
-                    == PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(
-                        requireActivity(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    )
-                    == PackageManager.PERMISSION_GRANTED
-                ) {
-                    // When permission is granted
-                    // Call method
-                    getCurrentLocation()
-                } else {
-                    // When permission is not granted
-                    // Call method
-                    requestPermissions(
-                        arrayOf(
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        ),
-                        100
-                    )
-                }
+        // check condition
+        if (ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
+            // When permission is granted
+            // Call method
+            getCurrentLocation()
+        } else {
+            // When permission is not granted
+            // Call method
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                100
+            )
+        }
 
 
         // Return view
-        initView()
+        searchItem()
         return tripBinding.root
     }
 
-    private fun initView() {
-
-        tripBinding.cdCurrentLocation.setOnClickListener {
-            var i = Intent(context, CurrentLocationActivity::class.java)
-            startActivity(i)
-        }
-    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String?>,
@@ -144,16 +139,20 @@ class MyTripPlanFragment : Fragment() {
                     ) {
 
                         // Initialize location
-                        val location: Location = task.getResult()!!
+                        val location: Location? = task.result
                         // Check condition
                         if (location != null) {
                             // When location result is not
                             // null set latitude
 
                             val geocoder: Geocoder = Geocoder(context!!, Locale.getDefault())
-                            val addresses: List<Address>? = geocoder.getFromLocation(location.latitude,  location.longitude, 1) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                            val addresses: List<Address>? = geocoder.getFromLocation(
+                                location.latitude,
+                                location.longitude,
+                                1
+                            ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
-                        var     address =
+                            var address =
                                 addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
                             val city = addresses!![0].locality
@@ -162,7 +161,7 @@ class MyTripPlanFragment : Fragment() {
                             val postalCode = addresses!![0].postalCode
                             val knownName = addresses!![0].featureName
 
-                            tripBinding.txtCurrentLocation.text=address.toString()
+                            tripBinding.txtCurrentLocation.text = city.toString()
 //
                         } else {
                             // When location result is null
@@ -187,25 +186,14 @@ class MyTripPlanFragment : Fragment() {
                                     val location1: Location? = locationResult
                                         .lastLocation
                                     // Set latitude
-//                                    tvLatitude?.setText(
-//                                        java.lang.String.valueOf(
-//                                            location1
-//                                                ?.getLatitude()
-//                                        )
-//                                    )
-//                                    // Set longitude
-//                                    tvLongitude?.setText(
-//                                        java.lang.String.valueOf(
-//                                            location1
-//                                                ?.getLongitude()
-//                                        )
-//                                    )
-//                                    val myLocation = LatLng(  location.latitude,  location.longitude)
-                                    val geocoder: Geocoder = Geocoder(context!!, Locale.getDefault())
+//
+                                    val geocoder: Geocoder =
+                                        Geocoder(context!!, Locale.getDefault())
                                     val addresses: List<Address>? = geocoder.getFromLocation(
-                                        location.latitude ,  location.longitude, 1) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                                        location?.latitude!!, location?.longitude!!, 1
+                                    ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
-                                    var     address =
+                                    var address =
                                         addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
                                     val city = addresses!![0].locality
@@ -214,7 +202,7 @@ class MyTripPlanFragment : Fragment() {
                                     val postalCode = addresses!![0].postalCode
                                     val knownName = addresses!![0].featureName
 
-                                    tripBinding.txtCurrentLocation.text=city.toString()
+                                    tripBinding.txtCurrentLocation.text = city.toString()
                                 }
                             }
 
@@ -227,13 +215,7 @@ class MyTripPlanFragment : Fragment() {
                                     Manifest.permission.ACCESS_COARSE_LOCATION
                                 ) != PackageManager.PERMISSION_GRANTED
                             ) {
-                                //  Consider calling
-                                //    ActivityCompat#requestPermissions
-                                // here to request the missing permissions, and then overriding
-                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                //                                          int[] grantResults)
-                                // to handle the case where the user grants the permission. See the documentation
-                                // for ActivityCompat#requestPermissions for more details.
+
                                 return
                             }
                             client!!.requestLocationUpdates(
@@ -255,6 +237,41 @@ class MyTripPlanFragment : Fragment() {
                         Intent.FLAG_ACTIVITY_NEW_TASK
                     )
             )
+        }
+    }
+
+
+    private fun searchItem() {
+
+        tripBinding.imgSearchT.setOnClickListener {
+        var search=tripBinding.edtSearch.text.toString()
+
+        adapter = HotelSearchAdapter(this,hotelList )
+        tripBinding.rcvSuggestionItem.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        tripBinding.rcvSuggestionItem.adapter = adapter
+
+        mDbRef.child("hotels").child(search).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                hotelList.clear()
+                for (postSnapshot in snapshot.children) {
+                    val currentUser = postSnapshot.getValue(HotelSearchModelClass::class.java)
+//                    if (mAuth.currentUser?.uid != currentUser?.uid) {
+                    currentUser?.image = postSnapshot.child("hotelName").value.toString()
+//                    currentUser?.popularName = postSnapshot.child("p_name").value.toString()
+                    hotelList.add(currentUser!!)
+
+                    Log.e("TAG", "search: "+currentUser?.image )
+//                    }
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
         }
     }
 }
