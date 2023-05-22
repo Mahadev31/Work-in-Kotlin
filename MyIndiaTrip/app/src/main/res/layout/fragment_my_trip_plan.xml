@@ -64,6 +64,7 @@
             android:id="@+id/edtSearch"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="wrap_content"
+            android:inputType="text"
             android:background="@color/white"
             android:imeOptions="actionDone"
             android:hint="Search"

@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F0F6F8"
+    android:orientation="vertical"
     tools:context=".activity.SearchLocationActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="wrap_content">
         <ImageView
             android:layout_width="@dimen/_20sdp"
@@ -16,15 +18,19 @@
             android:src="@drawable/ic_arrow_back"
             android:id="@+id/imgBackSearch"/>
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/_200sdp"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:imeOptions="actionDone"
             android:hint="Search"
-            android:paddingVertical="@dimen/_5sdp"
-            android:layout_marginHorizontal="@dimen/_10sdp"
+            android:padding="@dimen/_5sdp"
+            android:layout_gravity="center"
             android:background="@drawable/round_trip_search"
             app:endIconMode="clear_text"
             android:id="@+id/edtSearchText"/>
     </androidx.appcompat.widget.Toolbar>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#C2C8CA"/>
 </LinearLayout>
