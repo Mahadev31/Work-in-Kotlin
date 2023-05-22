@@ -21,8 +21,10 @@ class HotelSearchAdapter(
 //    private var selectedItemPosition: Int = -1
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var image: ImageView = itemView.findViewById(R.id.imgHotel)
-        var PopularName: TextView = itemView.findViewById(R.id.txtPopular)
+        var imgHotelImage: ImageView = itemView.findViewById(R.id.imgHotelImage)
+        var txtHotelName: TextView = itemView.findViewById(R.id.txtHotelName)
+        var txtHotelRent: TextView = itemView.findViewById(R.id.txtHotelRent)
+        var txtHotelRating: TextView = itemView.findViewById(R.id.txtHotelRating)
         var layPopular: RelativeLayout = itemView.findViewById(R.id.layPopular)
     }
 
@@ -36,12 +38,13 @@ class HotelSearchAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.PopularName.text = hotelList[position].image
+        holder.txtHotelName.text = hotelList[position].hotelName
+        holder.txtHotelRent.text = hotelList[position].hotelRent
+        holder.txtHotelRating.text = hotelList[position].hotelRating
 
-//        Glide.with(myTripFragment).load(hotelList[position].image)
-//            .placeholder(R.drawable.ic_image).into(holder.image)
-//
-//        Log.e("TAG", "onBindViewHolder: " + hotelList[position].image)
+        Glide.with(myTripFragment).load(hotelList[position].image).placeholder(R.drawable.ic_image).into(holder.imgHotelImage)
+
+        Log.e("TAG", "onBindViewHolder: " + hotelList[position].image)
 
         holder.layPopular.setOnClickListener {
 

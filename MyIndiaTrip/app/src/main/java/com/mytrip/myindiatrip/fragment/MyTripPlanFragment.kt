@@ -244,34 +244,37 @@ class MyTripPlanFragment : Fragment() {
     private fun searchItem() {
 
         tripBinding.imgSearchT.setOnClickListener {
-        var search=tripBinding.edtSearch.text.toString()
+            var search = tripBinding.edtSearch.text.toString()
 
-        adapter = HotelSearchAdapter(this,hotelList )
-        tripBinding.rcvSuggestionItem.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        tripBinding.rcvSuggestionItem.adapter = adapter
+            adapter = HotelSearchAdapter(this, hotelList)
+            tripBinding.rcvSuggestionItem.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            tripBinding.rcvSuggestionItem.adapter = adapter
 
-        mDbRef.child("hotels").child(search).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                hotelList.clear()
-                for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(HotelSearchModelClass::class.java)
+            mDbRef.child("hotels").child(search).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    hotelList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser = postSnapshot.getValue(HotelSearchModelClass::class.java)
 //                    if (mAuth.currentUser?.uid != currentUser?.uid) {
-                    currentUser?.image = postSnapshot.child("hotelName").value.toString()
-//                    currentUser?.popularName = postSnapshot.child("p_name").value.toString()
-                    hotelList.add(currentUser!!)
+                        currentUser?.image = postSnapshot.child("hotelImage").value.toString()
+                        currentUser?.hotelName = postSnapshot.child("hotelName").value.toString()
+                        currentUser?.hotelRent = postSnapshot.child("hotelRent").value.toString()
+                        currentUser?.hotelRating =
+                            postSnapshot.child("hotelRating").value.toString().toDouble().toString()
+                        hotelList.add(currentUser!!)
 
-                    Log.e("TAG", "search: "+currentUser?.image )
+                        Log.e("TAG", "search: " + currentUser?.image)
 //                    }
+                    }
+                    adapter.notifyDataSetChanged()
                 }
-                adapter.notifyDataSetChanged()
-            }
 
-            override fun onCancelled(error: DatabaseError) {
+                override fun onCancelled(error: DatabaseError) {
 
-            }
+                }
 
-        })
+            })
         }
     }
 }
