@@ -24,6 +24,7 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.*
+import com.mytrip.myindiatrip.activity.SearchLocationActivity
 import com.mytrip.myindiatrip.adapter.HotelSearchAdapter
 import com.mytrip.myindiatrip.databinding.FragmentMyTripPlanBinding
 import com.mytrip.myindiatrip.model.HotelSearchModelClass
@@ -48,6 +49,12 @@ class MyTripPlanFragment : Fragment() {
         tripBinding = FragmentMyTripPlanBinding.inflate(layoutInflater, container, false)
 
         mDbRef = FirebaseDatabase.getInstance().getReference()
+
+
+        tripBinding.txtCurrentLocation.setOnClickListener {
+            var i=Intent(context,SearchLocationActivity::class.java)
+            startActivity(i)
+        }
         // Initialize location client
         client = LocationServices
             .getFusedLocationProviderClient(
