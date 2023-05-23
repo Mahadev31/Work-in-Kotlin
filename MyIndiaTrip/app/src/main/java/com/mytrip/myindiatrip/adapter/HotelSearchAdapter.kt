@@ -42,9 +42,9 @@ class HotelSearchAdapter(
         holder.txtHotelRent.text = hotelList[position].hotelRent
         holder.txtHotelRating.text = hotelList[position].hotelRating
 
-        Glide.with(myTripFragment).load(hotelList[position].image).placeholder(R.drawable.ic_image).into(holder.imgHotelImage)
+        Glide.with(myTripFragment).load(hotelList[position].hotelImage).placeholder(R.drawable.ic_image).into(holder.imgHotelImage)
 
-        Log.e("TAG", "onBindViewHolder: " + hotelList[position].image)
+        Log.e("TAG", "onBindViewHolder: " + hotelList[position].hotelImage)
 
         holder.layPopular.setOnClickListener {
 

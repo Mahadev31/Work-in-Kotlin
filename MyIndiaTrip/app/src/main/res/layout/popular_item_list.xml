@@ -17,10 +17,11 @@
 
     <TextView
         android:id="@+id/txtPopular"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/_80sdp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imgPopular"
         android:layout_centerHorizontal="true"
+        android:textAlignment="center"
         android:paddingHorizontal="@dimen/_10sdp"
         android:paddingVertical="@dimen/_5sdp"
         android:background="@drawable/round_popular"

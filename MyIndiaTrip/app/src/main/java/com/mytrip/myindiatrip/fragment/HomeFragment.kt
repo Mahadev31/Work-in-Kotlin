@@ -1,5 +1,6 @@
 package com.mytrip.myindiatrip.fragment
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.mytrip.myindiatrip.activity.SearchActivity
 import com.mytrip.myindiatrip.adapter.CategoryAdapter
 import com.mytrip.myindiatrip.adapter.ImageSliderAdapter
 import com.mytrip.myindiatrip.adapter.PopularPlaceAdapter
@@ -36,17 +38,6 @@ class HomeFragment : Fragment() {
     lateinit var popularAdapter: PopularPlaceAdapter
     var popularList = ArrayList<PopularModelClass>()
 
-    val handler = Handler()
-    var sliderRunnable = Runnable {}
-    var currentPage = 0
-    var timer: Timer? = null
-    val DELAY_MS: Long = 500 //delay in milliseconds before task is to be executed
-
-    val PERIOD_MS: Long = 3000 // time in milliseconds between successive task executions.
-
-
-    val videoUrl =
-        "https://firebasestorage.googleapis.com/v0/b/my-india-trip.appspot.com/o/itro1_360.mp4?alt=media&token=598e0bc3-df56-43fa-a3cb-16777d313957"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +48,10 @@ class HomeFragment : Fragment() {
 
         mDbRef = FirebaseDatabase.getInstance().getReference()
 
+        homeBinding.imgSearch.setOnClickListener{
+            var i= Intent(context,SearchActivity::class.java)
+            startActivity(i)
+        }
         autoVideoPlay()
         category()
         autoImageSlider()

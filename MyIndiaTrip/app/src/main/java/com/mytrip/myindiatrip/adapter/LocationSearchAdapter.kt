@@ -6,9 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mytrip.myindiatrip.R
+import com.mytrip.myindiatrip.activity.SearchLocationActivity
 import com.mytrip.myindiatrip.model.LocationSearchModelClass
 
-class LocationSearchAdapter(var searchList: ArrayList<LocationSearchModelClass>) :RecyclerView.Adapter<LocationSearchAdapter.MyViewHolder>() {
+class LocationSearchAdapter(
+   var searchLocationActivity: SearchLocationActivity,
+ var   searchList: ArrayList<LocationSearchModelClass>
+) :RecyclerView.Adapter<LocationSearchAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) :RecyclerView.ViewHolder(itemView) {
         var txtCityName:TextView=itemView.findViewById(R.id.txtCityName)
         var txtStateCountry:TextView=itemView.findViewById(R.id.txtStateCountry)

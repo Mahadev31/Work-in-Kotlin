@@ -39,8 +39,9 @@ class MyTripPlanFragment : Fragment() {
 
     lateinit var adapter: HotelSearchAdapter
     var hotelList = ArrayList<HotelSearchModelClass>()
-    // Initialize variables
 
+    // Initialize variables
+//     var search:String=""
     var client: FusedLocationProviderClient? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +53,7 @@ class MyTripPlanFragment : Fragment() {
 
 
         tripBinding.txtCurrentLocation.setOnClickListener {
-            var i=Intent(context,SearchLocationActivity::class.java)
+            var i = Intent(context, SearchLocationActivity::class.java)
             startActivity(i)
         }
         // Initialize location client
@@ -162,7 +163,7 @@ class MyTripPlanFragment : Fragment() {
                             var address =
                                 addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-                            val city = addresses!![0].locality
+                          val  city = addresses!![0].locality
                             val state = addresses!![0].adminArea
                             val country = addresses!![0].countryName
                             val postalCode = addresses!![0].postalCode
@@ -250,38 +251,71 @@ class MyTripPlanFragment : Fragment() {
 
     private fun searchItem() {
 
+        setByDefualtAdapter()
+
         tripBinding.imgSearchT.setOnClickListener {
-            var search = tripBinding.edtSearch.text.toString()
+            setAdapter()
 
-            adapter = HotelSearchAdapter(this, hotelList)
-            tripBinding.rcvSuggestionItem.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            tripBinding.rcvSuggestionItem.adapter = adapter
 
-            mDbRef.child("hotels").child(search).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    hotelList.clear()
-                    for (postSnapshot in snapshot.children) {
-                        val currentUser = postSnapshot.getValue(HotelSearchModelClass::class.java)
-//                    if (mAuth.currentUser?.uid != currentUser?.uid) {
-                        currentUser?.image = postSnapshot.child("hotelImage").value.toString()
-                        currentUser?.hotelName = postSnapshot.child("hotelName").value.toString()
-                        currentUser?.hotelRent = postSnapshot.child("hotelRent").value.toString()
-                        currentUser?.hotelRating =
-                            postSnapshot.child("hotelRating").value.toString().toDouble().toString()
-                        hotelList.add(currentUser!!)
 
-                        Log.e("TAG", "search: " + currentUser?.image)
-//                    }
-                    }
-                    adapter.notifyDataSetChanged()
-                }
+        }
+    }
 
-                override fun onCancelled(error: DatabaseError) {
+    private fun setByDefualtAdapter() {
+        adapter = HotelSearchAdapter(this, hotelList)
+        tripBinding.rcvSuggestionItem.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        tripBinding.rcvSuggestionItem.adapter = adapter
+
+        mDbRef.child("hotels").child("surat").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                hotelList.clear()
+                for (postSnapshot in snapshot.children) {
+                    val currentUser = postSnapshot.getValue(HotelSearchModelClass::class.java)
+                    hotelList.add(currentUser!!)
+                    Log.e("TAG", "search: " + currentUser.hotelImage)
 
                 }
+                adapter.notifyDataSetChanged()
+            }
 
-            })
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("TAG", "onCancelled: ")
+            }
+
+        })
+    }
+
+    private fun setAdapter() {
+       var search = tripBinding.edtSearch.text.toString()
+
+        if (search.isEmpty()){
+            Toast.makeText(context, "Pleas Enter value", Toast.LENGTH_SHORT).show()
+        }else{
+
+
+        adapter = HotelSearchAdapter(this, hotelList)
+        tripBinding.rcvSuggestionItem.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        tripBinding.rcvSuggestionItem.adapter = adapter
+
+        mDbRef.child("hotels").child(search).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                hotelList.clear()
+                for (postSnapshot in snapshot.children) {
+                    val currentUser = postSnapshot.getValue(HotelSearchModelClass::class.java)
+                    hotelList.add(currentUser!!)
+                    Log.e("TAG", "search: " + currentUser.hotelImage)
+
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("TAG", "onCancelled: ")
+            }
+
+        })
         }
     }
 }

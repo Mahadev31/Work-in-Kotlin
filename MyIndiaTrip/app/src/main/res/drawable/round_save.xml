@@ -4,16 +4,16 @@
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle">
             <gradient
-                android:startColor="#EFF9FD"
-                android:centerColor="#EFF9FD"
-                android:endColor="#EFF9FD"
+                android:startColor="#DFDDDD"
+                android:centerColor="#DFDDDD"
+                android:endColor="#DFDDDD"
                 android:angle="135" />
             <corners
                 android:radius="100dp"
                 ></corners>
             <stroke
                 android:width="2dp"
-                android:color="#949798"
+                android:color="#DFDDDD"
 
 >
 

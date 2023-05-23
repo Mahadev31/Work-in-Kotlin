@@ -2,13 +2,11 @@ package com.mytrip.myindiatrip.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.adapter.LocationSearchAdapter
 import com.mytrip.myindiatrip.databinding.ActivitySearchLocationBinding
-import com.mytrip.myindiatrip.model.HotelSearchModelClass
 import com.mytrip.myindiatrip.model.LocationSearchModelClass
 
 class SearchLocationActivity : AppCompatActivity() {
@@ -21,18 +19,20 @@ class SearchLocationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         searchLocationBinding= ActivitySearchLocationBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_search_location)
+        setContentView(searchLocationBinding.root)
 
+
+        mDbRef = FirebaseDatabase.getInstance().getReference()
         initView()
     }
 
     private fun initView() {
-        mDbRef = FirebaseDatabase.getInstance().getReference()
+//        searchLocationBinding.linCurrentLocation
+        searchAdapter = LocationSearchAdapter(this, searchList)
+       searchLocationBinding.rcvLocation.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        searchAdapter=LocationSearchAdapter(searchList)
-        searchLocationBinding.rcvLocation.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
-        searchLocationBinding.rcvLocation.adapter=searchAdapter
-
+        searchLocationBinding.rcvLocation.adapter = searchAdapter
 
         mDbRef.child("searchList").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -44,7 +44,6 @@ class SearchLocationActivity : AppCompatActivity() {
                     currentUser?.stateName = postSnapshot.child("stateName").value.toString()
                     searchList.add(currentUser!!)
 
-                    Log.e("TAG", "searchList: " + currentUser?.cityName)
 //                    }
                 }
                 searchAdapter.notifyDataSetChanged()
