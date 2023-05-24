@@ -9,6 +9,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
+        android:id="@+id/cdSearchView"
         android:layout_height="wrap_content"
         android:elevation="@dimen/_10sdp"
         app:cardCornerRadius="@dimen/_20sdp">
@@ -43,11 +44,11 @@
 
                         <TextView
                             android:id="@+id/txtPlaceName"
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/_150sdp"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="@dimen/_10sdp"
                             android:textColor="@color/black"
-                            android:textSize="@dimen/_20ssp"
+                            android:textSize="@dimen/_15ssp"
                             android:textStyle="bold"
                             tools:text="Place Name" />
 
@@ -76,6 +77,7 @@
                     <LinearLayout
                         android:layout_width="@dimen/_100sdp"
                         android:gravity="center"
+                        android:layout_weight="1"
                         android:layout_height="match_parent">
                         <ImageView
                             android:layout_width="@dimen/_20sdp"

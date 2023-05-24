@@ -27,6 +27,11 @@ class SearchLocationActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+
+        searchLocationBinding.imgBackSearch.setOnClickListener {
+            onBackPressed()
+        }
+
 //        searchLocationBinding.linCurrentLocation
         searchAdapter = LocationSearchAdapter(this, searchList)
        searchLocationBinding.rcvLocation.layoutManager =

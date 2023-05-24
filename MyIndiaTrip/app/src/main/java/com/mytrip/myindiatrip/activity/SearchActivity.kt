@@ -1,7 +1,9 @@
 package com.mytrip.myindiatrip.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.adapter.SearchAdapter
@@ -25,11 +27,21 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        searchBinding.imgBackSearch.setOnClickListener {
+          onBackPressed()
+        }
+
         searchBinding.imgSearch.setOnClickListener {
            var search = searchBinding.edtSearchText.text.toString()
 
-        searchAdapter = SearchAdapter(this,placeList)
-        searchBinding.rcvSearchPlace.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+        searchAdapter = SearchAdapter(this,placeList) {
+            var clickIntent = Intent(this@SearchActivity, DataDisplayActivity::class.java)
+            clickIntent.putExtra("search",search)
+            clickIntent.putExtra("Key", it.key)
+            Log.e("TAG", "initView: "+it.key )
+            startActivity(clickIntent)
+        }
+            searchBinding.rcvSearchPlace.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         searchBinding.rcvSearchPlace.adapter=searchAdapter
 
         mDbRef.child("search_bar").child(search).addValueEventListener(object : ValueEventListener {

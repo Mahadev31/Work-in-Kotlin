@@ -6,17 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.activity.SearchActivity
 import com.mytrip.myindiatrip.model.SearchModelClass
 
-class SearchAdapter(var context: Context, var placeList: ArrayList<SearchModelClass>) : RecyclerView.Adapter<SearchAdapter.MyViewHolder>() {
+class SearchAdapter(var context: Context, var placeList: ArrayList<SearchModelClass>,var click:(SearchModelClass)-> Unit) : RecyclerView.Adapter<SearchAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgPlace: ImageView = itemView.findViewById(R.id.imgPlace)
         var txtPlaceName: TextView = itemView.findViewById(R.id.txtPlaceName)
         var txtLocation: TextView = itemView.findViewById(R.id.txtLocation)
+        var txtPlaceRating: TextView = itemView.findViewById(R.id.txtPlaceRating)
+        var cdSearchView: CardView = itemView.findViewById(R.id.cdSearchView)
 
     }
 
@@ -36,5 +39,12 @@ class SearchAdapter(var context: Context, var placeList: ArrayList<SearchModelCl
 
         holder.txtPlaceName.text=placeList[position].placeName
         holder.txtLocation.text=placeList[position].placeLocation
+        holder.txtPlaceRating.text=placeList[position].placeRating
+
+        holder.cdSearchView.setOnClickListener {
+            click.invoke(placeList[position])
+        }
+
+
     }
 }

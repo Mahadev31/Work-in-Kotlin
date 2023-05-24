@@ -41,6 +41,7 @@ class MyTripPlanFragment : Fragment() {
     var hotelList = ArrayList<HotelSearchModelClass>()
 
     // Initialize variables
+    var city:String=""
 //     var search:String=""
     var client: FusedLocationProviderClient? = null
     override fun onCreateView(
@@ -163,7 +164,7 @@ class MyTripPlanFragment : Fragment() {
                             var address =
                                 addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-                          val  city = addresses!![0].locality
+                             city = addresses!![0].locality
                             val state = addresses!![0].adminArea
                             val country = addresses!![0].countryName
                             val postalCode = addresses!![0].postalCode
@@ -204,7 +205,7 @@ class MyTripPlanFragment : Fragment() {
                                     var address =
                                         addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-                                    val city = addresses!![0].locality
+                                     city = addresses!![0].locality
                                     val state = addresses!![0].adminArea
                                     val country = addresses!![0].countryName
                                     val postalCode = addresses!![0].postalCode
@@ -257,7 +258,45 @@ class MyTripPlanFragment : Fragment() {
             setAdapter()
 
 
+        }
+    }
 
+
+    private fun setAdapter() {
+        var search: String? = null
+//        if (search != null) {
+            search = tripBinding.edtSearch.text.toString()
+//        }else{
+//            search = tripBinding.edtSearch.text=city.toString()
+//        }
+
+        if (search.isEmpty()) {
+            Toast.makeText(context, "Pleas Enter value", Toast.LENGTH_SHORT).show()
+        } else {
+
+
+            adapter = HotelSearchAdapter(this, hotelList)
+            tripBinding.rcvSuggestionItem.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            tripBinding.rcvSuggestionItem.adapter = adapter
+
+            mDbRef.child("hotels").child(search).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    hotelList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser = postSnapshot.getValue(HotelSearchModelClass::class.java)
+                        hotelList.add(currentUser!!)
+                        Log.e("TAG", "search: " + currentUser.hotelImage)
+
+                    }
+                    adapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("TAG", "onCancelled: ")
+                }
+
+            })
         }
     }
 
@@ -284,38 +323,5 @@ class MyTripPlanFragment : Fragment() {
             }
 
         })
-    }
-
-    private fun setAdapter() {
-       var search = tripBinding.edtSearch.text.toString()
-
-        if (search.isEmpty()){
-            Toast.makeText(context, "Pleas Enter value", Toast.LENGTH_SHORT).show()
-        }else{
-
-
-        adapter = HotelSearchAdapter(this, hotelList)
-        tripBinding.rcvSuggestionItem.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        tripBinding.rcvSuggestionItem.adapter = adapter
-
-        mDbRef.child("hotels").child(search).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                hotelList.clear()
-                for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(HotelSearchModelClass::class.java)
-                    hotelList.add(currentUser!!)
-                    Log.e("TAG", "search: " + currentUser.hotelImage)
-
-                }
-                adapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("TAG", "onCancelled: ")
-            }
-
-        })
-        }
     }
 }
