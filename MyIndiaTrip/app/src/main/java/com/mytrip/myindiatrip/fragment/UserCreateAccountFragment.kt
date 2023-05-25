@@ -1,32 +1,36 @@
 package com.mytrip.myindiatrip.fragment
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.mytrip.myindiatrip.databinding.FragmentProfileBinding
+import com.mytrip.myindiatrip.R
+import com.mytrip.myindiatrip.databinding.FragmentUserCreateAccountBinding
+import com.mytrip.myindiatrip.databinding.FragmentUserLoginBinding
+
+class UserCreateAccountFragment : Fragment() {
 
 
-class ProfileFragment : Fragment() {
-
-    lateinit var profileBinding: FragmentProfileBinding
+    lateinit var createAccountFragment: FragmentUserCreateAccountBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        profileBinding = FragmentProfileBinding.inflate(layoutInflater, container, false)
+        createAccountFragment= FragmentUserCreateAccountBinding.inflate(layoutInflater,container,false)
 
         initView()
         // Inflate the layout for this fragment
-        return profileBinding.root
+        return createAccountFragment.root
     }
 
     private fun initView() {
-        profileBinding.cdUserLogin.setOnClickListener {
+
+        createAccountFragment.txtLoginPage.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(com.mytrip.myindiatrip.R.id.container, UserLoginFragment()).commit()
         }
     }
-}
 
+
+}
