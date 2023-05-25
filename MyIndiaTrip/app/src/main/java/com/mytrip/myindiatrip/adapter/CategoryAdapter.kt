@@ -17,9 +17,10 @@ import kotlin.collections.ArrayList
 
 class CategoryAdapter(
     var homeFragment: HomeFragment,
-    var categoryList: ArrayList<CategoryModelClass>
+    var categoryList: ArrayList<CategoryModelClass>,
+    var click:(CategoryModelClass)-> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.MyViewHolder>() {
-    private var selectedItemPosition: Int = -1
+    private var selectedItemPosition: Int = 0
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image: ImageView = itemView.findViewById(R.id.imgCategory)
@@ -37,14 +38,15 @@ class CategoryAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.categoryName.text = categoryList[position].categoryName
+        holder.categoryName.text = categoryList[position].category_name
 
-        Glide.with(homeFragment).load(categoryList[position].categoryImage)
+        Glide.with(homeFragment).load(categoryList[position].category_image)
             .placeholder(R.drawable.ic_image).into(holder.image)
 
-        Log.e("TAG", "onBindViewHolder: " + categoryList[position].categoryImage)
+        Log.e("TAG", "onBindViewHolder: " + categoryList[position].category_image)
 
         holder.linCategory.setOnClickListener {
+            click.invoke(categoryList[position])
             selectedItemPosition = position
             notifyDataSetChanged()
         }

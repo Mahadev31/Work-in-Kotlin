@@ -1,13 +1,18 @@
 package com.mytrip.myindiatrip.activity
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.adapter.SearchAdapter
 import com.mytrip.myindiatrip.databinding.ActivitySearchBinding
+import com.mytrip.myindiatrip.databinding.ProgressBarBinding
 import com.mytrip.myindiatrip.model.SearchModelClass
 
 class SearchActivity : AppCompatActivity() {
@@ -15,6 +20,7 @@ class SearchActivity : AppCompatActivity() {
     var placeList = ArrayList<SearchModelClass>()
     lateinit var searchAdapter: SearchAdapter
     lateinit var mDbRef: DatabaseReference
+    lateinit var dialog:Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +38,17 @@ class SearchActivity : AppCompatActivity() {
         }
 
         searchBinding.imgSearch.setOnClickListener {
+            dialog = Dialog(this)
+            var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
+            dialog.setContentView(progressBarBinding.root)
+
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            dialog.window?.setLayout(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            dialog.show()
+
            var search = searchBinding.edtSearchText.text.toString()
 
         searchAdapter = SearchAdapter(this,placeList) {
@@ -53,6 +70,7 @@ class SearchActivity : AppCompatActivity() {
 
                 }
                 searchAdapter.notifyDataSetChanged()
+                dialog.dismiss()
             }
 
             override fun onCancelled(error: DatabaseError) {

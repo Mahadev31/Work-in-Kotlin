@@ -116,7 +116,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="@dimen/_50sdp"
             android:layout_marginVertical="@dimen/_10sdp"
-            android:src="@drawable/volume_off" />
+            android:src="@drawable/volume_on" />
     </RelativeLayout>
 
     <TextView

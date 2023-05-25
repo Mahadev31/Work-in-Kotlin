@@ -1,6 +1,9 @@
 package com.mytrip.myindiatrip.fragment
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
@@ -16,9 +20,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.activity.SearchActivity
 import com.mytrip.myindiatrip.adapter.CategoryAdapter
+import com.mytrip.myindiatrip.adapter.CategoryListAdapter
 import com.mytrip.myindiatrip.adapter.ImageSliderAdapter
 import com.mytrip.myindiatrip.adapter.PopularPlaceAdapter
 import com.mytrip.myindiatrip.databinding.FragmentHomeBinding
+import com.mytrip.myindiatrip.databinding.ProgressBarBinding
 import com.mytrip.myindiatrip.model.CategoryModelClass
 import com.mytrip.myindiatrip.model.ImageSliderModel
 import com.mytrip.myindiatrip.model.PopularModelClass
@@ -38,6 +44,8 @@ class HomeFragment : Fragment() {
     lateinit var popularAdapter: PopularPlaceAdapter
     var popularList = ArrayList<PopularModelClass>()
 
+    lateinit var   dialog : Dialog
+    var key=""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,10 +54,21 @@ class HomeFragment : Fragment() {
         homeBinding = FragmentHomeBinding.inflate(layoutInflater, container, false)
 
 
+         dialog = Dialog(requireContext())
+        var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
+        dialog.setContentView(progressBarBinding.root)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        dialog.show()
+
         mDbRef = FirebaseDatabase.getInstance().getReference()
 
-        homeBinding.imgSearch.setOnClickListener{
-            var i= Intent(context,SearchActivity::class.java)
+        homeBinding.imgSearch.setOnClickListener {
+            var i = Intent(context, SearchActivity::class.java)
             startActivity(i)
         }
         autoVideoPlay()
@@ -105,24 +124,25 @@ class HomeFragment : Fragment() {
 
     private fun category() {
 
-        popularAdapter = PopularPlaceAdapter(this, popularList)
-        homeBinding.rcvPopularPlace.layoutManager =
+        adapter = CategoryAdapter(this, categoryList) {
+          key= it.key!!
+            Log.e("TAG", "categoryList: "+it.key!! )
+            Log.e("TAG", "categoryListView: "+key )
+        }
+        homeBinding.rcvCategory.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        homeBinding.rcvPopularPlace.adapter = popularAdapter
+        homeBinding.rcvCategory.adapter = adapter
 
-        mDbRef.child("popular_place").addValueEventListener(object : ValueEventListener {
+        mDbRef.child("category_data").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                popularList.clear()
+                categoryList.clear()
                 for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(PopularModelClass::class.java)
-//                    if (mAuth.currentUser?.uid != currentUser?.uid) {
-                    currentUser?.popularImage = postSnapshot.child("p_image").value.toString()
-                    currentUser?.popularName = postSnapshot.child("p_name").value.toString()
-                    popularList.add(currentUser!!)
+                    val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
+                    categoryList.add(currentUser!!)
 
-//                    }
                 }
-                popularAdapter.notifyDataSetChanged()
+                dialog.dismiss()
+                adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -131,7 +151,41 @@ class HomeFragment : Fragment() {
 
         })
 
+        categoryListView()
 
+    }
+
+    private fun categoryListView() {
+
+
+
+    var    categoryListAdapter = CategoryListAdapter(this, categoryList)
+        homeBinding.rcvCategoryList.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        homeBinding.rcvCategoryList.adapter = categoryListAdapter
+
+        mDbRef.child(key).child("heritage").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                categoryList.clear()
+                for (postSnapshot in snapshot.children) {
+                    val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
+//
+//////                    if (mAuth.currentUser?.uid != currentUser?.uid) {
+//                    currentUser?.heritage_image = postSnapshot.child("heritage_image").value.toString()
+//                    currentUser?.heritage_name = postSnapshot.child("heritage_name").value.toString()
+                    categoryList.add(currentUser!!)
+
+                    Log.e("TAG", "heritage_image: "+ currentUser?.heritage_image  )
+//                    }
+                }
+                categoryListAdapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
     }
 
     private fun autoImageSlider() {
@@ -176,6 +230,7 @@ class HomeFragment : Fragment() {
 
 //                    }
                 }
+                dialog.dismiss()
                 sliderAdapter.notifyDataSetChanged()
             }
 
@@ -207,25 +262,28 @@ class HomeFragment : Fragment() {
     }
 
     private fun popularPlace() {
-        adapter = CategoryAdapter(this, categoryList)
-        homeBinding.rcvCategory.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        homeBinding.rcvCategory.adapter = adapter
 
-        mDbRef.child("category_data").addValueEventListener(object : ValueEventListener {
+
+
+        popularAdapter = PopularPlaceAdapter(this, popularList)
+        homeBinding.rcvPopularPlace.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        homeBinding.rcvPopularPlace.adapter = popularAdapter
+
+        mDbRef.child("popular_place").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                categoryList.clear()
+                popularList.clear()
                 for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
+                    val currentUser = postSnapshot.getValue(PopularModelClass::class.java)
 //                    if (mAuth.currentUser?.uid != currentUser?.uid) {
-                    currentUser?.categoryImage =
-                        postSnapshot.child("category_image").value.toString()
-                    currentUser?.categoryName = postSnapshot.child("category_name").value.toString()
-                    categoryList.add(currentUser!!)
+                    currentUser?.popularImage = postSnapshot.child("p_image").value.toString()
+                    currentUser?.popularName = postSnapshot.child("p_name").value.toString()
+                    popularList.add(currentUser!!)
 
 //                    }
                 }
-                adapter.notifyDataSetChanged()
+                dialog.dismiss()
+                popularAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {

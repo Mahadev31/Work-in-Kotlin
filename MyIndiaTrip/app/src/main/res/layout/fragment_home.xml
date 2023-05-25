@@ -101,6 +101,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvCategoryList"
+                android:layout_width="match_parent"
+                android:layout_marginVertical="@dimen/_10sdp"
+                android:layout_height="wrap_content" />
+
             <!--    image show -->
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewPager"
@@ -140,7 +146,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginBottom="@dimen/_50sdp" />
+                android:layout_marginBottom="@dimen/_10sdp" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

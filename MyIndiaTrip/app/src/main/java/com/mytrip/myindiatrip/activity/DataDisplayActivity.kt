@@ -84,15 +84,15 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         textToSpeech!!.speak(text, TextToSpeech.QUEUE_FLUSH, null,"")
     }
 
-//    public override fun onDestroy() {
-//        // Shutdown TTS when
-//        // activity is destroyed
-//        if (textToSpeech != null) {
-//            textToSpeech!!.stop()
-//            textToSpeech!!.shutdown()
-//        }
-//        super.onDestroy()
-//    }
+    public override fun onDestroy() {
+        // Shutdown TTS when
+        // activity is destroyed
+        if (textToSpeech != null) {
+            textToSpeech!!.stop()
+            textToSpeech!!.shutdown()
+        }
+        super.onDestroy()
+    }
 
 
 }

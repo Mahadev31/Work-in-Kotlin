@@ -1,9 +1,12 @@
 package com.mytrip.myindiatrip.fragment
 
 import android.Manifest
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
@@ -15,6 +18,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -27,6 +31,7 @@ import com.google.firebase.database.*
 import com.mytrip.myindiatrip.activity.SearchLocationActivity
 import com.mytrip.myindiatrip.adapter.HotelSearchAdapter
 import com.mytrip.myindiatrip.databinding.FragmentMyTripPlanBinding
+import com.mytrip.myindiatrip.databinding.ProgressBarBinding
 import com.mytrip.myindiatrip.model.HotelSearchModelClass
 import java.util.*
 
@@ -39,7 +44,7 @@ class MyTripPlanFragment : Fragment() {
 
     lateinit var adapter: HotelSearchAdapter
     var hotelList = ArrayList<HotelSearchModelClass>()
-
+lateinit var dialog:Dialog
     // Initialize variables
     var city:String=""
 //     var search:String=""
@@ -52,6 +57,16 @@ class MyTripPlanFragment : Fragment() {
 
         mDbRef = FirebaseDatabase.getInstance().getReference()
 
+        dialog = Dialog(requireContext())
+        var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
+        dialog.setContentView(progressBarBinding.root)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        dialog.show()
 
         tripBinding.txtCurrentLocation.setOnClickListener {
             var i = Intent(context, SearchLocationActivity::class.java)
@@ -316,6 +331,7 @@ class MyTripPlanFragment : Fragment() {
 
                 }
                 adapter.notifyDataSetChanged()
+                dialog.dismiss()
             }
 
             override fun onCancelled(error: DatabaseError) {
