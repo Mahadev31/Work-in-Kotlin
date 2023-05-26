@@ -35,12 +35,12 @@ class CategoryListAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.PopularName.text = categoryList[position].heritage_name
+        holder.PopularName.text = categoryList[position].place_name
 
-        Glide.with(homeFragment).load(categoryList[position].heritage_image)
+        Glide.with(homeFragment).load(categoryList[position].place_image)
             .placeholder(R.drawable.ic_image).into(holder.image)
 
-        Log.e("TAG", "onBindViewHolder: " + categoryList[position].heritage_image)
+        Log.e("TAG", "onBindViewHolder: " + categoryList[position].place_image)
 
         holder.layPopular.setOnClickListener {
 

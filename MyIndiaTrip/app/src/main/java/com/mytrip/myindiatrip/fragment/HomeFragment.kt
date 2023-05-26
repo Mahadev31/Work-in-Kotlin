@@ -125,20 +125,20 @@ class HomeFragment : Fragment() {
     private fun category() {
 
         adapter = CategoryAdapter(this, categoryList) {
-          key= it.key!!
-            Log.e("TAG", "categoryList: "+it.key!! )
-            Log.e("TAG", "categoryListView: "+key )
+          key= it.key.toString()
+            Log.e("TAG", "categoryList: "+it.key )
+            Log.e("TAG", "categoryListView: $key")
         }
         homeBinding.rcvCategory.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         homeBinding.rcvCategory.adapter = adapter
 
-        mDbRef.child("category_data").addValueEventListener(object : ValueEventListener {
+        mDbRef.child("category").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 categoryList.clear()
                 for (postSnapshot in snapshot.children) {
                     val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
-                    categoryList.add(currentUser!!)
+                    currentUser?.let { categoryList.add(it) }
 
                 }
                 dialog.dismiss()
@@ -159,26 +159,27 @@ class HomeFragment : Fragment() {
 
 
 
-    var    categoryListAdapter = CategoryListAdapter(this, categoryList)
-        homeBinding.rcvCategoryList.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        homeBinding.rcvCategoryList.adapter = categoryListAdapter
 
-        mDbRef.child(key).child("heritage").addValueEventListener(object : ValueEventListener {
+        mDbRef.child("category").child(key).child("h_place").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 categoryList.clear()
                 for (postSnapshot in snapshot.children) {
                     val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
 //
-//////                    if (mAuth.currentUser?.uid != currentUser?.uid) {
-//                    currentUser?.heritage_image = postSnapshot.child("heritage_image").value.toString()
-//                    currentUser?.heritage_name = postSnapshot.child("heritage_name").value.toString()
+////////                    if (mAuth.currentUser?.uid != currentUser?.uid) {
+//                    currentUser?.place_image = postSnapshot.child("place_image").value.toString()
+//                    currentUser?.place_name = postSnapshot.child("place_name").value.toString()
                     categoryList.add(currentUser!!)
 
-                    Log.e("TAG", "heritage_image: "+ currentUser?.heritage_image  )
+                    Log.e("TAG", "heritage_image: "+ currentUser?.place_image  )
 //                    }
                 }
-                categoryListAdapter.notifyDataSetChanged()
+//                categoryListAdapter.notifyDataSetChanged()
+
+                var    categoryListAdapter = CategoryListAdapter(this@HomeFragment, categoryList)
+                homeBinding.rcvCategoryList.layoutManager =
+                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                homeBinding.rcvCategoryList.adapter = categoryListAdapter
             }
 
             override fun onCancelled(error: DatabaseError) {
