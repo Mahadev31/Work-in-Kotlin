@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.mytrip.myindiatrip.activity.DataDisplayActivity
 import com.mytrip.myindiatrip.activity.SearchActivity
 import com.mytrip.myindiatrip.adapter.CategoryAdapter
 import com.mytrip.myindiatrip.adapter.CategoryListAdapter
@@ -44,8 +45,8 @@ class HomeFragment : Fragment() {
     lateinit var popularAdapter: PopularPlaceAdapter
     var popularList = ArrayList<PopularModelClass>()
 
-    lateinit var   dialog : Dialog
-       var id:String=""
+    lateinit var dialog: Dialog
+    var id: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +55,7 @@ class HomeFragment : Fragment() {
         homeBinding = FragmentHomeBinding.inflate(layoutInflater, container, false)
 
 
-         dialog = Dialog(requireContext())
+        dialog = Dialog(requireContext())
         var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
         dialog.setContentView(progressBarBinding.root)
 
@@ -136,8 +137,8 @@ class HomeFragment : Fragment() {
                 dialog.dismiss()
 
                 var adapter = CategoryAdapter(this@HomeFragment, categoryList) {
-                    id= it
-                    Log.e("TAG", "categoryList: "+it )
+                    id = it
+                    Log.e("TAG", "categoryList: " + it)
                     Log.e("TAG", "categoryListView: $id")
                 }
                 homeBinding.rcvCategory.layoutManager =
@@ -154,43 +155,49 @@ class HomeFragment : Fragment() {
         })
 
 
-
     }
 
     private fun categoryListView() {
 
 
-
-
-        mDbRef.child("category_data").child("1").child("heritage ").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                categoryItemList.clear()
-                for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
+        mDbRef.child("category_data").child("1").child("place")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    categoryItemList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
 //
-//////                    if (mAuth.currentUser?.uid != currentUser?.uid) {
-                    currentUser?.place_image = postSnapshot.child("heritage_image").value.toString()
-                    currentUser?.place_name = postSnapshot.child("heritage_name").value.toString()
-                    categoryItemList.add(currentUser!!)
+////////                    if (mAuth.currentUser?.uid != currentUser?.uid) {
+//                        currentUser?.image =
+//                            postSnapshot.child("image").value.toString()
+//                        currentUser?.name =
+//                            postSnapshot.child("name").value.toString()
+                        categoryItemList.add(currentUser!!)
 
-                    Log.e("TAG", "heritage_image: "+ currentUser?.place_image  )
+                        Log.e("TAG", "heritage_image: " + currentUser?.image)
 //                    }
+                    }
+
+
+                    var categoryListAdapter =
+                        CategoryListAdapter(this@HomeFragment, categoryItemList) {
+                            var i = Intent(context, DataDisplayActivity::class.java)
+                            i.putExtra("Key", it.key)
+                            i.putExtra("child_key", it.child_key)
+                            startActivity(i)
+                        }
+                    homeBinding.rcvCategoryList.layoutManager =
+                        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    homeBinding.rcvCategoryList.adapter = categoryListAdapter
+
+                    categoryListAdapter.notifyDataSetChanged()
                 }
 
+                override fun onCancelled(error: DatabaseError) {
 
-                var    categoryListAdapter = CategoryListAdapter(this@HomeFragment, categoryItemList)
-                homeBinding.rcvCategoryList.layoutManager =
-                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                homeBinding.rcvCategoryList.adapter = categoryListAdapter
+                }
 
-                categoryListAdapter.notifyDataSetChanged()
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-
-            }
-
-        })
+            })
     }
 
     private fun autoImageSlider() {
@@ -267,7 +274,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun popularPlace() {
-
 
 
         popularAdapter = PopularPlaceAdapter(this, popularList)

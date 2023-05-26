@@ -13,13 +13,13 @@ import com.mytrip.myindiatrip.model.SearchModelClass
 import java.util.*
 
 class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
-    lateinit var displayBinding:ActivityDataDisplayBinding
+    lateinit var displayBinding: ActivityDataDisplayBinding
 
     private var textToSpeech: TextToSpeech? = null
     lateinit var mDbRef: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        displayBinding=ActivityDataDisplayBinding.inflate(layoutInflater)
+        displayBinding = ActivityDataDisplayBinding.inflate(layoutInflater)
         setContentView(displayBinding.root)
 
         mDbRef = FirebaseDatabase.getInstance().getReference()
@@ -27,38 +27,75 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     }
 
     private fun initView() {
+        displayBinding.imgBackDisplay.setOnClickListener {
+            onBackPressed()
+        }
 
-        var search=intent.getStringExtra("search").toString()
-        var key=intent.getStringExtra("Key").toString()
+        var search = intent.getStringExtra("search").toString()
+        var key = intent.getStringExtra("Key").toString()
+        var child_key = intent.getStringExtra("child_key").toString()
 //        var title=""
 
-        mDbRef.child("search_bar").child(search).child(key).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+        if (child_key != null) {
+            mDbRef.child("category_data").child("1").child("place").child(child_key)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
 
-               var image = snapshot.child("placeImage").value.toString()
-               var name = snapshot.child("placeName").value.toString()
-               var rating = snapshot.child("placeRating").value.toString()
-               var description = snapshot.child("placeDescription").value.toString()
-               var location = snapshot.child("placeLocation").value.toString()
+                        var image = snapshot.child("image").value.toString()
+                        var name = snapshot.child("name").value.toString()
+                        var rating = snapshot.child("rating").value.toString()
+                        var description = snapshot.child("description").value.toString()
+                        var location = snapshot.child("location").value.toString()
 
-                Glide.with(this@DataDisplayActivity).load(image)
-                    .placeholder(R.drawable.ic_image).into(displayBinding.imgPlaceDisplay)
+                        Glide.with(this@DataDisplayActivity).load(image)
+                            .placeholder(R.drawable.ic_image).into(displayBinding.imgPlaceDisplay)
 
-                displayBinding.txtPlaceTitle.text = name
-                displayBinding.txtPlaceRating.text = rating
-                displayBinding.txtPlaceDescription.text = description
-                displayBinding.txtPlaceLocation.text = location
+                        displayBinding.txtPlaceTitle.text = name
+                        displayBinding.txtPlaceRating.text = rating
+                        displayBinding.txtPlaceDescription.text = description
+                        displayBinding.txtPlaceLocation.text = location
 //                searchAdapter.notifyDataSetChanged()
-                Log.e("Try", "search: "+search )
-                Log.e("Try", "key: "+key )
-                Log.e("Try", "title: "+title )
-            }
+                        Log.e("Try", "key: " + key)
+                        Log.e("Try", "child_key: " + child_key)
+                        Log.e("Try", "name: " + name)
+                    }
 
-            override fun onCancelled(error: DatabaseError) {
+                    override fun onCancelled(error: DatabaseError) {
 
-            }
+                    }
 
-        })
+                })
+        } else {
+            mDbRef.child("search_bar").child(search).child(key)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+
+                        var image = snapshot.child("placeImage").value.toString()
+                        var name = snapshot.child("placeName").value.toString()
+                        var rating = snapshot.child("placeRating").value.toString()
+                        var description = snapshot.child("placeDescription").value.toString()
+                        var location = snapshot.child("placeLocation").value.toString()
+
+                        Glide.with(this@DataDisplayActivity).load(image)
+                            .placeholder(R.drawable.ic_image).into(displayBinding.imgPlaceDisplay)
+
+                        displayBinding.txtPlaceTitle.text = name
+                        displayBinding.txtPlaceRating.text = rating
+                        displayBinding.txtPlaceDescription.text = description
+                        displayBinding.txtPlaceLocation.text = location
+//                searchAdapter.notifyDataSetChanged()
+                        Log.e("Try", "search: " + search)
+                        Log.e("Try", "key: " + key)
+                        Log.e("Try", "title: " + title)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+
+        }
 
         displayBinding.imgVolumeSpeech!!.isEnabled = false
         textToSpeech = TextToSpeech(this, this)
@@ -73,15 +110,16 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             val result = textToSpeech!!.setLanguage(Locale.ENGLISH)
 
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
-                Log.e("TTS","The Language not supported!")
+                Log.e("TTS", "The Language not supported!")
             } else {
                 displayBinding.imgVolumeSpeech!!.isEnabled = true
             }
         }
     }
+
     private fun speakOut() {
         val text = displayBinding.txtPlaceDescription!!.text.toString()
-        textToSpeech!!.speak(text, TextToSpeech.QUEUE_FLUSH, null,"")
+        textToSpeech!!.speak(text, TextToSpeech.QUEUE_FLUSH, null, "")
     }
 
     public override fun onDestroy() {

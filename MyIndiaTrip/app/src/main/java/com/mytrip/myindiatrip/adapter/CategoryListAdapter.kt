@@ -15,7 +15,8 @@ import com.mytrip.myindiatrip.model.CategoryModelClass
 
 class CategoryListAdapter(
     var homeFragment: HomeFragment,
-    var categoryList: ArrayList<CategoryModelClass>
+    var categoryItemList: ArrayList<CategoryModelClass>,
+    var click:(CategoryModelClass)->Unit
 ) : RecyclerView.Adapter<CategoryListAdapter.MyViewHolder>() {
 //    private var selectedItemPosition: Int = -1
 
@@ -31,16 +32,20 @@ class CategoryListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return categoryList.size
+        return categoryItemList.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.PopularName.text = categoryList[position].place_name
+        holder.PopularName.text = categoryItemList[position].name
 
-        Glide.with(homeFragment).load(categoryList[position].place_image)
+        Glide.with(homeFragment).load(categoryItemList[position].image)
             .placeholder(R.drawable.ic_image).into(holder.image)
 
-        Log.e("TAG", "image place_image: " + categoryList[position].place_image)
+        Log.e("TAG", "image place_image: " + categoryItemList[position].image)
+
+        holder.layPopular.setOnClickListener {
+            click.invoke(categoryItemList[position])
+        }
 
 
 

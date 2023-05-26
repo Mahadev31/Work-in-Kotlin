@@ -47,7 +47,7 @@ class CategoryAdapter(
 
         holder.linCategory.setOnClickListener {
 
-            click.invoke(categoryList[position].key)
+            click.invoke(categoryList[position].key!!)
             selectedItemPosition = position
             notifyDataSetChanged()
         }
