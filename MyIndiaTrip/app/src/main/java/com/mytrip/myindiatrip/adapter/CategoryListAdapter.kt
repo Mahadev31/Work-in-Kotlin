@@ -40,12 +40,9 @@ class CategoryListAdapter(
         Glide.with(homeFragment).load(categoryList[position].place_image)
             .placeholder(R.drawable.ic_image).into(holder.image)
 
-        Log.e("TAG", "onBindViewHolder: " + categoryList[position].place_image)
+        Log.e("TAG", "image place_image: " + categoryList[position].place_image)
 
-        holder.layPopular.setOnClickListener {
 
-            notifyDataSetChanged()
-        }
 
     }
 }

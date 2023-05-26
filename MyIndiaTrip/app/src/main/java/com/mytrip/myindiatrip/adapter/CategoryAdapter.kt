@@ -18,9 +18,9 @@ import kotlin.collections.ArrayList
 class CategoryAdapter(
     var homeFragment: HomeFragment,
     var categoryList: ArrayList<CategoryModelClass>,
-    var click:(CategoryModelClass)-> Unit
+    var click:(String)-> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.MyViewHolder>() {
-    private var selectedItemPosition: Int = 0
+     var selectedItemPosition = -1
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image: ImageView = itemView.findViewById(R.id.imgCategory)
@@ -46,7 +46,8 @@ class CategoryAdapter(
         Log.e("TAG", "onBindViewHolder: " + categoryList[position].category_image)
 
         holder.linCategory.setOnClickListener {
-            click.invoke(categoryList[position])
+
+            click.invoke(categoryList[position].key)
             selectedItemPosition = position
             notifyDataSetChanged()
         }

@@ -6,12 +6,11 @@ package com.mytrip.myindiatrip.model
      var category_name:String?=null
      var place_image:String?=null
      var place_name:String?=null
-     var key:String?=null
-
+     lateinit var key:String
     constructor(){
 
     }
-    constructor(category_image:String?,category_name:String?,place_image:String?,place_name:String?,key:String?){
+    constructor(category_image:String?,category_name:String?,place_image:String?,place_name:String?,key:String){
 
        this. category_image=category_image
        this. category_name=category_name
