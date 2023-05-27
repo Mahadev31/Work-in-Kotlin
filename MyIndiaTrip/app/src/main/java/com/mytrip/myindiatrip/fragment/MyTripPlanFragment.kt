@@ -18,6 +18,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -269,6 +270,12 @@ lateinit var dialog:Dialog
 
         setByDefualtAdapter()
 
+        tripBinding.edtSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                setAdapter()
+            }
+            true
+        }
         tripBinding.imgSearchT.setOnClickListener {
             setAdapter()
 
@@ -278,12 +285,19 @@ lateinit var dialog:Dialog
 
 
     private fun setAdapter() {
+        dialog = Dialog(requireContext())
+        var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
+        dialog.setContentView(progressBarBinding.root)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        dialog.show()
+
         var search: String? = null
-//        if (search != null) {
             search = tripBinding.edtSearch.text.toString()
-//        }else{
-//            search = tripBinding.edtSearch.text=city.toString()
-//        }
 
         if (search.isEmpty()) {
             Toast.makeText(context, "Pleas Enter value", Toast.LENGTH_SHORT).show()
@@ -304,6 +318,7 @@ lateinit var dialog:Dialog
                         Log.e("TAG", "search: " + currentUser.hotelImage)
 
                     }
+                    dialog.dismiss()
                     adapter.notifyDataSetChanged()
                 }
 

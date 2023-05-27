@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:background="@color/white"
-            android:imeOptions="actionDone"
+            android:imeOptions="actionSearch"
             android:hint="Search"
             android:textStyle="bold" />
 

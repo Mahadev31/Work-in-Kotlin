@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
@@ -37,19 +38,32 @@ class SearchActivity : AppCompatActivity() {
           onBackPressed()
         }
 
+        searchBinding.edtSearchText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                searchFunction()
+            }
+            true
+        }
         searchBinding.imgSearch.setOnClickListener {
-            dialog = Dialog(this)
-            var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
-            dialog.setContentView(progressBarBinding.root)
+            searchBinding.edtSearchText
+            searchFunction()
 
-            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            dialog.window?.setLayout(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            dialog.show()
+        }
+    }
 
-           var search = searchBinding.edtSearchText.text.toString()
+    private fun searchFunction() {
+        dialog = Dialog(this)
+        var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
+        dialog.setContentView(progressBarBinding.root)
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        dialog.show()
+
+        var search = searchBinding.edtSearchText.text.toString()
 
         searchAdapter = SearchAdapter(this,placeList) {
             var clickIntent = Intent(this@SearchActivity, DataDisplayActivity::class.java)
@@ -58,7 +72,7 @@ class SearchActivity : AppCompatActivity() {
             Log.e("TAG", "initView: "+it.key )
             startActivity(clickIntent)
         }
-            searchBinding.rcvSearchPlace.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+        searchBinding.rcvSearchPlace.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         searchBinding.rcvSearchPlace.adapter=searchAdapter
 
         mDbRef.child("search_bar").child(search).addValueEventListener(object : ValueEventListener {
@@ -78,6 +92,5 @@ class SearchActivity : AppCompatActivity() {
             }
 
         })
-        }
     }
 }

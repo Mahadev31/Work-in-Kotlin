@@ -41,7 +41,7 @@ class HomeFragment : Fragment() {
     var imageSliderList = ArrayList<ImageSliderModel>()
 
     lateinit var popularAdapter: PopularPlaceAdapter
-    var popularList = ArrayList<PopularModelClass>()
+    var popularList = ArrayList<CategoryModelClass>()
 
     lateinit var dialog: Dialog
 //      var id: String?=null
@@ -223,7 +223,12 @@ var newId=key
             }
         })
 
-        var sliderAdapter = ImageSliderAdapter(this, imageSliderList)
+        var sliderAdapter = ImageSliderAdapter(this, imageSliderList) {
+            var i = Intent(context, DataDisplayActivity::class.java)
+            i.putExtra("Key", it.key)
+            i.putExtra("slider",true)
+            startActivity(i)
+        }
 //        homeBinding.rcvCategory.layoutManager =
 //            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         homeBinding.viewPager.adapter = sliderAdapter
@@ -278,7 +283,12 @@ var newId=key
     private fun popularPlace() {
 
 
-        popularAdapter = PopularPlaceAdapter(this, popularList)
+        popularAdapter = PopularPlaceAdapter(this, popularList){
+            var i = Intent(context, DataDisplayActivity::class.java)
+            i.putExtra("Key", it.key)
+            i.putExtra("popular",true)
+            startActivity(i)
+        }
         homeBinding.rcvPopularPlace.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         homeBinding.rcvPopularPlace.adapter = popularAdapter
@@ -287,10 +297,8 @@ var newId=key
             override fun onDataChange(snapshot: DataSnapshot) {
                 popularList.clear()
                 for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(PopularModelClass::class.java)
+                    val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
 //                    if (mAuth.currentUser?.uid != currentUser?.uid) {
-                    currentUser?.popularImage = postSnapshot.child("p_image").value.toString()
-                    currentUser?.popularName = postSnapshot.child("p_name").value.toString()
                     popularList.add(currentUser!!)
 
 //                    }

@@ -19,7 +19,8 @@ import kotlin.collections.ArrayList
 
 class PopularPlaceAdapter(
     var homeFragment: HomeFragment,
-    var popularList: ArrayList<PopularModelClass>
+    var popularList: ArrayList<CategoryModelClass>,
+    var click: (CategoryModelClass) -> Unit
 ) : RecyclerView.Adapter<PopularPlaceAdapter.MyViewHolder>() {
 //    private var selectedItemPosition: Int = -1
 
@@ -30,7 +31,8 @@ class PopularPlaceAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        var v = LayoutInflater.from(parent.context).inflate(R.layout.popular_item_list, parent, false)
+        var v =
+            LayoutInflater.from(parent.context).inflate(R.layout.popular_item_list, parent, false)
         return MyViewHolder(v)
     }
 
@@ -39,15 +41,15 @@ class PopularPlaceAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.PopularName.text = popularList[position].popularName
+        holder.PopularName.text = popularList[position].name
 
-        Glide.with(homeFragment).load(popularList[position].popularImage)
+        Glide.with(homeFragment).load(popularList[position].image)
             .placeholder(R.drawable.ic_image).into(holder.image)
 
-        Log.e("TAG", "onBindViewHolder: " + popularList[position].popularImage)
+        Log.e("TAG", "onBindViewHolder: " + popularList[position].image)
 
         holder.layPopular.setOnClickListener {
-
+            click.invoke(popularList[position])
             notifyDataSetChanged()
         }
 

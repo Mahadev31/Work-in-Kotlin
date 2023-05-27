@@ -68,7 +68,65 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        } else {
+        }    else  if (key != null && intent.hasExtra("slider") ) {
+            mDbRef.child("image_slider").child(key)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+
+                        var image = snapshot.child("image").value.toString()
+                        var name = snapshot.child("name").value.toString()
+                        var rating = snapshot.child("rating").value.toString()
+                        var description = snapshot.child("description").value.toString()
+                        var location = snapshot.child("location").value.toString()
+
+                        Glide.with(this@DataDisplayActivity).load(image)
+                            .placeholder(R.drawable.ic_image).into(displayBinding.imgPlaceDisplay)
+
+                        displayBinding.txtPlaceTitle.text = name
+                        displayBinding.txtPlaceRating.text = rating
+                        displayBinding.txtPlaceDescription.text = description
+                        displayBinding.txtPlaceLocation.text = location
+//                searchAdapter.notifyDataSetChanged()
+                        Log.e("Try", "key: " + key)
+                        Log.e("Try", "child_key: " + child_key)
+                        Log.e("Try", "name: " + name)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+        }  else  if (key != null && intent.hasExtra("popular") ) {
+            mDbRef.child("popular_place").child(key)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+
+                        var image = snapshot.child("image").value.toString()
+                        var name = snapshot.child("name").value.toString()
+                        var rating = snapshot.child("rating").value.toString()
+                        var description = snapshot.child("description").value.toString()
+                        var location = snapshot.child("location").value.toString()
+
+                        Glide.with(this@DataDisplayActivity).load(image)
+                            .placeholder(R.drawable.ic_image).into(displayBinding.imgPlaceDisplay)
+
+                        displayBinding.txtPlaceTitle.text = name
+                        displayBinding.txtPlaceRating.text = rating
+                        displayBinding.txtPlaceDescription.text = description
+                        displayBinding.txtPlaceLocation.text = location
+//                searchAdapter.notifyDataSetChanged()
+                        Log.e("Try", "key: " + key)
+                        Log.e("Try", "child_key: " + child_key)
+                        Log.e("Try", "name: " + name)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+        }else {
             mDbRef.child("search_bar").child(search).child(key)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {

@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.mytrip.myindiatrip.R
@@ -16,7 +17,7 @@ import com.mytrip.myindiatrip.model.ImageSliderModel
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ImageSliderAdapter(var homeFragment: HomeFragment, var imageSliderList: ArrayList<ImageSliderModel>) : PagerAdapter() {
+class ImageSliderAdapter(var homeFragment: HomeFragment, var imageSliderList: ArrayList<ImageSliderModel>,var click:(ImageSliderModel)-> Unit ): PagerAdapter() {
     override fun getCount(): Int {
         return imageSliderList.size
     }
@@ -35,14 +36,18 @@ class ImageSliderAdapter(var homeFragment: HomeFragment, var imageSliderList: Ar
         val imageView: ImageView = itemView.findViewById<View>(R.id.imgSliderView) as ImageView
         val name: TextView = itemView.findViewById<View>(R.id.txtSliderName) as TextView
 
+        val cdViewSlider: CardView = itemView.findViewById<View>(R.id.cdViewSlider) as CardView
+
         name.text=imageSliderList[position].name.toString()
-
-
 
         Glide.with(homeFragment).load(imageSliderList[position].image)
             .placeholder(R.drawable.ic_image).into(imageView)
 
         Log.e("TAG", "image slider: " + imageSliderList[position].image)
+
+        cdViewSlider.setOnClickListener {
+            click.invoke(imageSliderList[position])
+        }
 
         Objects.requireNonNull(container).addView(itemView)
 

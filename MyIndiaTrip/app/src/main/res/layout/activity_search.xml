@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:background="@drawable/round_trip_search"
             android:hint="Search Place,Hotel,etc "
-            android:imeOptions="actionDone"
+            android:imeOptions="actionSearch"
             android:inputType="text"
             android:padding="@dimen/_5sdp"
             app:endIconMode="clear_text" />
