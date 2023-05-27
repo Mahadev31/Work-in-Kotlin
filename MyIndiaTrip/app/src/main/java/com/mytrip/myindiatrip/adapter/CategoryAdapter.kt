@@ -18,7 +18,7 @@ import kotlin.collections.ArrayList
 class CategoryAdapter(
     var homeFragment: HomeFragment,
     var categoryList: ArrayList<CategoryModelClass>,
-    var click:(String)-> Unit
+    var click:((CategoryModelClass)-> Unit)
 ) : RecyclerView.Adapter<CategoryAdapter.MyViewHolder>() {
      var selectedItemPosition = -1
 
@@ -47,7 +47,7 @@ class CategoryAdapter(
 
         holder.linCategory.setOnClickListener {
 
-            click.invoke(categoryList[position].key!!)
+            click.invoke(categoryList[position])
             selectedItemPosition = position
             notifyDataSetChanged()
         }

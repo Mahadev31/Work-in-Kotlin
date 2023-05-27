@@ -17,6 +17,9 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var textToSpeech: TextToSpeech? = null
     lateinit var mDbRef: DatabaseReference
+
+    lateinit var search:String
+    lateinit var child_key:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         displayBinding = ActivityDataDisplayBinding.inflate(layoutInflater)
@@ -31,13 +34,13 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             onBackPressed()
         }
 
-        var search = intent.getStringExtra("search").toString()
+         search = intent.getStringExtra("search").toString()
         var key = intent.getStringExtra("Key").toString()
-        var child_key = intent.getStringExtra("child_key").toString()
+         child_key = intent.getStringExtra("child_key").toString()
 //        var title=""
 
-        if (child_key != null) {
-            mDbRef.child("category_data").child("1").child("place").child(child_key)
+        if (child_key != null && intent.hasExtra("category") ) {
+            mDbRef.child("category_data").child(key).child("place").child(child_key)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
 

@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,6 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.activity.DataDisplayActivity
 import com.mytrip.myindiatrip.activity.SearchActivity
@@ -46,7 +44,7 @@ class HomeFragment : Fragment() {
     var popularList = ArrayList<PopularModelClass>()
 
     lateinit var dialog: Dialog
-    var id: String = ""
+//      var id: String?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,7 +72,7 @@ class HomeFragment : Fragment() {
         }
         autoVideoPlay()
         category()
-        categoryListView()
+
         autoImageSlider()
         popularPlace()
         return homeBinding.root
@@ -125,7 +123,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun category() {
-
         mDbRef.child("category_data").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
 //                categoryList.clear()
@@ -137,9 +134,10 @@ class HomeFragment : Fragment() {
                 dialog.dismiss()
 
                 var adapter = CategoryAdapter(this@HomeFragment, categoryList) {
-                    id = it
-                    Log.e("TAG", "categoryList: " + it)
+                 var   key = it.key!!
+                    Log.e("TAG", "categoryList: " + it.key)
                     Log.e("TAG", "categoryListView: $id")
+                    categoryListView(key)
                 }
                 homeBinding.rcvCategory.layoutManager =
                     LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -157,47 +155,51 @@ class HomeFragment : Fragment() {
 
     }
 
-    private fun categoryListView() {
+    private fun categoryListView(key: String) {
+var newId=key
+
+        Log.e("TAG", "sczc:"+newId )
+        if (newId != null) {
+            mDbRef.child("category_data").child(newId.toString()).child("place")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        categoryItemList.clear()
+                        for (postSnapshot in snapshot.children) {
+                            val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
+    //
+    ////////                    if (mAuth.currentUser?.uid != currentUser?.uid) {
+    //                        currentUser?.image =
+    //                            postSnapshot.child("image").value.toString()
+    //                        currentUser?.name =
+    //                            postSnapshot.child("name").value.toString()
+                            categoryItemList.add(currentUser!!)
+
+                            Log.e("TAG", "heritage_image: " + currentUser?.image)
+    //                    }
+                        }
 
 
-        mDbRef.child("category_data").child("1").child("place")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    categoryItemList.clear()
-                    for (postSnapshot in snapshot.children) {
-                        val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
-//
-////////                    if (mAuth.currentUser?.uid != currentUser?.uid) {
-//                        currentUser?.image =
-//                            postSnapshot.child("image").value.toString()
-//                        currentUser?.name =
-//                            postSnapshot.child("name").value.toString()
-                        categoryItemList.add(currentUser!!)
+                        var categoryListAdapter =
+                            CategoryListAdapter(this@HomeFragment, categoryItemList) {
+                                var i = Intent(context, DataDisplayActivity::class.java)
+                                i.putExtra("Key", newId)
+                                i.putExtra("child_key", it.child_key)
+                                i.putExtra("category",true)
+                                startActivity(i)
+                            }
+                        homeBinding.rcvCategoryList.layoutManager =
+                            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                        homeBinding.rcvCategoryList.adapter = categoryListAdapter
 
-                        Log.e("TAG", "heritage_image: " + currentUser?.image)
-//                    }
+                        categoryListAdapter.notifyDataSetChanged()
                     }
 
+                    override fun onCancelled(error: DatabaseError) {
 
-                    var categoryListAdapter =
-                        CategoryListAdapter(this@HomeFragment, categoryItemList) {
-                            var i = Intent(context, DataDisplayActivity::class.java)
-                            i.putExtra("Key", it.key)
-                            i.putExtra("child_key", it.child_key)
-                            startActivity(i)
-                        }
-                    homeBinding.rcvCategoryList.layoutManager =
-                        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    homeBinding.rcvCategoryList.adapter = categoryListAdapter
+                    }
 
-                    categoryListAdapter.notifyDataSetChanged()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
+                })
+        }
     }
 
     private fun autoImageSlider() {
