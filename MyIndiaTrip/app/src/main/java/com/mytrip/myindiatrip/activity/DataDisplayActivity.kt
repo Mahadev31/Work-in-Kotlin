@@ -8,8 +8,6 @@ import com.bumptech.glide.Glide
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.databinding.ActivityDataDisplayBinding
-import com.mytrip.myindiatrip.model.PopularModelClass
-import com.mytrip.myindiatrip.model.SearchModelClass
 import java.util.*
 
 class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
@@ -131,11 +129,11 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
 
-                        var image = snapshot.child("placeImage").value.toString()
-                        var name = snapshot.child("placeName").value.toString()
-                        var rating = snapshot.child("placeRating").value.toString()
-                        var description = snapshot.child("placeDescription").value.toString()
-                        var location = snapshot.child("placeLocation").value.toString()
+                        var image = snapshot.child("image").value.toString()
+                        var name = snapshot.child("name").value.toString()
+                        var rating = snapshot.child("rating").value.toString()
+                        var description = snapshot.child("description").value.toString()
+                        var location = snapshot.child("location").value.toString()
 
                         Glide.with(this@DataDisplayActivity).load(image)
                             .placeholder(R.drawable.ic_image).into(displayBinding.imgPlaceDisplay)

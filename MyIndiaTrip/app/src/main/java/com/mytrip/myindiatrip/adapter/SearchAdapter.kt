@@ -10,10 +10,9 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mytrip.myindiatrip.R
-import com.mytrip.myindiatrip.activity.SearchActivity
-import com.mytrip.myindiatrip.model.SearchModelClass
+import com.mytrip.myindiatrip.model.ModelClass
 
-class SearchAdapter(var context: Context, var placeList: ArrayList<SearchModelClass>,var click:(SearchModelClass)-> Unit) : RecyclerView.Adapter<SearchAdapter.MyViewHolder>() {
+class SearchAdapter(var context: Context, var placeList: ArrayList<ModelClass>, var click:(ModelClass)-> Unit) : RecyclerView.Adapter<SearchAdapter.MyViewHolder>() {
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgPlace: ImageView = itemView.findViewById(R.id.imgPlace)
         var txtPlaceName: TextView = itemView.findViewById(R.id.txtPlaceName)
@@ -34,12 +33,12 @@ class SearchAdapter(var context: Context, var placeList: ArrayList<SearchModelCl
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        Glide.with(context).load(placeList[position].placeImage)
+        Glide.with(context).load(placeList[position].image)
             .placeholder(R.drawable.ic_image).into(holder.imgPlace)
 
-        holder.txtPlaceName.text=placeList[position].placeName
-        holder.txtLocation.text=placeList[position].placeLocation
-        holder.txtPlaceRating.text=placeList[position].placeRating
+        holder.txtPlaceName.text=placeList[position].name
+        holder.txtLocation.text=placeList[position].location
+        holder.txtPlaceRating.text=placeList[position].rating
 
         holder.cdSearchView.setOnClickListener {
             click.invoke(placeList[position])

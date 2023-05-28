@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -13,11 +12,11 @@ import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.fragment.HomeFragment
-import com.mytrip.myindiatrip.model.ImageSliderModel
+import com.mytrip.myindiatrip.model.ModelClass
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ImageSliderAdapter(var homeFragment: HomeFragment, var imageSliderList: ArrayList<ImageSliderModel>,var click:(ImageSliderModel)-> Unit ): PagerAdapter() {
+class ImageSliderAdapter(var homeFragment: HomeFragment, var imageSliderList: ArrayList<ModelClass>,var click:(ModelClass)-> Unit ): PagerAdapter() {
     override fun getCount(): Int {
         return imageSliderList.size
     }

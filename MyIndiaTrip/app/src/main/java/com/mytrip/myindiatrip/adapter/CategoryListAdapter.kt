@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.fragment.HomeFragment
-import com.mytrip.myindiatrip.model.CategoryModelClass
+import com.mytrip.myindiatrip.model.ModelClass
 
 class CategoryListAdapter(
     var homeFragment: HomeFragment,
-    var categoryItemList: ArrayList<CategoryModelClass>,
-    var click:(CategoryModelClass)->Unit
+    var categoryItemList: ArrayList<ModelClass>,
+    var click:(ModelClass)->Unit
 ) : RecyclerView.Adapter<CategoryListAdapter.MyViewHolder>() {
 //    private var selectedItemPosition: Int = -1
 

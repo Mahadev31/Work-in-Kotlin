@@ -14,11 +14,11 @@ import com.google.firebase.database.*
 import com.mytrip.myindiatrip.adapter.SearchAdapter
 import com.mytrip.myindiatrip.databinding.ActivitySearchBinding
 import com.mytrip.myindiatrip.databinding.ProgressBarBinding
-import com.mytrip.myindiatrip.model.SearchModelClass
+import com.mytrip.myindiatrip.model.ModelClass
 
 class SearchActivity : AppCompatActivity() {
     lateinit var searchBinding: ActivitySearchBinding
-    var placeList = ArrayList<SearchModelClass>()
+    var placeList = ArrayList<ModelClass>()
     lateinit var searchAdapter: SearchAdapter
     lateinit var mDbRef: DatabaseReference
     lateinit var dialog:Dialog
@@ -79,7 +79,7 @@ class SearchActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 placeList.clear()
                 for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(SearchModelClass::class.java)
+                    val currentUser = postSnapshot.getValue(ModelClass::class.java)
                     currentUser?.let { placeList.add(it) }
 
                 }

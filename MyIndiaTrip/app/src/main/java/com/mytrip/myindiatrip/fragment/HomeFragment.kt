@@ -24,9 +24,7 @@ import com.mytrip.myindiatrip.adapter.ImageSliderAdapter
 import com.mytrip.myindiatrip.adapter.PopularPlaceAdapter
 import com.mytrip.myindiatrip.databinding.FragmentHomeBinding
 import com.mytrip.myindiatrip.databinding.ProgressBarBinding
-import com.mytrip.myindiatrip.model.CategoryModelClass
-import com.mytrip.myindiatrip.model.ImageSliderModel
-import com.mytrip.myindiatrip.model.PopularModelClass
+import com.mytrip.myindiatrip.model.ModelClass
 import java.util.*
 
 
@@ -36,12 +34,12 @@ class HomeFragment : Fragment() {
     lateinit var homeBinding: FragmentHomeBinding
 
     lateinit var mDbRef: DatabaseReference
-    var categoryList = ArrayList<CategoryModelClass>()
-    var categoryItemList = ArrayList<CategoryModelClass>()
-    var imageSliderList = ArrayList<ImageSliderModel>()
+    var categoryList = ArrayList<ModelClass>()
+    var categoryItemList = ArrayList<ModelClass>()
+    var imageSliderList = ArrayList<ModelClass>()
 
     lateinit var popularAdapter: PopularPlaceAdapter
-    var popularList = ArrayList<CategoryModelClass>()
+    var popularList = ArrayList<ModelClass>()
 
     lateinit var dialog: Dialog
 //      var id: String?=null
@@ -127,7 +125,7 @@ class HomeFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
 //                categoryList.clear()
                 for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
+                    val currentUser = postSnapshot.getValue(ModelClass::class.java)
                     currentUser?.let { categoryList.add(it) }
 
                 }
@@ -165,7 +163,7 @@ var newId=key
                     override fun onDataChange(snapshot: DataSnapshot) {
                         categoryItemList.clear()
                         for (postSnapshot in snapshot.children) {
-                            val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
+                            val currentUser = postSnapshot.getValue(ModelClass::class.java)
     //
     ////////                    if (mAuth.currentUser?.uid != currentUser?.uid) {
     //                        currentUser?.image =
@@ -241,7 +239,7 @@ var newId=key
             override fun onDataChange(snapshot: DataSnapshot) {
                 imageSliderList.clear()
                 for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(ImageSliderModel::class.java)
+                    val currentUser = postSnapshot.getValue(ModelClass::class.java)
 //                    if (mAuth.currentUser?.uid != currentUser?.uid) {
                     currentUser?.image = postSnapshot.child("image").value.toString()
                     currentUser?.name = postSnapshot.child("name").value.toString()
@@ -297,7 +295,7 @@ var newId=key
             override fun onDataChange(snapshot: DataSnapshot) {
                 popularList.clear()
                 for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(CategoryModelClass::class.java)
+                    val currentUser = postSnapshot.getValue(ModelClass::class.java)
 //                    if (mAuth.currentUser?.uid != currentUser?.uid) {
                     popularList.add(currentUser!!)
 

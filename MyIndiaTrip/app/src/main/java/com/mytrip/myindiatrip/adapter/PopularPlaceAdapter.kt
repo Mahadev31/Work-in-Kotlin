@@ -1,26 +1,23 @@
 package com.mytrip.myindiatrip.adapter
 
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.fragment.HomeFragment
-import com.mytrip.myindiatrip.model.CategoryModelClass
-import com.mytrip.myindiatrip.model.PopularModelClass
+import com.mytrip.myindiatrip.model.ModelClass
 import kotlin.collections.ArrayList
 
 class PopularPlaceAdapter(
     var homeFragment: HomeFragment,
-    var popularList: ArrayList<CategoryModelClass>,
-    var click: (CategoryModelClass) -> Unit
+    var popularList: ArrayList<ModelClass>,
+    var click: (ModelClass) -> Unit
 ) : RecyclerView.Adapter<PopularPlaceAdapter.MyViewHolder>() {
 //    private var selectedItemPosition: Int = -1
 

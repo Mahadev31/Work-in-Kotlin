@@ -12,13 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.fragment.HomeFragment
-import com.mytrip.myindiatrip.model.CategoryModelClass
-import kotlin.collections.ArrayList
+import com.mytrip.myindiatrip.model.ModelClass
 
 class CategoryAdapter(
     var homeFragment: HomeFragment,
-    var categoryList: ArrayList<CategoryModelClass>,
-    var click:((CategoryModelClass)-> Unit)
+    var categoryList: ArrayList<ModelClass>,
+    var click:((ModelClass)-> Unit)
 ) : RecyclerView.Adapter<CategoryAdapter.MyViewHolder>() {
      var selectedItemPosition = -1
 
@@ -46,10 +45,13 @@ class CategoryAdapter(
         Log.e("TAG", "onBindViewHolder: " + categoryList[position].category_image)
 
         holder.linCategory.setOnClickListener {
-
-            click.invoke(categoryList[position])
+            selectedItemPosition=0
             selectedItemPosition = position
+            click.invoke(categoryList[position])
+
             notifyDataSetChanged()
+
+
         }
         if (selectedItemPosition == position) {
             holder.linCategory.setBackgroundColor(Color.parseColor("#F6AA50"))
