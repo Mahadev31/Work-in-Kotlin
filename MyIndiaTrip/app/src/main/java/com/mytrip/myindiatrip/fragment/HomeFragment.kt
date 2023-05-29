@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import com.google.firebase.database.*
+import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.activity.DataDisplayActivity
 import com.mytrip.myindiatrip.activity.SearchActivity
 import com.mytrip.myindiatrip.adapter.CategoryAdapter
@@ -104,13 +105,13 @@ class HomeFragment : Fragment() {
         homeBinding.imgVolume.setOnClickListener {
             if (mVolumePlaying) {
                 Log.d("TAG", "setVolume ON")
-                homeBinding.imgVolume.setImageResource(com.mytrip.myindiatrip.R.drawable.ic_volume_up)
+                homeBinding.imgVolume.setImageResource(R.drawable.ic_volume_up)
                 mp.setVolume(1f, 1f)//UnMute
 
             } else {
 
                 Log.d("TAG", "setVolume OFF")
-                homeBinding.imgVolume.setImageResource(com.mytrip.myindiatrip.R.drawable.ic_volume_off)
+                homeBinding.imgVolume.setImageResource(R.drawable.ic_volume_off)
                 mp.setVolume(0f, 0f) //Mute
 
 
@@ -224,7 +225,7 @@ var newId=key
         var sliderAdapter = ImageSliderAdapter(this, imageSliderList) {
             var i = Intent(context, DataDisplayActivity::class.java)
             i.putExtra("Key", it.key)
-            i.putExtra("slider",true)
+            i.putExtra("imageSliderList",true)
             startActivity(i)
         }
 //        homeBinding.rcvCategory.layoutManager =

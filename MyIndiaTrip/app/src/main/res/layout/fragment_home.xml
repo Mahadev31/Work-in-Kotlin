@@ -48,7 +48,10 @@
             android:layout_marginEnd="@dimen/_20sdp"
             android:src="@drawable/search6" />
     </androidx.appcompat.widget.Toolbar>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CDC9C9" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -64,6 +67,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/_5sdp"
                 android:layout_gravity="center"
                 app:cardCornerRadius="@dimen/_10sdp">
 
@@ -104,7 +108,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvCategoryList"
                 android:layout_width="match_parent"
-                android:layout_marginVertical="@dimen/_10sdp"
+                android:layout_marginVertical="@dimen/_5sdp"
                 android:layout_height="wrap_content" />
 
             <!--    image show -->

@@ -7,15 +7,18 @@ import android.util.Log
 import com.bumptech.glide.Glide
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.R
+import com.mytrip.myindiatrip.adapter.ChildImageSliderAdapter
 import com.mytrip.myindiatrip.databinding.ActivityDataDisplayBinding
+import com.mytrip.myindiatrip.model.ModelClass
 import java.util.*
+import kotlin.collections.ArrayList
 
 class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     lateinit var displayBinding: ActivityDataDisplayBinding
 
     private var textToSpeech: TextToSpeech? = null
     lateinit var mDbRef: DatabaseReference
-
+    var childSliderList=ArrayList<ModelClass>()
     lateinit var search:String
     lateinit var child_key:String
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +41,27 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 //        var title=""
 
         if (child_key != null && intent.hasExtra("category") ) {
+            var  childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
+            displayBinding.viewPager.adapter = childSliderAdapter
+            displayBinding.wormDotsIndicator.attachTo(displayBinding.viewPager)
+
+            mDbRef.child("category_data").child(key).child("place").child(child_key).child("slider").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    childSliderList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser = postSnapshot.getValue(ModelClass::class.java)
+                        childSliderList.add(currentUser!!)
+
+                    }
+                    childSliderAdapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
             mDbRef.child("category_data").child(key).child("place").child(child_key)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -66,7 +90,32 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        }    else  if (key != null && intent.hasExtra("slider") ) {
+        }    else  if (key != null && intent.hasExtra("imageSliderList") ) {
+
+            var  childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
+            displayBinding.viewPager.adapter = childSliderAdapter
+            displayBinding.wormDotsIndicator.attachTo(displayBinding.viewPager)
+
+            mDbRef.child("image_slider").child(key).child("slider").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    childSliderList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser = postSnapshot.getValue(ModelClass::class.java)
+                        childSliderList.add(currentUser!!)
+
+                    }
+                    childSliderAdapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
+
+
+
             mDbRef.child("image_slider").child(key)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
