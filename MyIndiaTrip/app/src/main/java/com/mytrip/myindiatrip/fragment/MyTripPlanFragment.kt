@@ -19,6 +19,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -29,11 +31,16 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.*
+import com.mytrip.myindiatrip.R
+import com.mytrip.myindiatrip.activity.DataDisplayActivity
+import com.mytrip.myindiatrip.activity.HotelAndActivityDataActivity
 import com.mytrip.myindiatrip.activity.SearchLocationActivity
 import com.mytrip.myindiatrip.adapter.HotelSearchAdapter
+import com.mytrip.myindiatrip.adapter.SearchAdapter
 import com.mytrip.myindiatrip.databinding.FragmentMyTripPlanBinding
 import com.mytrip.myindiatrip.databinding.ProgressBarBinding
 import com.mytrip.myindiatrip.model.HotelSearchModelClass
+import com.mytrip.myindiatrip.model.ModelClass
 import java.util.*
 
 
@@ -42,13 +49,18 @@ class MyTripPlanFragment : Fragment() {
     lateinit var tripBinding: FragmentMyTripPlanBinding
 
     lateinit var mDbRef: DatabaseReference
-
+    var placeList = ArrayList<ModelClass>()
     lateinit var adapter: HotelSearchAdapter
     var hotelList = ArrayList<HotelSearchModelClass>()
-lateinit var dialog:Dialog
+    lateinit var dialog: Dialog
+
+    lateinit var searchAdapter: SearchAdapter
+
+    var itemList = ArrayList<String>()
+
     // Initialize variables
-    var city:String=""
-//     var search:String=""
+    var city: String = ""
+
     var client: FusedLocationProviderClient? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -180,7 +192,7 @@ lateinit var dialog:Dialog
                             var address =
                                 addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-                             city = addresses!![0].locality
+                            city = addresses!![0].locality
                             val state = addresses!![0].adminArea
                             val country = addresses!![0].countryName
                             val postalCode = addresses!![0].postalCode
@@ -221,7 +233,7 @@ lateinit var dialog:Dialog
                                     var address =
                                         addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
 
-                                     city = addresses!![0].locality
+                                    city = addresses!![0].locality
                                     val state = addresses!![0].adminArea
                                     val country = addresses!![0].countryName
                                     val postalCode = addresses!![0].postalCode
@@ -268,23 +280,49 @@ lateinit var dialog:Dialog
 
     private fun searchItem() {
 
+        itemList.add("place")
+        itemList.add("hotel")
+        itemList.add("activity")
+
+
+        val adapter: ArrayAdapter<*> =
+            ArrayAdapter<String>(requireContext(), R.layout.spinnerlist, R.id.txtCityList, itemList)
+        tripBinding.spinnerItem.adapter = adapter
+
+        tripBinding.spinnerItem.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectItemName: String = itemList[position]
+                    Log.e("TAG", "onItemSelected: $selectItemName")
+
         setByDefualtAdapter()
 
         tripBinding.edtSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                setAdapter()
+                setAdapter(selectItemName)
             }
             true
         }
         tripBinding.imgSearchT.setOnClickListener {
-            setAdapter()
+            setAdapter(selectItemName)
 
 
         }
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+
+
     }
 
 
-    private fun setAdapter() {
+    private fun setAdapter(selectItemName: String) {
         dialog = Dialog(requireContext())
         var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
         dialog.setContentView(progressBarBinding.root)
@@ -297,62 +335,128 @@ lateinit var dialog:Dialog
         dialog.show()
 
         var search: String? = null
-            search = tripBinding.edtSearch.text.toString()
+        search = tripBinding.edtSearch.text.toString()
 
         if (search.isEmpty()) {
             Toast.makeText(context, "Pleas Enter value", Toast.LENGTH_SHORT).show()
         } else {
 
+            if (selectItemName == "place") {
 
-            adapter = HotelSearchAdapter(this, hotelList)
-            tripBinding.rcvSuggestionItem.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            tripBinding.rcvSuggestionItem.adapter = adapter
-
-            mDbRef.child("hotels").child(search).addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    hotelList.clear()
-                    for (postSnapshot in snapshot.children) {
-                        val currentUser = postSnapshot.getValue(HotelSearchModelClass::class.java)
-                        hotelList.add(currentUser!!)
-                        Log.e("TAG", "search: " + currentUser.hotelImage)
-
-                    }
-                    dialog.dismiss()
-                    adapter.notifyDataSetChanged()
+                searchAdapter = SearchAdapter(requireContext(), placeList) {
+                    var clickIntent = Intent(context, DataDisplayActivity::class.java)
+                    clickIntent.putExtra("search", search)
+                    clickIntent.putExtra("selectItemName", selectItemName)
+                    clickIntent.putExtra("Key", it.key)
+                    clickIntent.putExtra("myTrip", true)
+                    Log.e("TAG", "myTripKey: " + it.key)
+                    Log.e("TAG", "myTrip_selected: " + selectItemName)
+                    startActivity(clickIntent)
                 }
+                tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+                tripBinding.rcvSuggestionItem.adapter = searchAdapter
 
-                override fun onCancelled(error: DatabaseError) {
-                    Log.e("TAG", "onCancelled: ")
+                mDbRef.child("my_trip_plan").child(search).child(selectItemName)
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            placeList.clear()
+                            for (postSnapshot in snapshot.children) {
+                                val currentUser =
+                                    postSnapshot.getValue(ModelClass::class.java)
+                                currentUser?.let { placeList.add(it) }
+
+                            }
+                            searchAdapter.notifyDataSetChanged()
+                            dialog.dismiss()
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+
+                        }
+
+                    })
+            }else{
+                adapter = HotelSearchAdapter(this, placeList) {
+                    var clickIntent = Intent(context, HotelAndActivityDataActivity::class.java)
+                    clickIntent.putExtra("search", search)
+                    clickIntent.putExtra("selectItemName", selectItemName)
+                    clickIntent.putExtra("Key", it.key)
+                    clickIntent.putExtra("myTrip", true)
+                    Log.e("TAG", "myTripKey: " + it.key)
+                    Log.e("TAG", "myTrip_selected: " + selectItemName)
+                    startActivity(clickIntent)
                 }
+                tripBinding.rcvSuggestionItem.layoutManager =
+                    LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                tripBinding.rcvSuggestionItem.adapter = adapter
 
-            })
+                mDbRef.child("my_trip_plan").child(search).child(selectItemName)
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            placeList.clear()
+                            for (postSnapshot in snapshot.children) {
+                                val currentUser =
+                                    postSnapshot.getValue(ModelClass::class.java)
+                                currentUser?.let { placeList.add(it) }
+
+                            }
+                            adapter.notifyDataSetChanged()
+                            dialog.dismiss()
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+
+                        }
+
+                    })
+            }
+
+
         }
     }
 
     private fun setByDefualtAdapter() {
-        adapter = HotelSearchAdapter(this, hotelList)
-        tripBinding.rcvSuggestionItem.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        tripBinding.rcvSuggestionItem.adapter = adapter
+        var search: String= "surat"
+        var selectItemName: String= "hotel"
+        searchAdapter = SearchAdapter(requireContext(), placeList) {
+            var clickIntent = Intent(context, HotelAndActivityDataActivity::class.java)
+            clickIntent.putExtra("search", search)
+            clickIntent.putExtra("selectItemName", selectItemName)
+            clickIntent.putExtra("Key", it.key)
+            clickIntent.putExtra("myTrip", true)
+            Log.e("TAG", "myTripKey: " + it.key)
+            Log.e("TAG", "myTrip_selected: " + selectItemName)
+            startActivity(clickIntent)
+        }
+        tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        tripBinding.rcvSuggestionItem.adapter = searchAdapter
 
-        mDbRef.child("hotels").child("surat").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                hotelList.clear()
-                for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(HotelSearchModelClass::class.java)
-                    hotelList.add(currentUser!!)
-                    Log.e("TAG", "search: " + currentUser.hotelImage)
+        mDbRef.child("my_trip_plan").child(search).child(selectItemName)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    placeList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser =
+                            postSnapshot.getValue(ModelClass::class.java)
+                        currentUser?.let { placeList.add(it) }
+
+                    }
+                    searchAdapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
 
                 }
-                adapter.notifyDataSetChanged()
-                dialog.dismiss()
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("TAG", "onCancelled: ")
-            }
-
-        })
+            })
     }
 }

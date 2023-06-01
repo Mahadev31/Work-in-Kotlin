@@ -62,31 +62,32 @@
 
         <EditText
             android:id="@+id/edtSearch"
-            android:layout_width="@dimen/_200sdp"
+            android:layout_width="@dimen/_150sdp"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:inputType="text"
             android:background="@color/white"
             android:imeOptions="actionSearch"
             android:hint="Search"
             android:textStyle="bold" />
 
+
+
+      <Spinner
+          android:layout_width="@dimen/_100sdp"
+          android:layout_height="wrap_content"
+          android:id="@+id/spinnerItem"/>
+
         <ImageView
             android:id="@+id/imgSearchT"
             android:layout_width="@dimen/_18sdp"
             android:layout_height="@dimen/_18sdp"
+            android:layout_marginHorizontal="@dimen/_5sdp"
             android:src="@drawable/search6" />
-
-        <ImageView
-            android:id="@+id/imgFilterT"
-            android:layout_width="@dimen/_18sdp"
-            android:layout_height="@dimen/_18sdp"
-            android:layout_marginHorizontal="@dimen/_10sdp"
-            android:src="@drawable/filter" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_20sdp"
         android:id="@+id/rcvSuggestionItem"/>
 </LinearLayout>

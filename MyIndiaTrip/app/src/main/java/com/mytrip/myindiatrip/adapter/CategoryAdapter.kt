@@ -19,7 +19,7 @@ class CategoryAdapter(
     var categoryList: ArrayList<ModelClass>,
     var click:((ModelClass)-> Unit)
 ) : RecyclerView.Adapter<CategoryAdapter.MyViewHolder>() {
-     var selectedItemPosition = -1
+     var selectedItemPosition = 0
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var image: ImageView = itemView.findViewById(R.id.imgCategory)
@@ -45,7 +45,6 @@ class CategoryAdapter(
         Log.e("TAG", "onBindViewHolder: " + categoryList[position].category_image)
 
         holder.linCategory.setOnClickListener {
-            selectedItemPosition=0
             selectedItemPosition = position
             click.invoke(categoryList[position])
 

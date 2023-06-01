@@ -14,12 +14,14 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
+
     lateinit var displayBinding: ActivityDataDisplayBinding
 
     private var textToSpeech: TextToSpeech? = null
     lateinit var mDbRef: DatabaseReference
     var childSliderList=ArrayList<ModelClass>()
     lateinit var search:String
+    lateinit var selectItemName: String
     lateinit var child_key:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,7 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         }
 
          search = intent.getStringExtra("search").toString()
+        selectItemName = intent.getStringExtra("selectItemName").toString()
         var key = intent.getStringExtra("Key").toString()
          child_key = intent.getStringExtra("child_key").toString()
 //        var title=""
@@ -66,14 +69,12 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
 
-                        var image = snapshot.child("image").value.toString()
+
                         var name = snapshot.child("name").value.toString()
                         var rating = snapshot.child("rating").value.toString()
                         var description = snapshot.child("description").value.toString()
                         var location = snapshot.child("location").value.toString()
 
-                        Glide.with(this@DataDisplayActivity).load(image)
-                            .placeholder(R.drawable.ic_image).into(displayBinding.imgPlaceDisplay)
 
                         displayBinding.txtPlaceTitle.text = name
                         displayBinding.txtPlaceRating.text = rating
@@ -90,7 +91,8 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        }    else  if (key != null && intent.hasExtra("imageSliderList") ) {
+        }
+        else  if (key != null && intent.hasExtra("imageSliderList") ) {
 
             var  childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
             displayBinding.viewPager.adapter = childSliderAdapter
@@ -120,14 +122,12 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
 
-                        var image = snapshot.child("image").value.toString()
                         var name = snapshot.child("name").value.toString()
                         var rating = snapshot.child("rating").value.toString()
                         var description = snapshot.child("description").value.toString()
                         var location = snapshot.child("location").value.toString()
 
-                        Glide.with(this@DataDisplayActivity).load(image)
-                            .placeholder(R.drawable.ic_image).into(displayBinding.imgPlaceDisplay)
+
 
                         displayBinding.txtPlaceTitle.text = name
                         displayBinding.txtPlaceRating.text = rating
@@ -144,19 +144,39 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        }  else  if (key != null && intent.hasExtra("popular") ) {
+        }
+        else  if (key != null && intent.hasExtra("popular") ) {
+
+            var  childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
+            displayBinding.viewPager.adapter = childSliderAdapter
+            displayBinding.wormDotsIndicator.attachTo(displayBinding.viewPager)
+
+            mDbRef.child("popular_place").child(key).child("slider").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    childSliderList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser = postSnapshot.getValue(ModelClass::class.java)
+                        childSliderList.add(currentUser!!)
+
+                    }
+                    childSliderAdapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
             mDbRef.child("popular_place").child(key)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
 
-                        var image = snapshot.child("image").value.toString()
                         var name = snapshot.child("name").value.toString()
                         var rating = snapshot.child("rating").value.toString()
                         var description = snapshot.child("description").value.toString()
                         var location = snapshot.child("location").value.toString()
 
-                        Glide.with(this@DataDisplayActivity).load(image)
-                            .placeholder(R.drawable.ic_image).into(displayBinding.imgPlaceDisplay)
 
                         displayBinding.txtPlaceTitle.text = name
                         displayBinding.txtPlaceRating.text = rating
@@ -173,19 +193,73 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        }else {
-            mDbRef.child("search_bar").child(search).child(key)
+        }
+        else  if (key != null && intent.hasExtra("myTrip") ) {
+
+            var  childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
+            displayBinding.viewPager.adapter = childSliderAdapter
+            displayBinding.wormDotsIndicator.attachTo(displayBinding.viewPager)
+
+            mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key).child("slider").addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    childSliderList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser = postSnapshot.getValue(ModelClass::class.java)
+                        childSliderList.add(currentUser!!)
+
+                    }
+                    childSliderAdapter.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
+
+
+
+            mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
 
-                        var image = snapshot.child("image").value.toString()
                         var name = snapshot.child("name").value.toString()
                         var rating = snapshot.child("rating").value.toString()
                         var description = snapshot.child("description").value.toString()
                         var location = snapshot.child("location").value.toString()
 
-                        Glide.with(this@DataDisplayActivity).load(image)
-                            .placeholder(R.drawable.ic_image).into(displayBinding.imgPlaceDisplay)
+
+
+                        displayBinding.txtPlaceTitle.text = name
+                        displayBinding.txtPlaceRating.text = rating
+                        displayBinding.txtPlaceDescription.text = description
+                        displayBinding.txtPlaceLocation.text = location
+//                searchAdapter.notifyDataSetChanged()
+                        Log.e("Try", "key: " + key)
+                        Log.e("Try", "search: " + search)
+                        Log.e("Try", "selectItemName: " + selectItemName)
+                        Log.e("Try", "name: " + name)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+        }
+        else {
+            mDbRef.child("search_bar").child(search).child(key)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+
+
+                        var name = snapshot.child("name").value.toString()
+                        var rating = snapshot.child("rating").value.toString()
+                        var description = snapshot.child("description").value.toString()
+                        var location = snapshot.child("location").value.toString()
+
+
 
                         displayBinding.txtPlaceTitle.text = name
                         displayBinding.txtPlaceRating.text = rating

@@ -69,7 +69,7 @@ class SearchActivity : AppCompatActivity() {
             var clickIntent = Intent(this@SearchActivity, DataDisplayActivity::class.java)
             clickIntent.putExtra("search",search)
             clickIntent.putExtra("Key", it.key)
-            Log.e("TAG", "initView: "+it.key )
+            Log.e("TAG", "initView: "+it.key)
             startActivity(clickIntent)
         }
         searchBinding.rcvSearchPlace.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)

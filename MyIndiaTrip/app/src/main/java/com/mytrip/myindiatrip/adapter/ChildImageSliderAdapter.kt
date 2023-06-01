@@ -1,5 +1,6 @@
 package com.mytrip.myindiatrip.adapter
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ChildImageSliderAdapter(
-   var context: DataDisplayActivity,
+   var context: Context,
  var   childSliderList: ArrayList<ModelClass>
 ) : PagerAdapter() {
     override fun getCount(): Int {

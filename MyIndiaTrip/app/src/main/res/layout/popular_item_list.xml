@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/txtPopular"
-        android:layout_width="@dimen/_80sdp"
+        android:layout_width="@dimen/_85sdp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imgPopular"
         android:layout_centerHorizontal="true"

@@ -133,7 +133,7 @@ class HomeFragment : Fragment() {
                 dialog.dismiss()
 
                 var adapter = CategoryAdapter(this@HomeFragment, categoryList) {
-                 var   key = it.key!!
+                    var key = it.key!!
                     Log.e("TAG", "categoryList: " + it.key)
                     Log.e("TAG", "categoryListView: $id")
                     categoryListView(key)
@@ -155,9 +155,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun categoryListView(key: String) {
-var newId=key
+        var newId = key
 
-        Log.e("TAG", "sczc:"+newId )
+        Log.e("TAG", "sczc:" + newId)
         if (newId != null) {
             mDbRef.child("category_data").child(newId.toString()).child("place")
                 .addValueEventListener(object : ValueEventListener {
@@ -165,16 +165,11 @@ var newId=key
                         categoryItemList.clear()
                         for (postSnapshot in snapshot.children) {
                             val currentUser = postSnapshot.getValue(ModelClass::class.java)
-    //
-    ////////                    if (mAuth.currentUser?.uid != currentUser?.uid) {
-    //                        currentUser?.image =
-    //                            postSnapshot.child("image").value.toString()
-    //                        currentUser?.name =
-    //                            postSnapshot.child("name").value.toString()
+
                             categoryItemList.add(currentUser!!)
 
-                            Log.e("TAG", "heritage_image: " + currentUser?.image)
-    //                    }
+                            Log.e("TAG", "image: " + currentUser?.image)
+                            //                    }
                         }
 
 
@@ -183,7 +178,7 @@ var newId=key
                                 var i = Intent(context, DataDisplayActivity::class.java)
                                 i.putExtra("Key", newId)
                                 i.putExtra("child_key", it.child_key)
-                                i.putExtra("category",true)
+                                i.putExtra("category", true)
                                 startActivity(i)
                             }
                         homeBinding.rcvCategoryList.layoutManager =
@@ -199,6 +194,8 @@ var newId=key
 
                 })
         }
+
+
     }
 
     private fun autoImageSlider() {
@@ -225,7 +222,7 @@ var newId=key
         var sliderAdapter = ImageSliderAdapter(this, imageSliderList) {
             var i = Intent(context, DataDisplayActivity::class.java)
             i.putExtra("Key", it.key)
-            i.putExtra("imageSliderList",true)
+            i.putExtra("imageSliderList", true)
             startActivity(i)
         }
 //        homeBinding.rcvCategory.layoutManager =
@@ -282,10 +279,10 @@ var newId=key
     private fun popularPlace() {
 
 
-        popularAdapter = PopularPlaceAdapter(this, popularList){
+        popularAdapter = PopularPlaceAdapter(this, popularList) {
             var i = Intent(context, DataDisplayActivity::class.java)
             i.putExtra("Key", it.key)
-            i.putExtra("popular",true)
+            i.putExtra("popular", true)
             startActivity(i)
         }
         homeBinding.rcvPopularPlace.layoutManager =

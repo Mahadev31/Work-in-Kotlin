@@ -12,11 +12,13 @@ import com.bumptech.glide.Glide
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.fragment.MyTripPlanFragment
 import com.mytrip.myindiatrip.model.HotelSearchModelClass
+import com.mytrip.myindiatrip.model.ModelClass
 import kotlin.collections.ArrayList
 
 class HotelSearchAdapter(
     var myTripFragment: MyTripPlanFragment,
-    var hotelList: ArrayList<HotelSearchModelClass>
+    var hotelList: ArrayList<ModelClass>,
+    var click: (ModelClass) -> Unit
 ) : RecyclerView.Adapter<HotelSearchAdapter.MyViewHolder>() {
 //    private var selectedItemPosition: Int = -1
 
@@ -38,16 +40,17 @@ class HotelSearchAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.txtHotelName.text = hotelList[position].hotelName
-        holder.txtHotelRent.text = hotelList[position].hotelRent
-        holder.txtHotelRating.text = hotelList[position].hotelRating
+        holder.txtHotelName.text = hotelList[position].name
+        holder.txtHotelRent.text = hotelList[position].rent
+        holder.txtHotelRating.text = hotelList[position].rating
 
-        Glide.with(myTripFragment).load(hotelList[position].hotelImage).placeholder(R.drawable.ic_image).into(holder.imgHotelImage)
+        Glide.with(myTripFragment).load(hotelList[position].image).placeholder(R.drawable.ic_image)
+            .into(holder.imgHotelImage)
 
-        Log.e("TAG", "onBindViewHolder: " + hotelList[position].hotelImage)
+        Log.e("TAG", "onBindViewHolder: " + hotelList[position].image)
 
         holder.layPopular.setOnClickListener {
-
+            click.invoke(hotelList[position])
             notifyDataSetChanged()
         }
 
