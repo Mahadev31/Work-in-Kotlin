@@ -4,11 +4,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.adapter.ChildImageSliderAdapter
 import com.mytrip.myindiatrip.databinding.ActivityDataDisplayBinding
+import com.mytrip.myindiatrip.fragment.MapsFragment
 import com.mytrip.myindiatrip.model.ModelClass
 import java.util.*
 import kotlin.collections.ArrayList
@@ -19,10 +23,10 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
     private var textToSpeech: TextToSpeech? = null
     lateinit var mDbRef: DatabaseReference
-    var childSliderList=ArrayList<ModelClass>()
-    lateinit var search:String
+    var childSliderList = ArrayList<ModelClass>()
+    lateinit var search: String
     lateinit var selectItemName: String
-    lateinit var child_key:String
+    lateinit var child_key: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         displayBinding = ActivityDataDisplayBinding.inflate(layoutInflater)
@@ -30,6 +34,7 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         mDbRef = FirebaseDatabase.getInstance().getReference()
         initView()
+//        mapView()
     }
 
     private fun initView() {
@@ -37,33 +42,63 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
             onBackPressed()
         }
 
-         search = intent.getStringExtra("search").toString()
+        search = intent.getStringExtra("search").toString()
         selectItemName = intent.getStringExtra("selectItemName").toString()
         var key = intent.getStringExtra("Key").toString()
-         child_key = intent.getStringExtra("child_key").toString()
+        child_key = intent.getStringExtra("child_key").toString()
+
+        // Declaring fragment manager from making data
+        // transactions using the custom fragment
+        val mFragmentManager = supportFragmentManager
+        val mFragmentTransaction = mFragmentManager.beginTransaction()
+        val mFragment = MapsFragment()
+
+        // On button click, a bundle is initialized and the
+        // text from the EditText is passed in the custom
+        // fragment using this bundle   mButton.setOnClickListener {
+//            val mBundle = Bundle()
+//            mBundle.putString("Key",key)
+//            mBundle.putString("child_key",child_key)
+//            mBundle.putString("search",search)
+//            mBundle.putString("selectItemName",selectItemName)
+//        mBundle.putBoolean("imageSliderList",true)
+//            mFragment.arguments = mBundle
+//            mFragmentTransaction.add(R.id.frameMap, mFragment).commit()
+
+//            supportFragmentManager.beginTransaction().replace(R.id.frameMap, MapsFragment())
+//                .commit()
 //        var title=""
 
-        if (child_key != null && intent.hasExtra("category") ) {
-            var  childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
+        if (child_key != null && intent.hasExtra("category")) {
+            var childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
             displayBinding.viewPager.adapter = childSliderAdapter
             displayBinding.wormDotsIndicator.attachTo(displayBinding.viewPager)
 
-            mDbRef.child("category_data").child(key).child("place").child(child_key).child("slider").addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    childSliderList.clear()
-                    for (postSnapshot in snapshot.children) {
-                        val currentUser = postSnapshot.getValue(ModelClass::class.java)
-                        childSliderList.add(currentUser!!)
+            mDbRef.child("category_data").child(key).child("place").child(child_key).child("slider")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        childSliderList.clear()
+                        for (postSnapshot in snapshot.children) {
+                            val currentUser = postSnapshot.getValue(ModelClass::class.java)
+                            childSliderList.add(currentUser!!)
+
+                        }
+                        childSliderAdapter.notifyDataSetChanged()
+
+                        val mBundle = Bundle()
+                        mBundle.putString("Key", key)
+                        mBundle.putString("child_key", child_key)
+                        mBundle.putBoolean("category", true)
+                        mFragment.arguments = mBundle
+                        mFragmentTransaction.add(R.id.frameMap, mFragment).commit()
 
                     }
-                    childSliderAdapter.notifyDataSetChanged()
-                }
 
-                override fun onCancelled(error: DatabaseError) {
+                    override fun onCancelled(error: DatabaseError) {
 
-                }
+                    }
 
-            })
+                })
 
             mDbRef.child("category_data").child(key).child("place").child(child_key)
                 .addValueEventListener(object : ValueEventListener {
@@ -91,29 +126,36 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        }
-        else  if (key != null && intent.hasExtra("imageSliderList") ) {
+        } else if (key != null && intent.hasExtra("imageSliderList")) {
 
-            var  childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
+            var childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
             displayBinding.viewPager.adapter = childSliderAdapter
             displayBinding.wormDotsIndicator.attachTo(displayBinding.viewPager)
 
-            mDbRef.child("image_slider").child(key).child("slider").addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    childSliderList.clear()
-                    for (postSnapshot in snapshot.children) {
-                        val currentUser = postSnapshot.getValue(ModelClass::class.java)
-                        childSliderList.add(currentUser!!)
+            mDbRef.child("image_slider").child(key).child("slider")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        childSliderList.clear()
+                        for (postSnapshot in snapshot.children) {
+                            val currentUser = postSnapshot.getValue(ModelClass::class.java)
+                            childSliderList.add(currentUser!!)
+
+                        }
+                        childSliderAdapter.notifyDataSetChanged()
+
+                    val mBundle = Bundle()
+                    mBundle.putString("Key",key)
+                    mBundle.putBoolean("imageSliderList",true)
+                    mFragment.arguments = mBundle
+                    mFragmentTransaction.add(R.id.frameMap, mFragment).commit()
+                    }
+
+
+                    override fun onCancelled(error: DatabaseError) {
 
                     }
-                    childSliderAdapter.notifyDataSetChanged()
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
+                })
 
 
 
@@ -144,29 +186,29 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        }
-        else  if (key != null && intent.hasExtra("popular") ) {
+        } else if (key != null && intent.hasExtra("popular")) {
 
-            var  childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
+            var childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
             displayBinding.viewPager.adapter = childSliderAdapter
             displayBinding.wormDotsIndicator.attachTo(displayBinding.viewPager)
 
-            mDbRef.child("popular_place").child(key).child("slider").addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    childSliderList.clear()
-                    for (postSnapshot in snapshot.children) {
-                        val currentUser = postSnapshot.getValue(ModelClass::class.java)
-                        childSliderList.add(currentUser!!)
+            mDbRef.child("popular_place").child(key).child("slider")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        childSliderList.clear()
+                        for (postSnapshot in snapshot.children) {
+                            val currentUser = postSnapshot.getValue(ModelClass::class.java)
+                            childSliderList.add(currentUser!!)
+
+                        }
+                        childSliderAdapter.notifyDataSetChanged()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
 
                     }
-                    childSliderAdapter.notifyDataSetChanged()
-                }
 
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
+                })
 
             mDbRef.child("popular_place").child(key)
                 .addValueEventListener(object : ValueEventListener {
@@ -193,14 +235,14 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        }
-        else  if (key != null && intent.hasExtra("myTrip") ) {
+        } else if (key != null && intent.hasExtra("myTrip")) {
 
-            var  childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
+            var childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
             displayBinding.viewPager.adapter = childSliderAdapter
             displayBinding.wormDotsIndicator.attachTo(displayBinding.viewPager)
 
-            mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key).child("slider").addValueEventListener(object : ValueEventListener {
+            mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key)
+                .child("slider").addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     childSliderList.clear()
                     for (postSnapshot in snapshot.children) {
@@ -247,8 +289,7 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        }
-        else {
+        } else {
             mDbRef.child("search_bar").child(search).child(key)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -314,5 +355,15 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         super.onDestroy()
     }
 
+    fun mapView() {
 
+    }
+    //loading the another fragment in viewPager
+//    private fun callFragment(fragment: Fragment) {
+//        val manager: FragmentManager = supportFragmentManager
+//        val transaction: FragmentTransaction = manager.beginTransaction()
+//        transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+//        transaction.replace(R.id.frameMap, fragment)
+//        transaction.commit()
+//    }
 }

@@ -144,7 +144,7 @@ class CurrentLocationActivity : AppCompatActivity(), OnMapReadyCallback {
                         val knownName = addresses!![0].featureName
 
                         mMap.addMarker(MarkerOptions().position(curr_latLng!!).title(address))
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(curr_latLng))
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(curr_latLng!!))
 //                        drawline(21.226920897072215, 72.83169425889456, TransportMode.DRIVING)
 
                         return

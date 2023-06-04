@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.mytrip.myindiatrip.databinding.FragmentProfileBinding
 
@@ -23,6 +24,13 @@ class ProfileFragment : Fragment() {
     }
 
     private fun initView() {
+
+        var sharedPreferences = requireActivity().getSharedPreferences("MySharePref", AppCompatActivity.MODE_PRIVATE)
+        if (sharedPreferences.getBoolean("isLogin", false) == true) {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(com.mytrip.myindiatrip.R.id.container, UserDetailsFragment())
+                .commit()
+        }
         profileBinding.cdUserLogin.setOnClickListener {
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(com.mytrip.myindiatrip.R.id.container, UserLoginFragment()).commit()

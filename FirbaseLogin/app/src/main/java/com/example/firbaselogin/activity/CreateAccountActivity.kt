@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.Toast
 import com.example.firbaselogin.databinding.ActivityCreateAccountBinding
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class CreateAccountActivity : AppCompatActivity() {

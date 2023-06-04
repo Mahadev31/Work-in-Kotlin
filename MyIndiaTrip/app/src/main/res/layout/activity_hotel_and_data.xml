@@ -153,6 +153,19 @@
                 android:textColor="@color/white"
                 android:background="@drawable/round_button_box"
                 android:id="@+id/btnBook"/>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                app:cardCornerRadius="@dimen/_10sdp">
+
+                <FrameLayout
+                    android:id="@+id/frameMap"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_180sdp" />
+            </androidx.cardview.widget.CardView>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

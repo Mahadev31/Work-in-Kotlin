@@ -420,8 +420,8 @@ class MyTripPlanFragment : Fragment() {
     }
 
     private fun setByDefualtAdapter() {
-        var search: String= "surat"
-        var selectItemName: String= "hotel"
+        var search: String= "mumbai"
+        var selectItemName: String= "activity"
         searchAdapter = SearchAdapter(requireContext(), placeList) {
             var clickIntent = Intent(context, HotelAndActivityDataActivity::class.java)
             clickIntent.putExtra("search", search)
