@@ -29,14 +29,20 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imgUserDp"
-        android:layout_width="@dimen/_120sdp"
-        android:layout_height="@dimen/_120sdp"
-        android:scaleType="fitXY"
-        android:layout_margin="@dimen/_5sdp"
-        android:src="@drawable/ic_image"
-        app:shapeAppearanceOverlay="@style/roundedImageStyle" />
+<!--    <com.google.android.material.imageview.ShapeableImageView-->
+<!--        android:id="@+id/imgUserDp"-->
+<!--        android:layout_width="@dimen/_120sdp"-->
+<!--        android:layout_height="@dimen/_120sdp"-->
+<!--        android:scaleType="fitXY"-->
+<!--        android:src="@drawable/ic_image"-->
+<!--        app:shapeAppearanceOverlay="@style/roundedImageStyle" />-->
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textStyle="bold"-->
+<!--        android:text="choose image"-->
+<!--        android:id="@+id/btnChooseImage"/>-->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

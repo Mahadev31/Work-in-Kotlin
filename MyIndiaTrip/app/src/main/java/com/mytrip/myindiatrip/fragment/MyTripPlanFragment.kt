@@ -36,7 +36,7 @@ import com.mytrip.myindiatrip.activity.DataDisplayActivity
 import com.mytrip.myindiatrip.activity.HotelAndActivityDataActivity
 import com.mytrip.myindiatrip.activity.SearchLocationActivity
 import com.mytrip.myindiatrip.adapter.HotelSearchAdapter
-import com.mytrip.myindiatrip.adapter.SearchAdapter
+import com.mytrip.myindiatrip.adapter.TripAdapter
 import com.mytrip.myindiatrip.databinding.FragmentMyTripPlanBinding
 import com.mytrip.myindiatrip.databinding.ProgressBarBinding
 import com.mytrip.myindiatrip.model.HotelSearchModelClass
@@ -54,7 +54,7 @@ class MyTripPlanFragment : Fragment() {
     var hotelList = ArrayList<HotelSearchModelClass>()
     lateinit var dialog: Dialog
 
-    lateinit var searchAdapter: SearchAdapter
+    lateinit var tripAdapter: TripAdapter
 
     var itemList = ArrayList<String>()
 
@@ -343,7 +343,7 @@ class MyTripPlanFragment : Fragment() {
 
             if (selectItemName == "place") {
 
-                searchAdapter = SearchAdapter(requireContext(), placeList) {
+                tripAdapter = TripAdapter(requireContext(), placeList, {
                     var clickIntent = Intent(context, DataDisplayActivity::class.java)
                     clickIntent.putExtra("search", search)
                     clickIntent.putExtra("selectItemName", selectItemName)
@@ -352,13 +352,13 @@ class MyTripPlanFragment : Fragment() {
                     Log.e("TAG", "myTripKey: " + it.key)
                     Log.e("TAG", "myTrip_selected: " + selectItemName)
                     startActivity(clickIntent)
-                }
+                },{save,key->  })
                 tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
                     requireContext(),
                     LinearLayoutManager.VERTICAL,
                     false
                 )
-                tripBinding.rcvSuggestionItem.adapter = searchAdapter
+                tripBinding.rcvSuggestionItem.adapter = tripAdapter
 
                 mDbRef.child("my_trip_plan").child(search).child(selectItemName)
                     .addValueEventListener(object : ValueEventListener {
@@ -370,7 +370,7 @@ class MyTripPlanFragment : Fragment() {
                                 currentUser?.let { placeList.add(it) }
 
                             }
-                            searchAdapter.notifyDataSetChanged()
+                            tripAdapter.notifyDataSetChanged()
                             dialog.dismiss()
                         }
 
@@ -420,10 +420,10 @@ class MyTripPlanFragment : Fragment() {
     }
 
     private fun setByDefualtAdapter() {
-        var search: String= "mumbai"
-        var selectItemName: String= "activity"
-        searchAdapter = SearchAdapter(requireContext(), placeList) {
-            var clickIntent = Intent(context, HotelAndActivityDataActivity::class.java)
+        var search: String= "surat"
+        var selectItemName: String= "place"
+        tripAdapter = TripAdapter(requireContext(), placeList, {
+            var clickIntent = Intent(context, DataDisplayActivity::class.java)
             clickIntent.putExtra("search", search)
             clickIntent.putExtra("selectItemName", selectItemName)
             clickIntent.putExtra("Key", it.key)
@@ -431,13 +431,15 @@ class MyTripPlanFragment : Fragment() {
             Log.e("TAG", "myTripKey: " + it.key)
             Log.e("TAG", "myTrip_selected: " + selectItemName)
             startActivity(clickIntent)
-        }
+        },{save,key->
+            mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key).child("save").setValue(save)
+        })
         tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,
             false
         )
-        tripBinding.rcvSuggestionItem.adapter = searchAdapter
+        tripBinding.rcvSuggestionItem.adapter = tripAdapter
 
         mDbRef.child("my_trip_plan").child(search).child(selectItemName)
             .addValueEventListener(object : ValueEventListener {
@@ -449,7 +451,7 @@ class MyTripPlanFragment : Fragment() {
                         currentUser?.let { placeList.add(it) }
 
                     }
-                    searchAdapter.notifyDataSetChanged()
+                    tripAdapter.notifyDataSetChanged()
                     dialog.dismiss()
                 }
 

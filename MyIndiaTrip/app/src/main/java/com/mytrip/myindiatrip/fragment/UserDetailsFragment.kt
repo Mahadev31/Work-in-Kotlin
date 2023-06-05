@@ -34,6 +34,8 @@ lateinit var userDetailsBinding: FragmentUserDetailsBinding
         mAuth = FirebaseAuth.getInstance()
         mDbRef = FirebaseDatabase.getInstance().getReference("user")
         user=mAuth.currentUser!!
+
+
         initView()
         return  userDetailsBinding.root
     }

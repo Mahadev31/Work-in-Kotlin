@@ -12,11 +12,12 @@ package com.mytrip.myindiatrip.model
       var rating:String?=null
       var slider_image:String?=null
       var rent:String?=null
+      var save:Int = 0
 
-    constructor(){
+     constructor(){
 
     }
-    constructor(category_image:String?,category_name:String?,image:String?,name:String?,key:String?, child_key:String?,location:String?,rating:String?,slider_image:String?,rent:String?){
+    constructor(category_image:String?,category_name:String?,image:String?,name:String?,key:String?, child_key:String?,location:String?,rating:String?,slider_image:String?,rent:String?,save:Int){
 
        this. category_image=category_image
        this. category_name=category_name
@@ -28,6 +29,7 @@ package com.mytrip.myindiatrip.model
         this.rating=rating
         this.slider_image=slider_image
         this.rent=rent
+        this.save=save
     }
 }
 

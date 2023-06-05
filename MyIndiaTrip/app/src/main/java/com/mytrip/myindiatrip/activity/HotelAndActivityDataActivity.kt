@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.database.*
+import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.adapter.ChildImageSliderAdapter
 import com.mytrip.myindiatrip.databinding.ActivityHotelAndDataBinding
+import com.mytrip.myindiatrip.fragment.MapsFragment
 import com.mytrip.myindiatrip.model.ModelClass
 
 class HotelAndActivityDataActivity : AppCompatActivity() {
@@ -32,7 +34,14 @@ class HotelAndActivityDataActivity : AppCompatActivity() {
         selectItemName = intent.getStringExtra("selectItemName").toString()
         var key = intent.getStringExtra("Key").toString()
         child_key = intent.getStringExtra("child_key").toString()
-//        var title=""
+
+
+        // Declaring fragment manager from making data
+        // transactions using the custom fragment
+        val mFragmentManager = supportFragmentManager
+        val mFragmentTransaction = mFragmentManager.beginTransaction()
+        val mFragment = MapsFragment()
+
 
         var  childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
         hotelAndDataBinding.viewPager.adapter = childSliderAdapter
@@ -48,6 +57,14 @@ class HotelAndActivityDataActivity : AppCompatActivity() {
 
                 }
                 childSliderAdapter.notifyDataSetChanged()
+
+                val mBundle = Bundle()
+                mBundle.putString("search",search)
+                mBundle.putString("selectItemName",selectItemName)
+                mBundle.putString("Key",key)
+                mBundle.putBoolean("myTrip",true)
+                mFragment.arguments = mBundle
+                mFragmentTransaction.add(R.id.frameMap, mFragment).commit()
             }
 
             override fun onCancelled(error: DatabaseError) {

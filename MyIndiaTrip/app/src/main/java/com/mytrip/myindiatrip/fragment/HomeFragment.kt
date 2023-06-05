@@ -43,7 +43,7 @@ class HomeFragment : Fragment() {
     var popularList = ArrayList<ModelClass>()
 
     lateinit var dialog: Dialog
-//      var id: String?=null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -143,6 +143,9 @@ class HomeFragment : Fragment() {
                 homeBinding.rcvCategory.adapter = adapter
 
                 adapter.notifyDataSetChanged()
+
+                val id = "1"
+                categoryListView(id)  //static key
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -150,7 +153,6 @@ class HomeFragment : Fragment() {
             }
 
         })
-
 
     }
 

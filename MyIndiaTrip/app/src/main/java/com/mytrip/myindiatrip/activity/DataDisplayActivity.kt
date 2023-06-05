@@ -53,21 +53,7 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         val mFragmentTransaction = mFragmentManager.beginTransaction()
         val mFragment = MapsFragment()
 
-        // On button click, a bundle is initialized and the
-        // text from the EditText is passed in the custom
-        // fragment using this bundle   mButton.setOnClickListener {
-//            val mBundle = Bundle()
-//            mBundle.putString("Key",key)
-//            mBundle.putString("child_key",child_key)
-//            mBundle.putString("search",search)
-//            mBundle.putString("selectItemName",selectItemName)
-//        mBundle.putBoolean("imageSliderList",true)
-//            mFragment.arguments = mBundle
-//            mFragmentTransaction.add(R.id.frameMap, mFragment).commit()
 
-//            supportFragmentManager.beginTransaction().replace(R.id.frameMap, MapsFragment())
-//                .commit()
-//        var title=""
 
         if (child_key != null && intent.hasExtra("category")) {
             var childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
@@ -126,7 +112,8 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        } else if (key != null && intent.hasExtra("imageSliderList")) {
+        }
+        else if (key != null && intent.hasExtra("imageSliderList")) {
 
             var childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
             displayBinding.viewPager.adapter = childSliderAdapter
@@ -179,6 +166,8 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                         Log.e("Try", "key: " + key)
                         Log.e("Try", "child_key: " + child_key)
                         Log.e("Try", "name: " + name)
+
+
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -186,7 +175,8 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        } else if (key != null && intent.hasExtra("popular")) {
+        }
+        else if (key != null && intent.hasExtra("popular")) {
 
             var childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
             displayBinding.viewPager.adapter = childSliderAdapter
@@ -202,6 +192,12 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
                         }
                         childSliderAdapter.notifyDataSetChanged()
+
+                        val mBundle = Bundle()
+                        mBundle.putString("Key",key)
+                        mBundle.putBoolean("popularList",true)
+                        mFragment.arguments = mBundle
+                        mFragmentTransaction.add(R.id.frameMap, mFragment).commit()
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -235,7 +231,8 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        } else if (key != null && intent.hasExtra("myTrip")) {
+        }
+        else if (key != null && intent.hasExtra("myTrip")) {
 
             var childSliderAdapter = ChildImageSliderAdapter(this, childSliderList)
             displayBinding.viewPager.adapter = childSliderAdapter
@@ -251,6 +248,14 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
                     }
                     childSliderAdapter.notifyDataSetChanged()
+
+                    val mBundle = Bundle()
+                    mBundle.putString("search",search)
+                    mBundle.putString("selectItemName",selectItemName)
+                    mBundle.putString("Key",key)
+                    mBundle.putBoolean("myTrip",true)
+                    mFragment.arguments = mBundle
+                    mFragmentTransaction.add(R.id.frameMap, mFragment).commit()
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -289,7 +294,8 @@ class DataDisplayActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
                     }
 
                 })
-        } else {
+        }
+        else {
             mDbRef.child("search_bar").child(search).child(key)
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
