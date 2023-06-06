@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.adapter.TripAdapter
@@ -21,7 +22,7 @@ class SearchActivity : AppCompatActivity() {
     var placeList = ArrayList<ModelClass>()
     lateinit var tripAdapter: TripAdapter
     lateinit var mDbRef: DatabaseReference
-    lateinit var dialog:Dialog
+    lateinit var dialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +36,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initView() {
         searchBinding.imgBackSearch.setOnClickListener {
-          onBackPressed()
+            onBackPressed()
         }
 
         searchBinding.edtSearchText.setOnEditorActionListener { _, actionId, _ ->
@@ -65,34 +66,49 @@ class SearchActivity : AppCompatActivity() {
 
         var search = searchBinding.edtSearchText.text.toString()
 
-        tripAdapter = TripAdapter(this,placeList, {
-            var clickIntent = Intent(this@SearchActivity, DataDisplayActivity::class.java)
-            clickIntent.putExtra("search",search)
-            clickIntent.putExtra("Key", it.key)
-            Log.e("TAG", "initView: "+it.key)
-            startActivity(clickIntent)
-        },{save,key->
+        var selectItemName: String = "place"
 
-        })
-        searchBinding.rcvSearchPlace.layoutManager=LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
-        searchBinding.rcvSearchPlace.adapter=tripAdapter
+        if (search.isEmpty()) {
+            Toast.makeText(this, "Pleas Enter value", Toast.LENGTH_SHORT).show()
+        } else {
 
-        mDbRef.child("search_bar").child(search).addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                placeList.clear()
-                for (postSnapshot in snapshot.children) {
-                    val currentUser = postSnapshot.getValue(ModelClass::class.java)
-                    currentUser?.let { placeList.add(it) }
 
-                }
-                tripAdapter.notifyDataSetChanged()
-                dialog.dismiss()
+            tripAdapter = TripAdapter(this, placeList) {
+                var clickIntent = Intent(this, DataDisplayActivity::class.java)
+                clickIntent.putExtra("search", search)
+                clickIntent.putExtra("selectItemName", selectItemName)
+                clickIntent.putExtra("Key", it.key)
+                clickIntent.putExtra("myTrip", true)
+                Log.e("TAG", "myTripKey: " + it.key)
+                Log.e("TAG", "myTrip_selected: " + selectItemName)
+                startActivity(clickIntent)
             }
+            searchBinding.rcvSearchPlace.layoutManager = LinearLayoutManager(
+                this,
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+            searchBinding.rcvSearchPlace.adapter = tripAdapter
 
-            override fun onCancelled(error: DatabaseError) {
+            mDbRef.child("my_trip_plan").child(search).child(selectItemName)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        placeList.clear()
+                        for (postSnapshot in snapshot.children) {
+                            val currentUser =
+                                postSnapshot.getValue(ModelClass::class.java)
+                            currentUser?.let { placeList.add(it) }
 
-            }
+                        }
+                        tripAdapter.notifyDataSetChanged()
+                        dialog.dismiss()
+                    }
 
-        })
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+        }
     }
 }

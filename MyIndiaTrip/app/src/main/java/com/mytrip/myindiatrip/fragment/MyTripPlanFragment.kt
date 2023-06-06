@@ -352,7 +352,7 @@ class MyTripPlanFragment : Fragment() {
                     Log.e("TAG", "myTripKey: " + it.key)
                     Log.e("TAG", "myTrip_selected: " + selectItemName)
                     startActivity(clickIntent)
-                },{save,key->  })
+                })
                 tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
                     requireContext(),
                     LinearLayoutManager.VERTICAL,
@@ -431,8 +431,6 @@ class MyTripPlanFragment : Fragment() {
             Log.e("TAG", "myTripKey: " + it.key)
             Log.e("TAG", "myTrip_selected: " + selectItemName)
             startActivity(clickIntent)
-        },{save,key->
-            mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key).child("save").setValue(save)
         })
         tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
             requireContext(),
