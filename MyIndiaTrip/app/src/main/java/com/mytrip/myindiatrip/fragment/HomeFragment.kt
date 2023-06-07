@@ -7,14 +7,20 @@ import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.activity.DataDisplayActivity
@@ -35,6 +41,8 @@ class HomeFragment : Fragment() {
     lateinit var homeBinding: FragmentHomeBinding
 
     lateinit var mDbRef: DatabaseReference
+    lateinit var user: FirebaseUser
+    lateinit var mAuth: FirebaseAuth
     var categoryList = ArrayList<ModelClass>()
     var categoryItemList = ArrayList<ModelClass>()
     var imageSliderList = ArrayList<ModelClass>()
@@ -64,11 +72,15 @@ class HomeFragment : Fragment() {
         dialog.show()
 
         mDbRef = FirebaseDatabase.getInstance().getReference()
+        mAuth = FirebaseAuth.getInstance()
+        user=mAuth.currentUser!!
 
         homeBinding.imgSearch.setOnClickListener {
             var i = Intent(context, SearchActivity::class.java)
             startActivity(i)
         }
+
+        navigationDrawer()
         autoVideoPlay()
         category()
 
@@ -77,6 +89,57 @@ class HomeFragment : Fragment() {
         return homeBinding.root
 
 
+    }
+
+    private fun navigationDrawer() {
+        homeBinding.imgNavMenu.setOnClickListener {
+            homeBinding.layDraw.openDrawer(GravityCompat.START)
+
+//           user information
+            var query: Query =mDbRef.child("user").orderByChild("email").equalTo(user.email)
+            query.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (postSnapshot in snapshot.children) {
+                        var firstName =postSnapshot.child("firstName").value
+                        var lastName =postSnapshot.child("lastName").value
+                        var email =postSnapshot.child("email").value
+
+                        homeBinding.txtUserFirstName.text= firstName.toString()
+                        homeBinding.txtUserLastName.text= lastName.toString()
+                        homeBinding.txtUserEmail.text= email.toString()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+            })
+
+            homeBinding.layHomeNav.setOnClickListener {
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(com.mytrip.myindiatrip.R.id.container, HomeFragment())
+                    .commit()
+            }
+            homeBinding.laySaveNav.setOnClickListener {
+                val manager: FragmentManager =      requireActivity(). supportFragmentManager
+                val transaction: FragmentTransaction = manager.beginTransaction()
+                transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                transaction.replace(R.id.container, SaveFragment())
+                transaction.commit()
+            }
+
+            //Shear Link
+            homeBinding.layShareNav.setOnClickListener {
+                homeBinding.layDraw.closeDrawer(GravityCompat.START)
+                val ShareIntent = Intent(Intent.ACTION_SEND)
+                ShareIntent.type = "text/plain"
+                ShareIntent.putExtra(
+                    Intent.EXTRA_TEXT,
+                    "https://play.google.com/store/apps/details?id=com.infinitytechapps.allshayari.hindi.shayari"
+                )
+                startActivity(ShareIntent)
+            }
+        }
     }
 
 
