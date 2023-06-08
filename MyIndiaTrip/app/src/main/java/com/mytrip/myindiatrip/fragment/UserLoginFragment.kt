@@ -62,7 +62,7 @@ class UserLoginFragment : Fragment() {
                         Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT).show()
 
                         requireActivity().supportFragmentManager.beginTransaction()
-                            .replace(com.mytrip.myindiatrip.R.id.container, UserDetailsFragment())
+                            .replace(com.mytrip.myindiatrip.R.id.container, HomeFragment())
                             .commit()
 
                         var myEdit: SharedPreferences.Editor = sharedPreferences.edit()

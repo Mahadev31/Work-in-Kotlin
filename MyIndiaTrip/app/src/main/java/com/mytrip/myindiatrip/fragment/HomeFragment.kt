@@ -12,10 +12,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -63,6 +66,8 @@ class HomeFragment : Fragment() {
     ): View? {
         homeBinding = FragmentHomeBinding.inflate(layoutInflater, container, false)
 
+        mDbRef = FirebaseDatabase.getInstance().getReference()
+        mAuth = FirebaseAuth.getInstance()
 
         dialog = Dialog(requireContext())
         var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
@@ -75,8 +80,7 @@ class HomeFragment : Fragment() {
         )
         dialog.show()
 
-        mDbRef = FirebaseDatabase.getInstance().getReference()
-        mAuth = FirebaseAuth.getInstance()
+
 
         homeBinding.imgSearch.setOnClickListener {
             var i = Intent(context, SearchActivity::class.java)
@@ -98,11 +102,28 @@ class HomeFragment : Fragment() {
         homeBinding.imgNavMenu.setOnClickListener {
             homeBinding.layDraw.openDrawer(GravityCompat.START)
 
+        }
+
+
+        if (mAuth.currentUser?.email == null) {
+            homeBinding.layProfileNav.visibility = View.GONE
+            homeBinding.txtLoginNav.visibility = View.VISIBLE
+
+            homeBinding.txtLoginNav.setOnClickListener {
+                val manager: FragmentManager = requireActivity().supportFragmentManager
+                val transaction: FragmentTransaction = manager.beginTransaction()
+                transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                transaction.replace(R.id.container, UserLoginFragment())
+                transaction.commit()
+            }
+
+        } else {
 //           user information
             var query: Query = mDbRef.child("user").orderByChild("email").equalTo(mAuth.currentUser?.email)
             query.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (postSnapshot in snapshot.children) {
+
                         var firstName = postSnapshot.child("firstName").value
                         var lastName = postSnapshot.child("lastName").value
                         var email = postSnapshot.child("email").value
@@ -110,21 +131,25 @@ class HomeFragment : Fragment() {
                         homeBinding.txtUserFirstName.text = firstName.toString()
                         homeBinding.txtUserLastName.text = lastName.toString()
                         homeBinding.txtUserEmail.text = email.toString()
+
+
                     }
                 }
+
 
                 override fun onCancelled(error: DatabaseError) {
 
                 }
             })
+        }
 
-            homeBinding.layHomeNav.setOnClickListener {
-                val manager: FragmentManager = requireActivity().supportFragmentManager
-                val transaction: FragmentTransaction = manager.beginTransaction()
-                transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                transaction.replace(R.id.container, HomeFragment())
-                transaction.commit()
-            }
+        homeBinding.layHomeNav.setOnClickListener {
+            val manager: FragmentManager = requireActivity().supportFragmentManager
+            val transaction: FragmentTransaction = manager.beginTransaction()
+            transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+            transaction.replace(R.id.container, HomeFragment())
+            transaction.commit()
+        }
 //            homeBinding.laySaveNav.setOnClickListener {
 //
 //                val manager: FragmentManager =      requireActivity(). supportFragmentManager
@@ -135,47 +160,47 @@ class HomeFragment : Fragment() {
 //                transaction.commit()
 //            }
 
-            //Shear Link
-            homeBinding.layShareNav.setOnClickListener {
-                homeBinding.layDraw.closeDrawer(GravityCompat.START)
-                val ShareIntent = Intent(Intent.ACTION_SEND)
-                ShareIntent.type = "text/plain"
-                ShareIntent.putExtra(
-                    Intent.EXTRA_TEXT,
-                    "https://play.google.com/store/apps/details?id=com.infinitytechapps.allshayari.hindi.shayari"
-                )
-                startActivity(ShareIntent)
-            }
-
-            //Visit privacy policy define
-            homeBinding.layPrivacyNav.setOnClickListener {
-                homeBinding.layDraw.closeDrawer(GravityCompat.START)
-                var browserIntent = Intent(Intent.ACTION_VIEW)
-                browserIntent.data =
-                    Uri.parse("https://knowledgeworldiswelth.blogspot.com/2023/04/privacy-and-policy.html");
-                startActivity(browserIntent)
-
-            }
-//Logout
-            homeBinding.layLogoutNav.setOnClickListener {
-                var sharedPreferences = requireActivity().getSharedPreferences("MySharePref",
-                    AppCompatActivity.MODE_PRIVATE
-                )
-                var myEdit: SharedPreferences.Editor = sharedPreferences.edit()
-                myEdit.remove("isLogin")
-                myEdit.commit()
-                mAuth.signOut()
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(com.mytrip.myindiatrip.R.id.container, HomeFragment())
-                    .commit()
-            }
-
-            //app version
-            val pack: PackageManager = requireActivity().packageManager
-            val info: PackageInfo = pack.getPackageInfo(requireActivity().packageName, 0)
-            val version: String = info.versionName
-            homeBinding.txtAppVersionNav.text = version
+        //Shear Link
+        homeBinding.layShareNav.setOnClickListener {
+            homeBinding.layDraw.closeDrawer(GravityCompat.START)
+            val ShareIntent = Intent(Intent.ACTION_SEND)
+            ShareIntent.type = "text/plain"
+            ShareIntent.putExtra(
+                Intent.EXTRA_TEXT,
+                "https://play.google.com/store/apps/details?id=com.infinitytechapps.allshayari.hindi.shayari"
+            )
+            startActivity(ShareIntent)
         }
+
+        //Visit privacy policy define
+        homeBinding.layPrivacyNav.setOnClickListener {
+            homeBinding.layDraw.closeDrawer(GravityCompat.START)
+            var browserIntent = Intent(Intent.ACTION_VIEW)
+            browserIntent.data =
+                Uri.parse("https://knowledgeworldiswelth.blogspot.com/2023/04/privacy-and-policy.html");
+            startActivity(browserIntent)
+
+        }
+//Logout
+        homeBinding.layLogoutNav.setOnClickListener {
+            var sharedPreferences = requireActivity().getSharedPreferences(
+                "MySharePref",
+                AppCompatActivity.MODE_PRIVATE
+            )
+            var myEdit: SharedPreferences.Editor = sharedPreferences.edit()
+            myEdit.remove("isLogin")
+            myEdit.commit()
+            mAuth.signOut()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(com.mytrip.myindiatrip.R.id.container, HomeFragment())
+                .commit()
+        }
+
+        //app version
+        val pack: PackageManager = requireActivity().packageManager
+        val info: PackageInfo = pack.getPackageInfo(requireActivity().packageName, 0)
+        val version: String = info.versionName
+        homeBinding.txtAppVersionNav.text = version
     }
 
 

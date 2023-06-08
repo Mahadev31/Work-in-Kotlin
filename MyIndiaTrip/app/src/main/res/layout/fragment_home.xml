@@ -174,10 +174,26 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+         <TextView
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="Login"
+             android:textAlignment="center"
+             android:visibility="gone"
+             android:id="@+id/txtLoginNav"
+             android:backgroundTint="#1C1E1E"
+             android:textStyle="bold"
+             android:textSize="@dimen/_20ssp"
+             android:padding="@dimen/_5sdp"
+             android:textColor="@color/white"
+             android:background="@drawable/round_layout_profile"
+
+             android:layout_margin="@dimen/_10sdp"/>
             <!--profile-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/layProfileNav"
                 android:layout_margin="@dimen/_10sdp"
                 android:background="@drawable/round_layout_profile"
                 android:backgroundTint="#1C1E1E"
@@ -218,7 +234,7 @@
                             android:textColor="@color/white"
                             android:textSize="@dimen/_15ssp"
                             android:textStyle="bold"
-                            tools:text="Sanjay" />
+                            tools:text="Name" />
 
                         <TextView
                             android:id="@+id/txtUserLastName"
@@ -227,8 +243,7 @@
                             android:layout_marginStart="@dimen/_5sdp"
                             android:textColor="@color/white"
                             android:textSize="@dimen/_15ssp"
-                            android:textStyle="bold"
-                            tools:text="Dangar" />
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <TextView
@@ -237,7 +252,7 @@
                         android:layout_height="@dimen/_15sdp"
                         android:textColor="@color/white"
                         android:textStyle="bold"
-                        tools:text="sanjaydangar31@gmail.com" />
+                        tools:text="xyz31@gmail.com" />
                 </LinearLayout>
 
                 <ImageView
