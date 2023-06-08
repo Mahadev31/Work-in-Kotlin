@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.activity.DataDisplayActivity
@@ -57,6 +58,7 @@ class MyTripPlanFragment : Fragment() {
     lateinit var tripAdapter: TripAdapter
 
     var itemList = ArrayList<String>()
+    var search: String? = null
 
     // Initialize variables
     var city: String = ""
@@ -119,8 +121,9 @@ class MyTripPlanFragment : Fragment() {
         }
 
 
-        // Return view
+
         searchItem()
+
         return tripBinding.root
     }
 
@@ -280,49 +283,29 @@ class MyTripPlanFragment : Fragment() {
 
     private fun searchItem() {
 
-        itemList.add("place")
-        itemList.add("hotel")
-        itemList.add("activity")
+        tripBinding.tabLayout.addTab(tripBinding.tabLayout.newTab().setText("place"))  //tabLayout
+        tripBinding.tabLayout.addTab(tripBinding.tabLayout.newTab().setText("hotel"))//tabLayout
+        tripBinding.tabLayout.addTab(tripBinding.tabLayout.newTab().setText("activity"))//tabLayout
 
 
-        val adapter: ArrayAdapter<*> =
-            ArrayAdapter<String>(requireContext(), R.layout.spinnerlist, R.id.txtCityList, itemList)
-        tripBinding.spinnerItem.adapter = adapter
-
-        tripBinding.spinnerItem.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View,
-                    position: Int,
-                    id: Long
-                ) {
-                    val selectItemName: String = itemList[position]
-                    Log.e("TAG", "onItemSelected: $selectItemName")
 
         setByDefualtAdapter()
-
         tripBinding.edtSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                setAdapter(selectItemName)
+                setAdapter()
             }
             true
         }
         tripBinding.imgSearchT.setOnClickListener {
-            setAdapter(selectItemName)
+            setAdapter()
 
 
         }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {}
-            }
-
 
     }
 
+    private fun setAdapter() {
 
-    private fun setAdapter(selectItemName: String) {
         dialog = Dialog(requireContext())
         var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
         dialog.setContentView(progressBarBinding.root)
@@ -334,94 +317,171 @@ class MyTripPlanFragment : Fragment() {
         )
         dialog.show()
 
-        var search: String? = null
+
         search = tripBinding.edtSearch.text.toString()
 
-        if (search.isEmpty()) {
+        if (search!!.isEmpty()) {
             Toast.makeText(context, "Pleas Enter value", Toast.LENGTH_SHORT).show()
         } else {
+            placeFun()
 
-            if (selectItemName == "place") {
+            tripBinding.tabLayout.addOnTabSelectedListener(object :
+                TabLayout.OnTabSelectedListener { //change tab with view pager
+                override fun onTabSelected(tab: TabLayout.Tab) {
 
-                tripAdapter = TripAdapter(requireContext(), placeList, {
-                    var clickIntent = Intent(context, DataDisplayActivity::class.java)
-                    clickIntent.putExtra("search", search)
-                    clickIntent.putExtra("selectItemName", selectItemName)
-                    clickIntent.putExtra("Key", it.key)
-                    clickIntent.putExtra("myTrip", true)
-                    Log.e("TAG", "myTripKey: " + it.key)
-                    Log.e("TAG", "myTrip_selected: " + selectItemName)
-                    startActivity(clickIntent)
-                })
-                tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
-                    requireContext(),
-                    LinearLayoutManager.VERTICAL,
-                    false
-                )
-                tripBinding.rcvSuggestionItem.adapter = tripAdapter
-
-                mDbRef.child("my_trip_plan").child(search).child(selectItemName)
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            placeList.clear()
-                            for (postSnapshot in snapshot.children) {
-                                val currentUser =
-                                    postSnapshot.getValue(ModelClass::class.java)
-                                currentUser?.let { placeList.add(it) }
-
-                            }
-                            tripAdapter.notifyDataSetChanged()
-                            dialog.dismiss()
+                    when (tab.position) {
+                        0 -> {
+                            placeFun()
+                        }
+                        1 -> {
+                            hotelFun()
+                        }
+                        2 -> {
+                            activityFun()
                         }
 
-                        override fun onCancelled(error: DatabaseError) {
 
-                        }
+                    }
 
-                    })
-            }else{
-                adapter = HotelSearchAdapter(this, placeList) {
-                    var clickIntent = Intent(context, HotelAndActivityDataActivity::class.java)
-                    clickIntent.putExtra("search", search)
-                    clickIntent.putExtra("selectItemName", selectItemName)
-                    clickIntent.putExtra("Key", it.key)
-                    clickIntent.putExtra("myTrip", true)
-                    Log.e("TAG", "myTripKey: " + it.key)
-                    Log.e("TAG", "myTrip_selected: " + selectItemName)
-                    startActivity(clickIntent)
+
+                    Log.e("TAG", "onTabSelected: " + tab.position)
+
+
                 }
-                tripBinding.rcvSuggestionItem.layoutManager =
-                    LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                tripBinding.rcvSuggestionItem.adapter = adapter
 
-                mDbRef.child("my_trip_plan").child(search).child(selectItemName)
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            placeList.clear()
-                            for (postSnapshot in snapshot.children) {
-                                val currentUser =
-                                    postSnapshot.getValue(ModelClass::class.java)
-                                currentUser?.let { placeList.add(it) }
+                override fun onTabUnselected(tab: TabLayout.Tab) {
 
-                            }
-                            adapter.notifyDataSetChanged()
-                            dialog.dismiss()
-                        }
+                }
 
-                        override fun onCancelled(error: DatabaseError) {
+                override fun onTabReselected(tab: TabLayout.Tab) {
 
-                        }
+                }
 
-                    })
-            }
-
-
+            })
         }
     }
 
+    private fun activityFun() {
+        val selectItemName = "activity"
+        adapter = HotelSearchAdapter(this, placeList) {
+            var clickIntent = Intent(context, HotelAndActivityDataActivity::class.java)
+            clickIntent.putExtra("search", search)
+            clickIntent.putExtra("selectItemName", selectItemName)
+            clickIntent.putExtra("Key", it.key)
+            clickIntent.putExtra("myTrip", true)
+            Log.e("TAG", "myTripKey: " + it.key)
+            Log.e("TAG", "myTrip_selected: " + selectItemName)
+            startActivity(clickIntent)
+        }
+        tripBinding.rcvSuggestionItem.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        tripBinding.rcvSuggestionItem.adapter = adapter
+
+        mDbRef.child("my_trip_plan").child(search!!).child(selectItemName)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    placeList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser =
+                            postSnapshot.getValue(ModelClass::class.java)
+                        currentUser?.let { placeList.add(it) }
+
+                    }
+                    adapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+    }
+
+    private fun hotelFun() {
+        val selectItemName = "hotel"
+        adapter = HotelSearchAdapter(this, placeList) {
+            var clickIntent = Intent(context, HotelAndActivityDataActivity::class.java)
+            clickIntent.putExtra("search", search)
+            clickIntent.putExtra("selectItemName", selectItemName)
+            clickIntent.putExtra("Key", it.key)
+            clickIntent.putExtra("myTrip", true)
+            Log.e("TAG", "myTripKey: " + it.key)
+            Log.e("TAG", "myTrip_selected: " + selectItemName)
+            startActivity(clickIntent)
+        }
+        tripBinding.rcvSuggestionItem.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        tripBinding.rcvSuggestionItem.adapter = adapter
+
+        mDbRef.child("my_trip_plan").child(search!!).child(selectItemName)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    placeList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser =
+                            postSnapshot.getValue(ModelClass::class.java)
+                        currentUser?.let { placeList.add(it) }
+
+                    }
+                    adapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+    }
+
+    private fun placeFun() {
+
+        val selectItemName = "place"
+
+        tripAdapter = TripAdapter(requireContext(), placeList) {
+            var clickIntent = Intent(context, DataDisplayActivity::class.java)
+            clickIntent.putExtra("search", search)
+            clickIntent.putExtra("selectItemName", selectItemName)
+            clickIntent.putExtra("Key", it.key)
+            clickIntent.putExtra("myTrip", true)
+            Log.e("TAG", "myTripKey: " + it.key)
+            Log.e("TAG", "myTrip_selected: " + selectItemName)
+            startActivity(clickIntent)
+        }
+        tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        tripBinding.rcvSuggestionItem.adapter = tripAdapter
+
+        mDbRef.child("my_trip_plan").child(search!!).child(selectItemName)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    placeList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser =
+                            postSnapshot.getValue(ModelClass::class.java)
+                        currentUser?.let { placeList.add(it) }
+
+                    }
+                    tripAdapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+
+    }
+
+
     private fun setByDefualtAdapter() {
-        var search: String= "surat"
-        var selectItemName: String= "place"
+        var search: String = "surat"
+        var selectItemName: String = "place"
         tripAdapter = TripAdapter(requireContext(), placeList, {
             var clickIntent = Intent(context, DataDisplayActivity::class.java)
             clickIntent.putExtra("search", search)

@@ -2,6 +2,9 @@ package com.mytrip.myindiatrip.fragment
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
@@ -13,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -24,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.activity.DataDisplayActivity
+import com.mytrip.myindiatrip.activity.MainActivity
 import com.mytrip.myindiatrip.activity.SearchActivity
 import com.mytrip.myindiatrip.adapter.CategoryAdapter
 import com.mytrip.myindiatrip.adapter.CategoryListAdapter
@@ -41,7 +46,6 @@ class HomeFragment : Fragment() {
     lateinit var homeBinding: FragmentHomeBinding
 
     lateinit var mDbRef: DatabaseReference
-    lateinit var user: FirebaseUser
     lateinit var mAuth: FirebaseAuth
     var categoryList = ArrayList<ModelClass>()
     var categoryItemList = ArrayList<ModelClass>()
@@ -73,7 +77,6 @@ class HomeFragment : Fragment() {
 
         mDbRef = FirebaseDatabase.getInstance().getReference()
         mAuth = FirebaseAuth.getInstance()
-        user=mAuth.currentUser!!
 
         homeBinding.imgSearch.setOnClickListener {
             var i = Intent(context, SearchActivity::class.java)
@@ -96,17 +99,17 @@ class HomeFragment : Fragment() {
             homeBinding.layDraw.openDrawer(GravityCompat.START)
 
 //           user information
-            var query: Query =mDbRef.child("user").orderByChild("email").equalTo(user.email)
+            var query: Query = mDbRef.child("user").orderByChild("email").equalTo(mAuth.currentUser?.email)
             query.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (postSnapshot in snapshot.children) {
-                        var firstName =postSnapshot.child("firstName").value
-                        var lastName =postSnapshot.child("lastName").value
-                        var email =postSnapshot.child("email").value
+                        var firstName = postSnapshot.child("firstName").value
+                        var lastName = postSnapshot.child("lastName").value
+                        var email = postSnapshot.child("email").value
 
-                        homeBinding.txtUserFirstName.text= firstName.toString()
-                        homeBinding.txtUserLastName.text= lastName.toString()
-                        homeBinding.txtUserEmail.text= email.toString()
+                        homeBinding.txtUserFirstName.text = firstName.toString()
+                        homeBinding.txtUserLastName.text = lastName.toString()
+                        homeBinding.txtUserEmail.text = email.toString()
                     }
                 }
 
@@ -116,17 +119,21 @@ class HomeFragment : Fragment() {
             })
 
             homeBinding.layHomeNav.setOnClickListener {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(com.mytrip.myindiatrip.R.id.container, HomeFragment())
-                    .commit()
-            }
-            homeBinding.laySaveNav.setOnClickListener {
-                val manager: FragmentManager =      requireActivity(). supportFragmentManager
+                val manager: FragmentManager = requireActivity().supportFragmentManager
                 val transaction: FragmentTransaction = manager.beginTransaction()
                 transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
-                transaction.replace(R.id.container, SaveFragment())
+                transaction.replace(R.id.container, HomeFragment())
                 transaction.commit()
             }
+//            homeBinding.laySaveNav.setOnClickListener {
+//
+//                val manager: FragmentManager =      requireActivity(). supportFragmentManager
+//                val transaction: FragmentTransaction = manager.beginTransaction()
+//                transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+//                transaction.replace(R.id.container, SaveFragment())
+//
+//                transaction.commit()
+//            }
 
             //Shear Link
             homeBinding.layShareNav.setOnClickListener {
@@ -139,6 +146,35 @@ class HomeFragment : Fragment() {
                 )
                 startActivity(ShareIntent)
             }
+
+            //Visit privacy policy define
+            homeBinding.layPrivacyNav.setOnClickListener {
+                homeBinding.layDraw.closeDrawer(GravityCompat.START)
+                var browserIntent = Intent(Intent.ACTION_VIEW)
+                browserIntent.data =
+                    Uri.parse("https://knowledgeworldiswelth.blogspot.com/2023/04/privacy-and-policy.html");
+                startActivity(browserIntent)
+
+            }
+//Logout
+            homeBinding.layLogoutNav.setOnClickListener {
+                var sharedPreferences = requireActivity().getSharedPreferences("MySharePref",
+                    AppCompatActivity.MODE_PRIVATE
+                )
+                var myEdit: SharedPreferences.Editor = sharedPreferences.edit()
+                myEdit.remove("isLogin")
+                myEdit.commit()
+                mAuth.signOut()
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(com.mytrip.myindiatrip.R.id.container, HomeFragment())
+                    .commit()
+            }
+
+            //app version
+            val pack: PackageManager = requireActivity().packageManager
+            val info: PackageInfo = pack.getPackageInfo(requireActivity().packageName, 0)
+            val version: String = info.versionName
+            homeBinding.txtAppVersionNav.text = version
         }
     }
 

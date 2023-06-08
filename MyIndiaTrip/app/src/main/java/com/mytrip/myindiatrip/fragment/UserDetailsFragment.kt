@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import com.mytrip.myindiatrip.R
-import com.mytrip.myindiatrip.activity.MainActivity
 import com.mytrip.myindiatrip.databinding.FragmentUserDetailsBinding
 
 
