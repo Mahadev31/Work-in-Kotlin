@@ -21,6 +21,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.mytrip.myindiatrip.databinding.ActivityCreateAccountBinding
 import com.mytrip.myindiatrip.fragment.UserLoginFragment
+import com.mytrip.myindiatrip.model.UserModelClass
 import java.util.*
 
 
@@ -110,7 +111,7 @@ class CreateAccountActivity : AppCompatActivity() {
                             .replace(com.mytrip.myindiatrip.R.id.container, UserLoginFragment())
                             .commit()
 
-                        addUserToDatabase(firstName, lastName, email, auth.currentUser?.uid!!)
+                        addUserToDatabase(image,firstName, lastName, email, auth.currentUser?.uid!!)
 
 
                     }
@@ -130,10 +131,10 @@ class CreateAccountActivity : AppCompatActivity() {
 
 
 
-    private fun addUserToDatabase(firstName: String, lastName: String, email: String, uid: String) {
+    private fun addUserToDatabase(image:String,firstName: String, lastName: String, email: String, uid: String) {
         mDbRef = FirebaseDatabase.getInstance().getReference()
 
-        mDbRef.child("user").child(uid).setValue(UserModelClass(firstName, lastName, email, uid))
+        mDbRef.child("user").child(uid).setValue(UserModelClass(image,firstName, lastName, email, uid))
 
 
     }
@@ -202,11 +203,4 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 }
 
-class UserModelClass(
-    var firstName: String,
-    var lastName: String,
-    var email: String,
-    var uid: String
-) {
 
-}

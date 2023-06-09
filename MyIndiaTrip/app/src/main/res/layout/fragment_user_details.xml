@@ -44,7 +44,7 @@
             android:layout_height="@dimen/_100sdp"
             android:layout_gravity="center"
             android:layout_margin="@dimen/_5sdp"
-            android:src="@drawable/parsuram" />
+            android:src="@drawable/user2" />
 
         <LinearLayout
             android:layout_width="match_parent"

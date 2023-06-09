@@ -26,6 +26,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -124,10 +125,12 @@ class HomeFragment : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (postSnapshot in snapshot.children) {
 
+                        var image = postSnapshot.child("image").value
                         var firstName = postSnapshot.child("firstName").value
                         var lastName = postSnapshot.child("lastName").value
                         var email = postSnapshot.child("email").value
 
+                        context?.let { Glide.with(it).load(image).placeholder(R.drawable.user2).into(homeBinding.imgUserDp) }
                         homeBinding.txtUserFirstName.text = firstName.toString()
                         homeBinding.txtUserLastName.text = lastName.toString()
                         homeBinding.txtUserEmail.text = email.toString()

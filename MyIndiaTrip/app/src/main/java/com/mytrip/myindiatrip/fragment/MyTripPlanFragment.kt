@@ -31,7 +31,10 @@ import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.activity.DataDisplayActivity
 import com.mytrip.myindiatrip.activity.HotelAndActivityDataActivity
@@ -50,6 +53,7 @@ class MyTripPlanFragment : Fragment() {
     lateinit var tripBinding: FragmentMyTripPlanBinding
 
     lateinit var mDbRef: DatabaseReference
+    lateinit var auth: FirebaseAuth
     var placeList = ArrayList<ModelClass>()
     lateinit var adapter: HotelSearchAdapter
     var hotelList = ArrayList<HotelSearchModelClass>()
@@ -63,6 +67,7 @@ class MyTripPlanFragment : Fragment() {
     // Initialize variables
     var city: String = ""
 
+
     var client: FusedLocationProviderClient? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,6 +76,7 @@ class MyTripPlanFragment : Fragment() {
         tripBinding = FragmentMyTripPlanBinding.inflate(layoutInflater, container, false)
 
         mDbRef = FirebaseDatabase.getInstance().getReference()
+        auth = Firebase.auth
 
         dialog = Dialog(requireContext())
         var progressBarBinding = ProgressBarBinding.inflate(layoutInflater)
@@ -83,6 +89,16 @@ class MyTripPlanFragment : Fragment() {
         )
         dialog.show()
 
+
+
+
+        locationFunction()
+        searchItem()
+
+        return tripBinding.root
+    }
+
+    private fun locationFunction() {
         tripBinding.txtCurrentLocation.setOnClickListener {
             var i = Intent(context, SearchLocationActivity::class.java)
             startActivity(i)
@@ -120,11 +136,6 @@ class MyTripPlanFragment : Fragment() {
             )
         }
 
-
-
-        searchItem()
-
-        return tripBinding.root
     }
 
 
@@ -288,7 +299,6 @@ class MyTripPlanFragment : Fragment() {
         tripBinding.tabLayout.addTab(tripBinding.tabLayout.newTab().setText("activity"))//tabLayout
 
 
-
         setByDefualtAdapter()
         tripBinding.edtSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -361,85 +371,11 @@ class MyTripPlanFragment : Fragment() {
         }
     }
 
-    private fun activityFun() {
-        val selectItemName = "activity"
-        adapter = HotelSearchAdapter(this, placeList) {
-            var clickIntent = Intent(context, HotelAndActivityDataActivity::class.java)
-            clickIntent.putExtra("search", search)
-            clickIntent.putExtra("selectItemName", selectItemName)
-            clickIntent.putExtra("Key", it.key)
-            clickIntent.putExtra("myTrip", true)
-            Log.e("TAG", "myTripKey: " + it.key)
-            Log.e("TAG", "myTrip_selected: " + selectItemName)
-            startActivity(clickIntent)
-        }
-        tripBinding.rcvSuggestionItem.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        tripBinding.rcvSuggestionItem.adapter = adapter
-
-        mDbRef.child("my_trip_plan").child(search!!).child(selectItemName)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    placeList.clear()
-                    for (postSnapshot in snapshot.children) {
-                        val currentUser =
-                            postSnapshot.getValue(ModelClass::class.java)
-                        currentUser?.let { placeList.add(it) }
-
-                    }
-                    adapter.notifyDataSetChanged()
-                    dialog.dismiss()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
-    }
-
-    private fun hotelFun() {
-        val selectItemName = "hotel"
-        adapter = HotelSearchAdapter(this, placeList) {
-            var clickIntent = Intent(context, HotelAndActivityDataActivity::class.java)
-            clickIntent.putExtra("search", search)
-            clickIntent.putExtra("selectItemName", selectItemName)
-            clickIntent.putExtra("Key", it.key)
-            clickIntent.putExtra("myTrip", true)
-            Log.e("TAG", "myTripKey: " + it.key)
-            Log.e("TAG", "myTrip_selected: " + selectItemName)
-            startActivity(clickIntent)
-        }
-        tripBinding.rcvSuggestionItem.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        tripBinding.rcvSuggestionItem.adapter = adapter
-
-        mDbRef.child("my_trip_plan").child(search!!).child(selectItemName)
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    placeList.clear()
-                    for (postSnapshot in snapshot.children) {
-                        val currentUser =
-                            postSnapshot.getValue(ModelClass::class.java)
-                        currentUser?.let { placeList.add(it) }
-
-                    }
-                    adapter.notifyDataSetChanged()
-                    dialog.dismiss()
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
-    }
-
     private fun placeFun() {
 
         val selectItemName = "place"
 
-        tripAdapter = TripAdapter(requireContext(), placeList) {
+        tripAdapter = TripAdapter(requireContext(), placeList, {
             var clickIntent = Intent(context, DataDisplayActivity::class.java)
             clickIntent.putExtra("search", search)
             clickIntent.putExtra("selectItemName", selectItemName)
@@ -448,7 +384,44 @@ class MyTripPlanFragment : Fragment() {
             Log.e("TAG", "myTripKey: " + it.key)
             Log.e("TAG", "myTrip_selected: " + selectItemName)
             startActivity(clickIntent)
-        }
+        }, { save, key ->
+
+
+            mDbRef.child("my_trip_plan").child(search!!).child(selectItemName).child(key)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+
+
+                        var name = snapshot.child("name").value.toString()
+                        var image = snapshot.child("image").value.toString()
+                        var location = snapshot.child("location").value.toString()
+                        var description = snapshot.child("description").value.toString()
+                        var rent=snapshot.child("rent").value.toString()
+                        var rating = snapshot.child("rating").value.toString()
+
+                        Log.e("TAG", "onDataChange:name " + name)
+
+                        mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
+                            .child("place").child(key).setValue(
+                                SaveModelClass(
+                                    name,
+                                    image,
+                                    location,
+                                    description,
+                                    rating,
+                                    rent,
+                                    key,
+                                    save
+                                )
+                            )
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+        })
         tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL,
@@ -478,6 +451,156 @@ class MyTripPlanFragment : Fragment() {
 
     }
 
+    private fun hotelFun() {
+        val selectItemName = "hotel"
+        adapter = HotelSearchAdapter(this, placeList, {
+            var clickIntent = Intent(context, HotelAndActivityDataActivity::class.java)
+            clickIntent.putExtra("search", search)
+            clickIntent.putExtra("selectItemName", selectItemName)
+            clickIntent.putExtra("Key", it.key)
+            clickIntent.putExtra("myTrip", true)
+            Log.e("TAG", "myTripKey: " + it.key)
+            Log.e("TAG", "myTrip_selected: " + selectItemName)
+            startActivity(clickIntent)
+        },{save,key->
+
+
+            mDbRef.child("my_trip_plan").child(search!!).child(selectItemName).child(key)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+
+
+                        var name = snapshot.child("name").value.toString()
+                        var image = snapshot.child("image").value.toString()
+                        var location = snapshot.child("location").value.toString()
+                        var description = snapshot.child("description").value.toString()
+                        var rent=snapshot.child("rent").value.toString()
+                        var rating = snapshot.child("rating").value.toString()
+
+                        Log.e("TAG", "onDataChange:name " + name)
+
+                        mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
+                            .child("hotel").child(key).setValue(
+                                SaveModelClass(
+                                    name,
+                                    image,
+                                    location,
+                                    description,
+                                    rating,
+                                    rent,
+                                    key,
+                                    save
+                                )
+                            )
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+        })
+        tripBinding.rcvSuggestionItem.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        tripBinding.rcvSuggestionItem.adapter = adapter
+
+        mDbRef.child("my_trip_plan").child(search!!).child(selectItemName)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    placeList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser =
+                            postSnapshot.getValue(ModelClass::class.java)
+                        currentUser?.let { placeList.add(it) }
+
+                    }
+                    adapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+    }
+
+    private fun activityFun() {
+        val selectItemName = "activity"
+        adapter = HotelSearchAdapter(this, placeList, {
+            var clickIntent = Intent(context, HotelAndActivityDataActivity::class.java)
+            clickIntent.putExtra("search", search)
+            clickIntent.putExtra("selectItemName", selectItemName)
+            clickIntent.putExtra("Key", it.key)
+            clickIntent.putExtra("myTrip", true)
+            Log.e("TAG", "myTripKey: " + it.key)
+            Log.e("TAG", "myTrip_selected: " + selectItemName)
+            startActivity(clickIntent)
+        },{save,key->
+
+
+
+            mDbRef.child("my_trip_plan").child(search!!).child(selectItemName).child(key)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+
+
+                        var name = snapshot.child("name").value.toString()
+                        var image = snapshot.child("image").value.toString()
+                        var location = snapshot.child("location").value.toString()
+                        var description = snapshot.child("description").value.toString()
+                        var rent=snapshot.child("rent").value.toString()
+                        var rating = snapshot.child("rating").value.toString()
+
+                        Log.e("TAG", "onDataChange:name " + name)
+
+                        mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
+                            .child("activity").child(key).setValue(
+                                SaveModelClass(
+                                    name,
+                                    image,
+                                    location,
+                                    description,
+                                    rating,
+                                    rent,
+                                    key,
+                                    save
+                                )
+                            )
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+
+        })
+        tripBinding.rcvSuggestionItem.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        tripBinding.rcvSuggestionItem.adapter = adapter
+
+        mDbRef.child("my_trip_plan").child(search!!).child(selectItemName)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    placeList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser =
+                            postSnapshot.getValue(ModelClass::class.java)
+                        currentUser?.let { placeList.add(it) }
+
+                    }
+                    adapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+    }
+
 
     private fun setByDefualtAdapter() {
         var search: String = "surat"
@@ -491,6 +614,44 @@ class MyTripPlanFragment : Fragment() {
             Log.e("TAG", "myTripKey: " + it.key)
             Log.e("TAG", "myTrip_selected: " + selectItemName)
             startActivity(clickIntent)
+        }, { save, key ->
+
+
+            mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+
+
+                        var name = snapshot.child("name").value.toString()
+                        var image = snapshot.child("image").value.toString()
+                        var location = snapshot.child("location").value.toString()
+                        var description = snapshot.child("description").value.toString()
+                        var rent=snapshot.child("rent").value.toString()
+                        var rating = snapshot.child("rating").value.toString()
+
+                        Log.e("TAG", "onDataChange:name " + name)
+
+                        mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
+                            .child("place").child(key).setValue(
+                                SaveModelClass(
+                                    name,
+                                    image,
+                                    location,
+                                    description,
+                                    rating,
+                                    rent,
+                                    key,
+                                    save
+                                )
+                            )
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+
         })
         tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
             requireContext(),
@@ -520,3 +681,18 @@ class MyTripPlanFragment : Fragment() {
             })
     }
 }
+
+class SaveModelClass(
+    var name: String,
+    var image: String,
+    var location: String,
+    var description: String,
+    var rating: String,
+    var rent:String,
+    var key: String,
+    var save: Int
+) {
+
+}
+
+

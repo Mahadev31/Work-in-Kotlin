@@ -11,9 +11,17 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mytrip.myindiatrip.R
+import com.mytrip.myindiatrip.fragment.SaveModelClass
 import com.mytrip.myindiatrip.model.ModelClass
 
-class TripAdapter(var context: Context, var placeList: ArrayList<ModelClass>, var click:(ModelClass)-> Unit) : RecyclerView.Adapter<TripAdapter.MyViewHolder>() {
+class TripAdapter(
+    var context: Context,
+    var placeList: ArrayList<ModelClass>,
+    var click: (ModelClass) -> Unit,
+    var save: (Int, String) -> Unit
+) : RecyclerView.Adapter<TripAdapter.MyViewHolder>() {
+
+
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgPlace: ImageView = itemView.findViewById(R.id.imgPlace)
         var txtPlaceName: TextView = itemView.findViewById(R.id.txtPlaceName)
@@ -31,23 +39,49 @@ class TripAdapter(var context: Context, var placeList: ArrayList<ModelClass>, va
     }
 
     override fun getItemCount(): Int {
-        return  placeList.size
+        return placeList.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         Glide.with(context).load(placeList[position].image)
             .placeholder(R.drawable.ic_image).into(holder.imgPlace)
 
-        holder.txtPlaceName.text=placeList[position].name
-        holder.txtLocation.text=placeList[position].location
-        holder.txtPlaceRating.text=placeList[position].rating
+        holder.txtPlaceName.text = placeList[position].name
+        holder.txtLocation.text = placeList[position].location
+        holder.txtPlaceRating.text = placeList[position].rating
 
         holder.cdSearchView.setOnClickListener {
             click.invoke(placeList[position])
         }
 
 
+        //save
+        if (placeList[position].save == 1) {
+            holder.imgSave.setImageResource(R.drawable.save_fill)
+
+        } else {
+            holder.imgSave.setImageResource(R.drawable.save_unfill)
+        }
+
+//like
+        holder.imgSave.setOnClickListener {
+
+            if (placeList[position].save == 1) {
+
+                save.invoke(0, placeList[position].key!!)
+                holder.imgSave.setImageResource(R.drawable.save_unfill)
+                placeList[position].save = 0
+                Log.e("TAG", "Display: " + placeList[position].save)
+            } else {
+
+                save.invoke(1, placeList[position].key!!)
+                holder.imgSave.setImageResource(R.drawable.save_fill)
+
+                placeList[position].save = 1
+
+            }
 
 
+        }
     }
 }

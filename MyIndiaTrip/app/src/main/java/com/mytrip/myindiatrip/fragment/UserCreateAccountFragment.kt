@@ -2,7 +2,6 @@ package com.mytrip.myindiatrip.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.mytrip.myindiatrip.databinding.FragmentUserCreateAccountBinding
+import com.mytrip.myindiatrip.model.UserModelClass
 
 
 class UserCreateAccountFragment : Fragment() {
@@ -109,9 +109,10 @@ class UserCreateAccountFragment : Fragment() {
 
 
     private fun addUserToDatabase(firstName: String, lastName: String, email: String, uid: String) {
+//        var save:Int=0
         mDbRef = FirebaseDatabase.getInstance().getReference()
-
-        mDbRef.child("user").child(uid).setValue(UserModelClass(firstName, lastName, email, uid))
+var image=""
+        mDbRef.child("user").child(uid).setValue(UserModelClass(image,firstName, lastName, email, uid))
 
     }
 
@@ -125,11 +126,4 @@ class UserCreateAccountFragment : Fragment() {
 
 }
 
-class UserModelClass(
-    var firstName: String,
-    var lastName: String,
-    var email: String,
-    var uid: String
-) {
 
-}

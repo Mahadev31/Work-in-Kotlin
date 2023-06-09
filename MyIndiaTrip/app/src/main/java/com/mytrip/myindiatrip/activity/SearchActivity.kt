@@ -73,7 +73,7 @@ class SearchActivity : AppCompatActivity() {
         } else {
 
 
-            tripAdapter = TripAdapter(this, placeList) {
+            tripAdapter = TripAdapter(this, placeList,{
                 var clickIntent = Intent(this, DataDisplayActivity::class.java)
                 clickIntent.putExtra("search", search)
                 clickIntent.putExtra("selectItemName", selectItemName)
@@ -82,7 +82,9 @@ class SearchActivity : AppCompatActivity() {
                 Log.e("TAG", "myTripKey: " + it.key)
                 Log.e("TAG", "myTrip_selected: " + selectItemName)
                 startActivity(clickIntent)
-            }
+            },{save,key->
+
+            })
             searchBinding.rcvSearchPlace.layoutManager = LinearLayoutManager(
                 this,
                 LinearLayoutManager.VERTICAL,

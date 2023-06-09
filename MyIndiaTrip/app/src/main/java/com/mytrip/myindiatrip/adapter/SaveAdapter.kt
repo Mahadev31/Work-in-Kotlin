@@ -15,7 +15,7 @@ import com.mytrip.myindiatrip.model.ModelClass
 
 class SaveAdapter(
     var context: Context,
-    var save: (Int, String) -> Unit
+    var save:(Int,String)->Unit
 ) :   //create invoke
     RecyclerView.Adapter<SaveAdapter.MyViewHolder>() {
     var placeList= ArrayList<ModelClass>()
@@ -48,55 +48,35 @@ class SaveAdapter(
         holder.txtLocation.text = placeList[position].location
         holder.txtPlaceRating.text = placeList[position].rating
 
-//        holder.cdSearchView.setOnClickListener {
-//            click.invoke(placeList[position])
-//        }
-//
-//        //like
-//        if (placeList[position].save == 1) {
-//            holder.imgSave.setImageResource(R.drawable.save_fill)
-//
-//        } else {
-//            holder.imgSave.setImageResource(R.drawable.save_unfill)
-//        }
-//
-//        //like
-//        holder.imgSave.setOnClickListener {
-//
-//            if (placeList[position].save == 1) {
-//
-//                save.invoke(0, placeList[position].key!!)
-//                holder.imgSave.setImageResource(R.drawable.save_unfill)
-//                placeList[position].save = 0
-//                Log.e("TAG", "Display: " + placeList[position].save)
-//            } else {
-//
-//                save.invoke(1, placeList[position].key!!)
-//                holder.imgSave.setImageResource(R.drawable.save_fill)
-//
-//                placeList[position].save = 1
-//
-//            }
-//
-//        }
+
+        //like
+        holder.imgSave.setImageResource(R.drawable.save_fill)
 
 
-        //click button and set unlike
-//            deleteItem(position)  //create function and set position
+        //like
+        holder.imgSave.setOnClickListener {
+
+
+            save.invoke(0,placeList[position].key!!)
+
+
+            Log.e("TAG", "Favorite: " + placeList[position].save)
+
+            //click button and set unlike
+            deleteItem(position)  //create function and set position
+        }
     }
 
+    //pass function in activity
     fun updateList(placeList: ArrayList<ModelClass>) {
         this.placeList = placeList
         notifyDataSetChanged()
+
     }
 
-
-    //pass function in activity
-
-//
-//    private fun deleteItem(position: Int) {  //click button and remove data in recycle view
-//        placeList.removeAt(position)
-//        notifyItemRemoved(position)
-//        notifyItemRangeChanged(position, placeList.size)
-//    }
+    private fun deleteItem(position: Int) {  //click button and remove data in recycle view
+        placeList.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, placeList.size)
+    }
 }

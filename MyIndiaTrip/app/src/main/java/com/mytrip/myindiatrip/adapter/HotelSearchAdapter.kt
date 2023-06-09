@@ -18,7 +18,8 @@ import kotlin.collections.ArrayList
 class HotelSearchAdapter(
     var myTripFragment: MyTripPlanFragment,
     var hotelList: ArrayList<ModelClass>,
-    var click: (ModelClass) -> Unit
+    var click: (ModelClass) -> Unit,
+    var save: (Int, String) -> Unit
 ) : RecyclerView.Adapter<HotelSearchAdapter.MyViewHolder>() {
 //    private var selectedItemPosition: Int = -1
 
@@ -28,6 +29,7 @@ class HotelSearchAdapter(
         var txtHotelRent: TextView = itemView.findViewById(R.id.txtHotelRent)
         var txtHotelRating: TextView = itemView.findViewById(R.id.txtHotelRating)
         var layPopular: RelativeLayout = itemView.findViewById(R.id.layPopular)
+        var imgSave: ImageView = itemView.findViewById(R.id.imgSave)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -54,7 +56,34 @@ class HotelSearchAdapter(
             notifyDataSetChanged()
         }
 
+
+        //save
+        if (hotelList[position].save == 1) {
+            holder.imgSave.setImageResource(R.drawable.save_fill)
+
+        } else {
+            holder.imgSave.setImageResource(R.drawable.save_unfill)
+        }
+
+//like
+        holder.imgSave.setOnClickListener {
+
+            if (hotelList[position].save == 1) {
+
+                save.invoke(0, hotelList[position].key!!)
+                holder.imgSave.setImageResource(R.drawable.save_unfill)
+                hotelList[position].save = 0
+                Log.e("TAG", "Display: " + hotelList[position].save)
+            } else {
+
+                save.invoke(1, hotelList[position].key!!)
+                holder.imgSave.setImageResource(R.drawable.save_fill)
+
+                hotelList[position].save = 1
+
+            }
+
+        }
+
     }
-
-
 }
