@@ -22,7 +22,7 @@
         <item name="cornerSize">10%</item>
     </style>
 
-<!--    Text Tool Tip-->
+    <!--    Text Tool Tip-->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -39,4 +39,13 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>
+
+    <style name="Theme.MyIndiaTrip.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.MyIndiaTrip.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.MyIndiaTrip.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

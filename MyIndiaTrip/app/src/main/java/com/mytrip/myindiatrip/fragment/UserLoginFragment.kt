@@ -1,5 +1,6 @@
 package com.mytrip.myindiatrip.fragment
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.mytrip.myindiatrip.activity.CreateAccountActivity
 import com.mytrip.myindiatrip.databinding.FragmentUserLoginBinding
 
 class UserLoginFragment : Fragment() {
@@ -80,9 +82,12 @@ class UserLoginFragment : Fragment() {
         }
 
         userLoginBinding.txtCreateAccountPage.setOnClickListener {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(com.mytrip.myindiatrip.R.id.container, UserCreateAccountFragment())
-                .commit()
+//            requireActivity().supportFragmentManager.beginTransaction()
+//                .replace(com.mytrip.myindiatrip.R.id.container, UserCreateAccountFragment())
+//                .commit()
+            var i=Intent(context,CreateAccountActivity::class.java)
+            startActivity(i)
+
         }
     }
 

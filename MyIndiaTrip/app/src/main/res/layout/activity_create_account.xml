@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="#F0F6F8"
-    android:gravity="center"
     android:layout_height="match_parent"
-    tools:context=".fragment.UserCreateAccountFragment">
+    android:background="#F0F6F8"
+    android:orientation="vertical"
+    tools:context=".activity.CreateAccountActivity">
 
 
     <!--    Toolbar-->
@@ -15,6 +14,12 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/ic_arrow_back" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -33,15 +38,30 @@
         android:id="@+id/imgUserDp"
         android:layout_width="@dimen/_120sdp"
         android:layout_height="@dimen/_120sdp"
+        android:layout_gravity="center"
         android:scaleType="fitXY"
         android:src="@drawable/ic_image"
         app:shapeAppearanceOverlay="@style/roundedImageStyle" />
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="choose image"
-        android:id="@+id/btnChooseImage"/>
+        android:gravity="center">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnChooseImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="choose image"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnUploadImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload image"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,16 +70,16 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_30sdp"
-            app:hintTextColor="@color/black"
-            app:boxStrokeColor="@color/black"
-            android:layout_marginEnd="10dp"
             android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginStart="@dimen/_30sdp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
             android:hint="First Name"
+            app:boxStrokeColor="@color/black"
             app:endIconMode="clear_text"
             app:endIconTint="@color/colorPrimaryDark"
+            app:hintTextColor="@color/black"
             app:shapeAppearance="@style/Rounded">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -70,19 +90,20 @@
                 android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="@dimen/_30sdp"
-            android:layout_marginStart="10dp"
             android:layout_marginVertical="@dimen/_10sdp"
-            app:hintTextColor="@color/black"
-            app:boxStrokeColor="@color/black"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="@dimen/_30sdp"
+            android:layout_weight="1"
             android:hint="Last Name"
+            app:boxStrokeColor="@color/black"
             app:endIconMode="clear_text"
             app:endIconTint="@color/colorPrimaryDark"
+            app:hintTextColor="@color/black"
             app:shapeAppearance="@style/Rounded">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -94,17 +115,18 @@
 
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
-        app:hintTextColor="@color/black"
-        app:boxStrokeColor="@color/black"
         android:layout_marginVertical="@dimen/_10sdp"
         android:hint="Email"
+        app:boxStrokeColor="@color/black"
         app:endIconMode="clear_text"
         app:endIconTint="@color/colorPrimaryDark"
+        app:hintTextColor="@color/black"
         app:shapeAppearance="@style/Rounded">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -123,10 +145,10 @@
         android:layout_marginHorizontal="30dp"
         android:layout_marginVertical="@dimen/_10sdp"
         android:hint="Password"
-        app:hintTextColor="@color/black"
         app:boxStrokeColor="@color/black"
         app:endIconMode="password_toggle"
         app:endIconTint="@color/colorPrimaryDark"
+        app:hintTextColor="@color/black"
         app:shapeAppearance="@style/Rounded">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -142,6 +164,7 @@
         android:id="@+id/cdSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_margin="@dimen/_10sdp"
         app:cardBackgroundColor="@color/black"
         app:cardCornerRadius="@dimen/_10sdp">
@@ -159,7 +182,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_100sdp">
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_50sdp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -167,10 +191,10 @@
             android:text="Already have a account?" />
 
         <TextView
+            android:id="@+id/txtLoginPage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="  Login "
-            android:id="@+id/txtLoginPage"
             android:textColor="@color/black"
             android:textStyle="bold" />
     </LinearLayout>

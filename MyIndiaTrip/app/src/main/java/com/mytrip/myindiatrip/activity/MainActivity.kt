@@ -1,32 +1,23 @@
 package com.mytrip.myindiatrip.activity
 
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.GridLayoutManager
-import com.mytrip.myindiatrip.fragment.SaveFragment
+import com.mytrip.myindiatrip.R
+import com.mytrip.myindiatrip.databinding.ActivityMainBinding
 import com.mytrip.myindiatrip.fragment.HomeFragment
 import com.mytrip.myindiatrip.fragment.MyTripPlanFragment
 import com.mytrip.myindiatrip.fragment.ProfileFragment
-import com.mytrip.myindiatrip.R
-import com.mytrip.myindiatrip.databinding.ActivityMainBinding
+import com.mytrip.myindiatrip.fragment.SaveFragment
 import org.imaginativeworld.oopsnointernet.ConnectionCallback
 import org.imaginativeworld.oopsnointernet.NoInternetDialog
 import org.imaginativeworld.oopsnointernet.NoInternetSnackbar
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 open class MainActivity : AppCompatActivity() {
@@ -159,4 +150,6 @@ open class MainActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
     }
+
+
 }

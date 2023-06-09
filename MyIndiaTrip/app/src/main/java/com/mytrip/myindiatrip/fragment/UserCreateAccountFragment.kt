@@ -1,6 +1,8 @@
 package com.mytrip.myindiatrip.fragment
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +15,14 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.mytrip.myindiatrip.databinding.FragmentUserCreateAccountBinding
 
+
 class UserCreateAccountFragment : Fragment() {
 
 
     lateinit var createAccountBinding: FragmentUserCreateAccountBinding
 
+
+    var RESULT_LOAD_IMAGE = 100
     lateinit var auth: FirebaseAuth
     private lateinit var mDbRef: DatabaseReference
     override fun onCreateView(
@@ -35,6 +40,13 @@ class UserCreateAccountFragment : Fragment() {
     }
 
     private fun initView() {
+
+        createAccountBinding.btnChooseImage.setOnClickListener(View.OnClickListener {
+            var intent =  Intent()
+            intent.type = "image/*";
+            intent.action = Intent.ACTION_GET_CONTENT;
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), RESULT_LOAD_IMAGE)
+        })
 
 
         createAccountBinding.cdSignUp.setOnClickListener {
@@ -101,6 +113,13 @@ class UserCreateAccountFragment : Fragment() {
 
         mDbRef.child("user").child(uid).setValue(UserModelClass(firstName, lastName, email, uid))
 
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        for (fragment in childFragmentManager.fragments) {
+            fragment.onActivityResult(requestCode, resultCode, data)
+        }
     }
 
 
