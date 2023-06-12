@@ -63,7 +63,7 @@ class CreateAccountActivity : AppCompatActivity() {
         })
             binding.btnUploadImage.setOnClickListener(View.OnClickListener {
 
-                uploadImage()
+//                uploadImage()
 
         })
 
@@ -145,9 +145,13 @@ class CreateAccountActivity : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult(),
         ActivityResultCallback { result ->
             if (result.resultCode === RESULT_OK) {
+
+
                 val data: Intent? = result.getData()
                 filePath= data?.data!!
                 binding.imgUserDp.setImageURI(filePath)
+
+                uploadImage()
             }
         })
 

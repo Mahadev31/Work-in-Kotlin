@@ -112,8 +112,7 @@
                 android:layout_marginTop="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
                 android:background="@drawable/round_save"
-                android:padding="@dimen/_5sdp"
-                android:src="@drawable/save_unfill" />
+                android:padding="@dimen/_5sdp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

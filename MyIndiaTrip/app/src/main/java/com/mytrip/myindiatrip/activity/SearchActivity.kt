@@ -73,7 +73,7 @@ class SearchActivity : AppCompatActivity() {
         } else {
 
 
-            tripAdapter = TripAdapter(this, placeList,{
+            tripAdapter = TripAdapter(this,{
                 var clickIntent = Intent(this, DataDisplayActivity::class.java)
                 clickIntent.putExtra("search", search)
                 clickIntent.putExtra("selectItemName", selectItemName)
@@ -102,7 +102,7 @@ class SearchActivity : AppCompatActivity() {
                             currentUser?.let { placeList.add(it) }
 
                         }
-                        tripAdapter.notifyDataSetChanged()
+                        tripAdapter.updateList(placeList)
                         dialog.dismiss()
                     }
 

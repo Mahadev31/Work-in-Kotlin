@@ -19,8 +19,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -35,7 +33,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
-import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.activity.DataDisplayActivity
 import com.mytrip.myindiatrip.activity.HotelAndActivityDataActivity
 import com.mytrip.myindiatrip.activity.SearchLocationActivity
@@ -43,7 +40,6 @@ import com.mytrip.myindiatrip.adapter.HotelSearchAdapter
 import com.mytrip.myindiatrip.adapter.TripAdapter
 import com.mytrip.myindiatrip.databinding.FragmentMyTripPlanBinding
 import com.mytrip.myindiatrip.databinding.ProgressBarBinding
-import com.mytrip.myindiatrip.model.HotelSearchModelClass
 import com.mytrip.myindiatrip.model.ModelClass
 import java.util.*
 
@@ -56,12 +52,10 @@ class MyTripPlanFragment : Fragment() {
     lateinit var auth: FirebaseAuth
     var placeList = ArrayList<ModelClass>()
     lateinit var adapter: HotelSearchAdapter
-    var hotelList = ArrayList<HotelSearchModelClass>()
     lateinit var dialog: Dialog
 
     lateinit var tripAdapter: TripAdapter
 
-    var itemList = ArrayList<String>()
     var search: String? = null
 
     // Initialize variables
@@ -375,7 +369,7 @@ class MyTripPlanFragment : Fragment() {
 
         val selectItemName = "place"
 
-        tripAdapter = TripAdapter(requireContext(), placeList, {
+        tripAdapter = TripAdapter(requireContext(), {
             var clickIntent = Intent(context, DataDisplayActivity::class.java)
             clickIntent.putExtra("search", search)
             clickIntent.putExtra("selectItemName", selectItemName)
@@ -396,7 +390,7 @@ class MyTripPlanFragment : Fragment() {
                         var image = snapshot.child("image").value.toString()
                         var location = snapshot.child("location").value.toString()
                         var description = snapshot.child("description").value.toString()
-                        var rent=snapshot.child("rent").value.toString()
+                        var rent = snapshot.child("rent").value.toString()
                         var rating = snapshot.child("rating").value.toString()
 
                         Log.e("TAG", "onDataChange:name " + name)
@@ -439,7 +433,7 @@ class MyTripPlanFragment : Fragment() {
                         currentUser?.let { placeList.add(it) }
 
                     }
-                    tripAdapter.notifyDataSetChanged()
+                    tripAdapter.updateList(placeList)
                     dialog.dismiss()
                 }
 
@@ -462,7 +456,7 @@ class MyTripPlanFragment : Fragment() {
             Log.e("TAG", "myTripKey: " + it.key)
             Log.e("TAG", "myTrip_selected: " + selectItemName)
             startActivity(clickIntent)
-        },{save,key->
+        }, { save, key ->
 
 
             mDbRef.child("my_trip_plan").child(search!!).child(selectItemName).child(key)
@@ -474,7 +468,7 @@ class MyTripPlanFragment : Fragment() {
                         var image = snapshot.child("image").value.toString()
                         var location = snapshot.child("location").value.toString()
                         var description = snapshot.child("description").value.toString()
-                        var rent=snapshot.child("rent").value.toString()
+                        var rent = snapshot.child("rent").value.toString()
                         var rating = snapshot.child("rating").value.toString()
 
                         Log.e("TAG", "onDataChange:name " + name)
@@ -536,8 +530,7 @@ class MyTripPlanFragment : Fragment() {
             Log.e("TAG", "myTripKey: " + it.key)
             Log.e("TAG", "myTrip_selected: " + selectItemName)
             startActivity(clickIntent)
-        },{save,key->
-
+        }, { save, key ->
 
 
             mDbRef.child("my_trip_plan").child(search!!).child(selectItemName).child(key)
@@ -549,7 +542,7 @@ class MyTripPlanFragment : Fragment() {
                         var image = snapshot.child("image").value.toString()
                         var location = snapshot.child("location").value.toString()
                         var description = snapshot.child("description").value.toString()
-                        var rent=snapshot.child("rent").value.toString()
+                        var rent = snapshot.child("rent").value.toString()
                         var rating = snapshot.child("rating").value.toString()
 
                         Log.e("TAG", "onDataChange:name " + name)
@@ -605,7 +598,7 @@ class MyTripPlanFragment : Fragment() {
     private fun setByDefualtAdapter() {
         var search: String = "surat"
         var selectItemName: String = "place"
-        tripAdapter = TripAdapter(requireContext(), placeList, {
+        tripAdapter = TripAdapter(requireContext(), {
             var clickIntent = Intent(context, DataDisplayActivity::class.java)
             clickIntent.putExtra("search", search)
             clickIntent.putExtra("selectItemName", selectItemName)
@@ -626,10 +619,11 @@ class MyTripPlanFragment : Fragment() {
                         var image = snapshot.child("image").value.toString()
                         var location = snapshot.child("location").value.toString()
                         var description = snapshot.child("description").value.toString()
-                        var rent=snapshot.child("rent").value.toString()
+                        var rent = snapshot.child("rent").value.toString()
                         var rating = snapshot.child("rating").value.toString()
 
                         Log.e("TAG", "onDataChange:name " + name)
+
 
                         mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
                             .child("place").child(key).setValue(
@@ -640,10 +634,24 @@ class MyTripPlanFragment : Fragment() {
                                     description,
                                     rating,
                                     rent,
-                                    key,
-                                    save
+                                    key, save
                                 )
                             )
+
+                        mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key)
+                            .child("save_data").child(auth.currentUser?.uid!!).child("place")
+                            .child(key).setValue(
+                                SaveModelClass(
+                                    name,
+                                    image,
+                                    location,
+                                    description,
+                                    rating,
+                                    rent,
+                                    key, save
+                                )
+                            )
+
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -670,7 +678,7 @@ class MyTripPlanFragment : Fragment() {
                         currentUser?.let { placeList.add(it) }
 
                     }
-                    tripAdapter.notifyDataSetChanged()
+                    tripAdapter.updateList(placeList)
                     dialog.dismiss()
                 }
 
@@ -688,7 +696,7 @@ class SaveModelClass(
     var location: String,
     var description: String,
     var rating: String,
-    var rent:String,
+    var rent: String,
     var key: String,
     var save: Int
 ) {

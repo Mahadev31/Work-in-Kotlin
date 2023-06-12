@@ -60,6 +60,8 @@ lateinit var userDetailsBinding: FragmentUserDetailsBinding
             }
         })
 
+
+
         userDetailsBinding.linLogout.setOnClickListener {
             var sharedPreferences = requireActivity().getSharedPreferences("MySharePref",
                 AppCompatActivity.MODE_PRIVATE

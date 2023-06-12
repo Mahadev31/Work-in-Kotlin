@@ -16,11 +16,11 @@ import com.mytrip.myindiatrip.model.ModelClass
 
 class TripAdapter(
     var context: Context,
-    var placeList: ArrayList<ModelClass>,
     var click: (ModelClass) -> Unit,
     var save: (Int, String) -> Unit
 ) : RecyclerView.Adapter<TripAdapter.MyViewHolder>() {
 
+    var placeList = ArrayList<ModelClass>()
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imgPlace: ImageView = itemView.findViewById(R.id.imgPlace)
@@ -63,7 +63,7 @@ class TripAdapter(
             holder.imgSave.setImageResource(R.drawable.save_unfill)
         }
 
-//like
+        //save
         holder.imgSave.setOnClickListener {
 
             if (placeList[position].save == 1) {
@@ -83,5 +83,10 @@ class TripAdapter(
 
 
         }
+    }
+
+    fun updateList(placeList: ArrayList<ModelClass>) {
+        this.placeList = placeList
+        notifyDataSetChanged()
     }
 }

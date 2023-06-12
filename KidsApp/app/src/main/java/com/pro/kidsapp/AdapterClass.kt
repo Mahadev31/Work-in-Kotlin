@@ -37,7 +37,6 @@ class AdapterClass(var context: Context, var list: ArrayList<ModelClass>) :
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
        holder.text.text = list[position].text
-
 //        var text=holder.text
             holder.layout.setOnClickListener {
 
@@ -47,7 +46,7 @@ class AdapterClass(var context: Context, var list: ArrayList<ModelClass>) :
                 // edit from original answer: I put double equal on this line
                 if (status == TextToSpeech.SUCCESS) {
                     tts?.language = Locale.UK
-                    tts!!.speak(  holder.text.text, TextToSpeech.QUEUE_FLUSH, null,"")
+                    tts!!.speak(  list[position].description, TextToSpeech.QUEUE_FLUSH, null,"")
                 }
             }
         }
