@@ -146,13 +146,15 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Book"
+                android:text="Add to Cart"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:paddingHorizontal="@dimen/_10sdp"
                 android:layout_gravity="end"
                 android:layout_marginHorizontal="@dimen/_20sdp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:background="@drawable/round_button_box"
-                android:id="@+id/btnBook"/>
+                android:id="@+id/btnAddToCart"/>
 
 
             <androidx.cardview.widget.CardView

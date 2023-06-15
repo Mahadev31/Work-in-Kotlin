@@ -69,12 +69,19 @@ class SaveAdapter(
 
 
             save.invoke(0, placeList[position].key!!)
-
+            placeList[position].save = 0
 
             Log.e("TAG", "Favorite: " + placeList[position].save)
 
             //click button and set unlike
-            deleteItem(position, placeList[position].key!!)  //create function and set position
+
+            deleteItem(position)  //create function and set position
+
+
+
+
+
+
 
         }
     }
@@ -89,28 +96,7 @@ class SaveAdapter(
 
     }
 
-    private fun deleteItem(position: Int, key: String) {
-        //click button and remove data in recycle view and Firebase data
-
-        mDbRef = FirebaseDatabase.getInstance().getReference()
-        auth = Firebase.auth
-
-
-        mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
-            .child("place").child(key).addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (appleSnapshot in dataSnapshot.children) {
-                        appleSnapshot.ref.removeValue()
-
-                        dataDeleteItem(key)  //create function and set position
-                    }
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e("TAG", "onCancelled", databaseError.toException())
-                }
-            })
-
+    private fun deleteItem(position: Int) {
 
 
         placeList.removeAt(position)
@@ -118,25 +104,7 @@ class SaveAdapter(
         notifyItemRangeChanged(position, placeList.size)
     }
 
-    private fun dataDeleteItem( key: String) {
-        mDbRef = FirebaseDatabase.getInstance().getReference()
-        auth = Firebase.auth
 
 
-        mDbRef.child("my_trip_plan").child("surat").child("place").child(key)
-            .child("save_data").child(auth.currentUser?.uid!!).child("place")
-            .child(key).addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (appleSnapshot in dataSnapshot.children) {
-                        appleSnapshot.ref.removeValue()
-                    }
-                }
 
-                override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e("TAG", "onCancelled", databaseError.toException())
-                }
-            })
-
-
-    }
 }

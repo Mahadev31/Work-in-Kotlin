@@ -117,4 +117,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
 
     implementation 'com.github.ImaginativeShohag:Oops-No-Internet:v1.1.2'
+
+//Razor pay
+    implementation 'com.razorpay:checkout:1.6.26'
 }

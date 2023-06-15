@@ -61,47 +61,32 @@ class SaveFragment : Fragment() {
         }, { save, key ->
 
 
-            mDbRef.child("my_trip_plan").child(search!!).child(selectItemName).child(key)
+            mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
+                .child("place").child(key).removeValue()
+                })
+
+
+
+            saveBinding.rcvSaveList.layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+            saveBinding.rcvSaveList.adapter = adapter
+
+            mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
+                .child("place")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
+                        placeList.clear()
+                        for (postSnapshot in snapshot.children) {
+                            val currentUser =
+                                postSnapshot.getValue(ModelClass::class.java)
+                            currentUser?.let { placeList.add(it) }
 
+                        }
+                        adapter.updateList(placeList)
 
-                        var name = snapshot.child("name").value.toString()
-                        var image = snapshot.child("image").value.toString()
-                        var location = snapshot.child("location").value.toString()
-                        var description = snapshot.child("description").value.toString()
-                        var rent = snapshot.child("rent").value.toString()
-                        var rating = snapshot.child("rating").value.toString()
-
-                        Log.e("TAG", "onDataChange:name " + name)
-
-//                mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key)
-//                    .child("save_data").child(auth.currentUser?.uid!!).child("place")
-//                    .child(key).setValue(
-//                        SaveModelClass(
-//                            name,
-//                            image,
-//                            location,
-//                            description,
-//                            rating,
-//                            rent,
-//                            key, save
-//                        )
-//                    )
-
-                        mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
-                            .child("place").child(key).setValue(
-                                SaveModelClass(
-                                    name,
-                                    image,
-                                    location,
-                                    description,
-                                    rating,
-                                    rent,
-                                    key,
-                                    save
-                                )
-                            )
                     }
 
                     override fun onCancelled(error: DatabaseError) {
@@ -109,36 +94,8 @@ class SaveFragment : Fragment() {
                     }
 
                 })
-        })
-        saveBinding.rcvSaveList.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            false
-        )
-        saveBinding.rcvSaveList.adapter = adapter
+        }
 
-        mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
-            .child("place")
-            .addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    placeList.clear()
-                    for (postSnapshot in snapshot.children) {
-                        val currentUser =
-                            postSnapshot.getValue(ModelClass::class.java)
-                        currentUser?.let { placeList.add(it) }
-
-                    }
-                    adapter.updateList(placeList)
-
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-
-                }
-
-            })
     }
-
-}
 
 

@@ -1,14 +1,14 @@
 package com.pro.roomdatabase;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class NewCourseActivity extends AppCompatActivity {
 
@@ -23,12 +23,10 @@ public class NewCourseActivity extends AppCompatActivity {
     public static final String EXTRA_DESCRIPTION = "com.gtappdevelopers.gfgroomdatabase.EXTRA_COURSE_DESCRIPTION";
     public static final String EXTRA_DURATION = "com.gtappdevelopers.gfgroomdatabase.EXTRA_COURSE_DURATION";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_course);
-
 
         // initializing our variables for each view.
         courseNameEdt = findViewById(R.id.idEdtCourseName);
@@ -61,8 +59,6 @@ public class NewCourseActivity extends AppCompatActivity {
                 }
                 // calling a method to save our course.
                 saveCourse(courseName, courseDesc, courseDuration);
-
-
             }
         });
     }
@@ -87,8 +83,5 @@ public class NewCourseActivity extends AppCompatActivity {
 
         // displaying a toast message after adding the data
         Toast.makeText(this, "Course has been saved to Room Database. ", Toast.LENGTH_SHORT).show();
-        Log.e("TAG", "saveCourse:Course Name :- "+courseName );
-        Log.e("TAG", "saveCourse:course Description :- "+courseDescription );
-        Log.e("TAG", "saveCourse:course Duration :- "+courseDuration );
     }
 }
