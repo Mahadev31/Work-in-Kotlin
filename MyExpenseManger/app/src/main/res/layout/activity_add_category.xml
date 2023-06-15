@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_15sdp"
         android:layout_marginVertical="@dimen/_10sdp"
+        android:imeOptions="actionDone"
         android:hint="Add New Category"
         android:inputType="text" />
 

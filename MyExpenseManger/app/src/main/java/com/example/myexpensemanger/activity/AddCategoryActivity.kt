@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myexpensemanger.adapter.AddCategoryAdapter
 import com.example.myexpensemanger.databinding.ActivityAddCategoryBinding
+import com.example.myexpensemanger.modelclass.CategoryModelClass
 import com.example.myexpensemanger.sqlite.SqLiteHelperData
 
 class AddCategoryActivity : AppCompatActivity() {
@@ -14,7 +15,7 @@ class AddCategoryActivity : AppCompatActivity() {
     lateinit var addCategoryBinding: ActivityAddCategoryBinding  // activity biding
 
     lateinit var db: SqLiteHelperData   //define sqlite
-
+    var list=ArrayList<CategoryModelClass>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addCategoryBinding = ActivityAddCategoryBinding.inflate(layoutInflater)
@@ -43,10 +44,10 @@ class AddCategoryActivity : AppCompatActivity() {
             db.insertCategory(categoryName)  //data base class in store value
 
 
-
+             list = db.displayCategory()  //show data base in this class
             addCategoryBinding.edtAddCategory.setText("")  //clear Edit text value
         }
-        val list = db.displayCategory()  //show data base in this class
+         list = db.displayCategory()  //show data base in this class
 
         val adapter = AddCategoryAdapter()  //set adapter class
         val manger = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
