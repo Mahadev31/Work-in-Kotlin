@@ -90,16 +90,10 @@ class UserLoginFragment : Fragment() {
 
 
         userLoginBinding.txtCreateAccountPage.setOnClickListener {
-//            requireActivity().supportFragmentManager.beginTransaction()
-//                .replace(com.mytrip.myindiatrip.R.id.container, UserCreateAccountFragment())
-//                .commit()
             var i=Intent(context,CreateAccountActivity::class.java)
             startActivity(i)
 
         }
     }
-
-
-
 
 }

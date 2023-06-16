@@ -33,18 +33,9 @@ class TransactionActivity : AppCompatActivity() {
 
         dbT = SqLiteHelperData(this)  // set context class in sqlite
         initView()
-        amount()
+
     }
 
-    private fun amount() {
-        var incomeAmount=transactionBinding.txtIncome.text
-        var expenseAmount=transactionBinding.txtExpense.text
-//        incomeAmount= adapter1.incomeFunction().toString()
-
-        Log.e("tra", "incomeAmount: $incomeAmount")
-        expenseAmount=adapter1.expenseFunction().toString()
-        Log.e("tra", "expenseAmount: $expenseAmount")
-    }
 
     private fun initView() {
         transactionBinding.imgBack.setOnClickListener {
@@ -99,6 +90,8 @@ class TransactionActivity : AppCompatActivity() {
             )
             dialog.show()
 
+        },{
+            amount()
         })
         var manger1 = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         transactionBinding.recycleTransaction.layoutManager = manger1
@@ -107,6 +100,21 @@ class TransactionActivity : AppCompatActivity() {
         listTransaction = dbT.displayTransact()
 
         adapter1.updateData(listTransaction)
+
+    }
+
+    private fun amount() {
+
+        var incomeAmount = adapter1.incomeFunction()
+
+        Log.e("tra", "incomeAmount: $incomeAmount")
+        var expenseAmount = adapter1.expenseFunction()
+        Log.e("tra", "expenseAmount: $expenseAmount")
+        var total = incomeAmount-expenseAmount
+        transactionBinding.txtIncome.text = incomeAmount.toString()
+        transactionBinding.txtExpense.text = expenseAmount.toString()
+        transactionBinding.txtTotal.text = total.toString()
+
 
     }
 }

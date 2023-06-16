@@ -1,87 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layTra"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/layTra"
-    android:background="#C5E8F8"
-    android:layout_marginVertical="@dimen/_10sdp"
-    android:orientation="vertical">
+    android:layout_margin="@dimen/_10sdp"
+    android:padding="@dimen/_10sdp"
+    app:cardBackgroundColor="#C5E8F8"
+    app:cardCornerRadius="@dimen/_10sdp">
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/layout"
+            android:paddingVertical="@dimen/_5sdp">
 
-<!--            <RelativeLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_marginStart="@dimen/_20sdp">-->
-
-<!--                <ImageView-->
-<!--                    android:id_number="@+id_number/imgCalendar"-->
-<!--                    android:layout_width="@dimen/_25sdp"-->
-<!--                    android:layout_height="@dimen/_25sdp"-->
-<!--                    android:layout_centerInParent="true"-->
-<!--                    android:src="@drawable/calendar_1" />-->
-                <TextView
-                    android:id="@+id/txtIdTra"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:text="Id"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
-
-<!--            </RelativeLayout>-->
+<!--            <TextView-->
+<!--                android:id="@+id/txtIdTra"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="0.5"-->
+<!--                android:gravity="center"-->
+<!--                android:text="Id"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="bold" />-->
 
             <TextView
                 android:id="@+id/txtAmountTra"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="Amount"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
-            <TextView
-                android:id="@+id/txtCategoryTra"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:text="Category"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
-            <TextView
-                android:id="@+id/txtDateTra"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="Date"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
-            <TextView
-                android:id="@+id/txtModeSelectedTra"
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:text="Mode"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
-            <TextView
-                android:id="@+id/txtNoteTra"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="Note"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/txtTypeTra"
                 android:layout_width="0dp"
@@ -91,22 +49,80 @@
                 android:text="Type"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
-
         </LinearLayout>
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_gravity="end"
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/_5sdp">
+
+            <TextView
+                android:id="@+id/txtDateTra"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:gravity="center"
+                android:text="Date"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtCategoryTra"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="Category"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtModeSelectedTra"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="Mode"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtNoteTra"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_20ssp"
+            android:text="Note"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+<View
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_2sdp"
+    android:layout_marginVertical="@dimen/_5sdp"
     android:layout_marginHorizontal="@dimen/_10sdp"
-    android:layout_height="wrap_content">
-    <ImageView
-        android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_30sdp"
-        android:src="@drawable/delete_image"
-        android:id="@+id/imgDelete"/>
-    <ImageView
-        android:layout_width="@dimen/_30sdp"
-        android:layout_height="@dimen/_30sdp"
-        android:src="@drawable/edit_image"
-        android:id="@+id/imgEdit"/>
-</LinearLayout>
-</LinearLayout>
+    android:background="@color/white"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_10sdp">
+
+            <ImageView
+                android:id="@+id/imgDelete"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:src="@drawable/delete_image" />
+            <View
+                android:layout_width="@dimen/_2sdp"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:background="@color/white"/>
+            <ImageView
+                android:id="@+id/imgEdit"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_weight="1"
+                android:src="@drawable/edit_image" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

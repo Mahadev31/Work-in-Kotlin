@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#DEE9EE"
+    android:orientation="vertical"
     tools:context=".activity.TransactionActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -43,128 +43,70 @@
             android:src="@drawable/share" />
     </androidx.appcompat.widget.Toolbar>
 
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_margin="@dimen/_10sdp"
-    android:layout_gravity="center_horizontal"
-    android:layout_height="wrap_content">
-    <TextView
-        android:layout_width="@dimen/_50sdp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        app:cardCornerRadius="@dimen/_10sdp"
         android:layout_height="wrap_content"
-        tools:text="123"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:textColor="#095E4B"
-        android:textSize="@dimen/_15ssp"
-        android:id="@+id/txtIncome"/>
-    <TextView
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_15ssp"
-        android:text="-"/>
-    <TextView
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="wrap_content"
-        tools:text="123"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:textColor="#830F05"
-        android:textSize="@dimen/_15ssp"
-        android:id="@+id/txtExpense"/>
-    <TextView
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_15ssp"
-        android:text="="/>
-    <TextView
-        android:layout_width="@dimen/_50sdp"
-        android:layout_height="wrap_content"
-        tools:text="123"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_15ssp"
-        android:id="@+id/txtTotal"/>
-</LinearLayout>
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/_10sdp">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_margin="@dimen/_10sdp"
+        android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/txtIncome"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="#049E2F"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold"
+            tools:text="123" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:gravity="center"
-                    android:text="Id"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+        <TextView
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Amount"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+        <TextView
+            android:id="@+id/txtExpense"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="#D51201"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold"
+            tools:text="123" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:gravity="center"
-                    android:text="Category"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+        <TextView
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="wrap_content"
+            android:text="="
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Date"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+        <TextView
+            android:id="@+id/txtTotal"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_15ssp"
+            android:textStyle="bold"
+            tools:text="123" />
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:gravity="center"
-                    android:text="Mode"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Note"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Type"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycleTransaction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleTransaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

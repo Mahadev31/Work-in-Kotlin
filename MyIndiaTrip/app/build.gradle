@@ -108,9 +108,9 @@ dependencies {
 
 
 //    Current Location
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
-
-    implementation 'com.akexorcist:google-direction-library:1.2.1'
+//    implementation 'com.google.android.gms:play-services-location:21.0.1'
+//    implementation 'com.akexorcist:google-direction-library:1.2.1'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 
 
     // Material Components for Android

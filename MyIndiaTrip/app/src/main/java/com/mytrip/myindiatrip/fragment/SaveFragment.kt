@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -46,24 +47,28 @@ class SaveFragment : Fragment() {
         saveBinding.tabLayout.addTab(saveBinding.tabLayout.newTab().setText("hotel"))//tabLayout
         saveBinding.tabLayout.addTab(saveBinding.tabLayout.newTab().setText("activity"))//tabLayout
 
-        var search: String = "surat"
-        var selectItemName: String = "place"
-        var adapter = SaveAdapter(requireContext(), {
 
-            var clickIntent = Intent(context, DataDisplayActivity::class.java)
-            clickIntent.putExtra("search", search)
-            clickIntent.putExtra("selectItemName", selectItemName)
-            clickIntent.putExtra("Key", it.key)
-            clickIntent.putExtra("myTrip", true)
-            Log.e("TAG", "myTripKey: " + it.key)
-            Log.e("TAG", "myTrip_selected: " + selectItemName)
-            startActivity(clickIntent)
-        }, { save, key ->
+        try {
 
 
-            mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
-                .child("place").child(key).removeValue()
-                })
+            var search: String = "surat"
+            var selectItemName: String = "place"
+            var adapter = SaveAdapter(requireContext(), {
+
+                var clickIntent = Intent(context, DataDisplayActivity::class.java)
+                clickIntent.putExtra("search", search)
+                clickIntent.putExtra("selectItemName", selectItemName)
+                clickIntent.putExtra("Key", it.key)
+                clickIntent.putExtra("myTrip", true)
+                Log.e("TAG", "myTripKey: " + it.key)
+                Log.e("TAG", "myTrip_selected: " + selectItemName)
+                startActivity(clickIntent)
+            }, { save, key ->
+
+
+                mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
+                    .child("place").child(key).removeValue()
+            })
 
 
 
@@ -94,8 +99,11 @@ class SaveFragment : Fragment() {
                     }
 
                 })
+        } catch (e: ArithmeticException) {
+            Toast.makeText(context, "" + e, Toast.LENGTH_SHORT).show()
         }
 
     }
+}
 
 
