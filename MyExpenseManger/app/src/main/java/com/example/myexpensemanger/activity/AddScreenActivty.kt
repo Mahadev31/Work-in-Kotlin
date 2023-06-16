@@ -108,9 +108,7 @@ class AddScreenActivty : AppCompatActivity() {
                 Toast.makeText(this, "Please Enter valid Amount", Toast.LENGTH_SHORT).show()
             } else if (note.isEmpty()) {
                 Toast.makeText(this, "Please Enter Note", Toast.LENGTH_SHORT).show()
-            } else if (note.length <= 1 || note.length >= 10) {
-                Toast.makeText(this, "Please Enter valid Note", Toast.LENGTH_SHORT).show()
-            } else {
+            }  else {
 
                 if (addScreenBinding.rgGroup.checkedRadioButtonId == -1) {
 
@@ -149,13 +147,15 @@ class AddScreenActivty : AppCompatActivity() {
                 Log.e("TAG", "Raj_mode: $selectedMode")
                 Log.e("TAG", "Raj_NOTE: $note")
                 Log.e("TAG", "Raj_page: $page")
+
+
+                var intent = Intent(this, TransactionActivity::class.java)
+                finish()
+                startActivity(intent)
+
+                Toast.makeText(this, "Your Data Save", Toast.LENGTH_SHORT).show()
             }
 
-            var intent = Intent(this, TransactionActivity::class.java)
-            finish()
-            startActivity(intent)
-
-            Toast.makeText(this, "Your Data Save", Toast.LENGTH_SHORT).show()
         }
 
     }

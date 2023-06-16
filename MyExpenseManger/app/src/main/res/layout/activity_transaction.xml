@@ -44,64 +44,121 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        app:cardCornerRadius="@dimen/_10sdp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="@dimen/_10sdp">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:layout_height="wrap_content">
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        app:cardCornerRadius="@dimen/_10sdp">
 
-        <TextView
-            android:id="@+id/txtIncome"
-            android:layout_width="@dimen/_50sdp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="#049E2F"
-            android:textSize="@dimen/_15ssp"
-            android:textStyle="bold"
-            tools:text="123" />
+            android:layout_margin="@dimen/_10sdp"
+            android:gravity="center">
 
-        <TextView
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_15ssp"
-            android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/txtExpense"
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="#D51201"
-            android:textSize="@dimen/_15ssp"
-            android:textStyle="bold"
-            tools:text="123" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Income"
+                    android:textAlignment="center"
+                    android:textColor="#049E2F"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="wrap_content"
-            android:text="="
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_15ssp"
-            android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/txtIncome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="#049E2F"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    tools:text="123" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtTotal"
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_15ssp"
-            android:textStyle="bold"
-            tools:text="123" />
-    </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="-"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expense"
+                    android:textAlignment="center"
+                    android:textColor="#D51201"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtExpense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="#D51201"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    tools:text="123" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="="
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Total"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    tools:text="123" />
+            </LinearLayout>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
