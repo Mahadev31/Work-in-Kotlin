@@ -75,6 +75,9 @@ class UserLoginFragment : Fragment() {
                             .replace(com.mytrip.myindiatrip.R.id.container, HomeFragment())
                             .commit()
 
+
+
+
                         var myEdit: SharedPreferences.Editor = sharedPreferences.edit()
                         myEdit.putBoolean("isLogin", true)
                         myEdit.putString("email", email)

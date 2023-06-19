@@ -1,11 +1,15 @@
 package com.mytrip.myindiatrip.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -37,7 +41,77 @@ open class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        permision()
+    }
 
+
+
+    private fun permision() {
+        if (checkPermission()) {
+
+            Toast.makeText(this, "Permission already granted.", Toast.LENGTH_LONG).show()
+
+        } else {
+
+            requestPermission();
+        }
+    }
+
+    private fun checkPermission(): Boolean {
+        val result = ContextCompat.checkSelfPermission(this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+        val result1 = ContextCompat.checkSelfPermission(this,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+        val result2 = ContextCompat.checkSelfPermission(this,
+            Manifest.permission.CAMERA
+        )
+        return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            100
+        )
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            100 -> if (grantResults.size > 0) {
+                val writeExternalStorage = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                val readExternalStorage = grantResults[1] == PackageManager.PERMISSION_GRANTED
+                val location = grantResults[2] == PackageManager.PERMISSION_GRANTED
+                val coarswLocation = grantResults[3] == PackageManager.PERMISSION_GRANTED
+
+                if (writeExternalStorage && readExternalStorage && location  && coarswLocation)
+                    Toast.makeText(
+                      this,
+                        "Permission Granted",
+                        Toast.LENGTH_LONG
+                    ).show()
+                else {
+                    Toast.makeText(
+                       this,
+                        "Permission Denied",
+                        Toast.LENGTH_LONG
+                    ).show()
+
+                }
+            }
+        }
     }
 
     override fun onResume() {
@@ -136,6 +210,7 @@ open class MainActivity : AppCompatActivity() {
         val transaction: FragmentTransaction = manager.beginTransaction()
         transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
         transaction.replace(R.id.container, fragment)
+        transaction.addToBackStack(null)
         transaction.commit()
     }
     private var doubleBackToExitPressedOnce: Boolean=false

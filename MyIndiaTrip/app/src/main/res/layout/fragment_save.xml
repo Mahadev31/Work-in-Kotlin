@@ -30,13 +30,24 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#CDC9C9" />
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="match_parent"
-        android:background="@color/white"
-        app:tabIndicatorColor="@color/black"
-        app:tabTextColor="@color/black"
-        android:layout_height="wrap_content" />
+<!--    <com.google.android.material.tabs.TabLayout-->
+<!--        android:id="@+id/tabLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:background="@color/white"-->
+<!--        app:tabIndicatorColor="@color/black"-->
+<!--        app:tabTextColor="@color/black"-->
+<!--        android:layout_height="wrap_content" />-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtNoSave"
+        android:textStyle="bold"
+        android:textSize="@dimen/_15ssp"
+        android:text="You Have No Post Save"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/_50sdp"/>
+
 <androidx.recyclerview.widget.RecyclerView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

@@ -105,203 +105,10 @@ class MyTripPlanFragment : Fragment() {
 
 //        locationFunction()
         searchItem()
+        defaultPlaceAdapter()
 
         return tripBinding.root
     }
-
-
-//    private fun locationFunction() {
-//        tripBinding.txtCurrentLocation.setOnClickListener {
-//            var i = Intent(context, SearchLocationActivity::class.java)
-//            startActivity(i)
-//        }
-//        // Initialize location client
-//        client = LocationServices
-//            .getFusedLocationProviderClient(
-//                requireActivity()
-//            )
-//
-//        // check condition
-//        if (ContextCompat.checkSelfPermission(
-//                requireActivity(),
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            )
-//            == PackageManager.PERMISSION_GRANTED
-//            && ContextCompat.checkSelfPermission(
-//                requireActivity(),
-//                Manifest.permission.ACCESS_COARSE_LOCATION
-//            )
-//            == PackageManager.PERMISSION_GRANTED
-//        ) {
-//            // When permission is granted
-//            // Call method
-//            getCurrentLocation()
-//        } else {
-//            // When permission is not granted
-//            // Call method
-//            requestPermissions(
-//                arrayOf(
-//                    Manifest.permission.ACCESS_FINE_LOCATION,
-//                    Manifest.permission.ACCESS_COARSE_LOCATION
-//                ),
-//                100
-//            )
-//        }
-//
-//    }
-
-
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int, permissions: Array<String?>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(
-//            requestCode, permissions, grantResults
-//        )
-//        // Check condition
-//        if (requestCode == 100 && grantResults.size > 0
-//            && (grantResults[0] + grantResults[1]
-//                    == PackageManager.PERMISSION_GRANTED)
-//        ) {
-//            // When permission are granted
-//            // Call  method
-//            getCurrentLocation()
-//        } else {
-//            // When permission are denied
-//            // Display toast
-//            Toast
-//                .makeText(
-//                    activity,
-//                    "Permission denied",
-//                    Toast.LENGTH_SHORT
-//                )
-//                .show()
-//        }
-//    }
-
-//    private fun getCurrentLocation() {
-//
-//        // Initialize Location manager
-//        val locationManager = activity
-//            ?.getSystemService(
-//                Context.LOCATION_SERVICE
-//            ) as LocationManager
-//        // Check condition
-//        if (locationManager.isProviderEnabled(
-//                LocationManager.GPS_PROVIDER
-//            )
-//            || locationManager.isProviderEnabled(
-//                LocationManager.NETWORK_PROVIDER
-//            )
-//        ) {
-//            // When location service is enabled
-//            // Get last location
-//            client!!.lastLocation.addOnCompleteListener(
-//                object : OnCompleteListener<Location?> {
-//                    override fun onComplete(
-//                        task: Task<Location?>
-//                    ) {
-//
-//                        // Initialize location
-//                        val location: Location? = task.result
-//                        // Check condition
-//                        if (location != null) {
-//                            // When location result is not
-//                            // null set latitude
-//                            val geocoder: Geocoder = Geocoder(context!!)
-//                            val addresses: List<Address>? = geocoder.getFromLocation(
-//                                location.latitude,
-//                                location.longitude,
-//                                1
-//                            ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-//
-//                            var address =
-//                                addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-//
-//                            city = addresses!![0].locality
-//                            val state = addresses!![0].adminArea
-//                            val country = addresses!![0].countryName
-//                            val postalCode = addresses!![0].postalCode
-//                            val knownName = addresses!![0].featureName
-//
-//                            tripBinding.txtCurrentLocation.text = city.toString()
-////
-//                        } else {
-//                            // When location result is null
-//                            // initialize location request
-//                            val locationRequest: LocationRequest = LocationRequest()
-//                                .setPriority(
-//                                    LocationRequest.PRIORITY_HIGH_ACCURACY
-//                                )
-//                                .setInterval(10000)
-//                                .setFastestInterval(
-//                                    1000
-//                                )
-//                                .setNumUpdates(1)
-//
-//                            // Initialize location call back
-//                            val locationCallback: LocationCallback = object : LocationCallback() {
-//                                override fun onLocationResult(
-//                                    locationResult: LocationResult
-//                                ) {
-//                                    // Initialize
-//                                    // location
-//                                    val location1: Location? = locationResult
-//                                        .lastLocation
-//                                    // Set latitude
-////
-//                                    val geocoder: Geocoder =
-//                                        Geocoder(context!!, Locale.getDefault())
-//                                    val addresses: List<Address>? = geocoder.getFromLocation(
-//                                        location?.latitude!!, location?.longitude!!, 1
-//                                    ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-//
-//                                    var address =
-//                                        addresses!![0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-//
-//                                    city = addresses!![0].locality
-//                                    val state = addresses!![0].adminArea
-//                                    val country = addresses!![0].countryName
-//                                    val postalCode = addresses!![0].postalCode
-//                                    val knownName = addresses!![0].featureName
-//
-//                                    tripBinding.txtCurrentLocation.text = city.toString()
-//                                }
-//                            }
-//
-//                            // Request location updates
-//                            if (ActivityCompat.checkSelfPermission(
-//                                    requireContext(),
-//                                    Manifest.permission.ACCESS_FINE_LOCATION
-//                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-//                                    requireContext(),
-//                                    Manifest.permission.ACCESS_COARSE_LOCATION
-//                                ) != PackageManager.PERMISSION_GRANTED
-//                            ) {
-//
-//                                return
-//                            }
-//                            client!!.requestLocationUpdates(
-//                                locationRequest,
-//                                locationCallback,
-//                                Looper.myLooper()
-//                            )
-//                        }
-//                    }
-//                })
-//        } else {
-//            // When location service is not enabled
-//            // open location setting
-//            startActivity(
-//                Intent(
-//                    Settings.ACTION_LOCATION_SOURCE_SETTINGS
-//                )
-//                    .setFlags(
-//                        Intent.FLAG_ACTIVITY_NEW_TASK
-//                    )
-//            )
-//        }
-//    }
 
 
     private fun searchItem() {
@@ -311,7 +118,6 @@ class MyTripPlanFragment : Fragment() {
         tripBinding.tabLayout.addTab(tripBinding.tabLayout.newTab().setText("activity"))//tabLayout
 
 
-        setByDefualtAdapter()
         tripBinding.edtSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 setAdapter()
@@ -353,13 +159,32 @@ class MyTripPlanFragment : Fragment() {
 
                     when (tab.position) {
                         0 -> {
-                            placeFun()
+
+                            if (search == null) {
+
+                                defaultPlaceAdapter()
+                            }else{
+                                placeFun()
+                            }
+
+
                         }
                         1 -> {
-                            hotelFun()
+//                            defaultHotelAdapter()
+                            if (search != null) {
+
+                                defaultHotelAdapter()
+                            }else{
+                                hotelFun()
+                            }
+
+
                         }
                         2 -> {
-                            activityFun()
+//                            defaultActivityAdapter()
+                            if (search != null) {
+                                activityFun()
+                            }
                         }
 
 
@@ -613,9 +438,171 @@ class MyTripPlanFragment : Fragment() {
     }
 
 
-    private fun setByDefualtAdapter() {
+    private fun defaultPlaceAdapter() {
         var search: String = "surat"
         var selectItemName: String = "place"
+        tripAdapter = TripAdapter(requireContext(), {
+            var clickIntent = Intent(context, DataDisplayActivity::class.java)
+            clickIntent.putExtra("search", search)
+            clickIntent.putExtra("selectItemName", selectItemName)
+            clickIntent.putExtra("Key", it.key)
+            clickIntent.putExtra("myTrip", true)
+            Log.e("TAG", "myTripKey: " + it.key)
+            Log.e("TAG", "myTrip_selected: " + selectItemName)
+            startActivity(clickIntent)
+        }, { save, key ->
+
+            mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        var name = snapshot.child("name").value.toString()
+                        var image = snapshot.child("image").value.toString()
+                        var location = snapshot.child("location").value.toString()
+                        var description = snapshot.child("description").value.toString()
+                        var rent = snapshot.child("rent").value.toString()
+                        var rating = snapshot.child("rating").value.toString()
+                        Log.e("TAG", "onDataChange:name " + name)
+
+                        mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key)
+                            .child("save_data").child(auth.currentUser?.uid!!)
+                            .child(key).child("save").setValue(save)
+
+                        mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
+                            .child("place").child(key).setValue(
+                                SaveModelClass(
+                                    name,
+                                    image,
+                                    location,
+                                    description,
+                                    rating,
+                                    rent,
+                                    key,
+                                    save
+                                )
+                            )
+
+
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+
+        })
+        tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        tripBinding.rcvSuggestionItem.adapter = tripAdapter
+
+        mDbRef.child("my_trip_plan").child(search).child(selectItemName)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    placeList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser =
+                            postSnapshot.getValue(ModelClass::class.java)
+                        currentUser?.let { placeList.add(it) }
+
+                    }
+                    tripAdapter.updateList(placeList)
+                    dialog.dismiss()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+    }
+
+    private fun defaultHotelAdapter() {
+        var search: String = "surat"
+        var selectItemName: String = "hotel"
+        tripAdapter = TripAdapter(requireContext(), {
+            var clickIntent = Intent(context, DataDisplayActivity::class.java)
+            clickIntent.putExtra("search", search)
+            clickIntent.putExtra("selectItemName", selectItemName)
+            clickIntent.putExtra("Key", it.key)
+            clickIntent.putExtra("myTrip", true)
+            Log.e("TAG", "myTripKey: " + it.key)
+            Log.e("TAG", "myTrip_selected: " + selectItemName)
+            startActivity(clickIntent)
+        }, { save, key ->
+
+            mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        var name = snapshot.child("name").value.toString()
+                        var image = snapshot.child("image").value.toString()
+                        var location = snapshot.child("location").value.toString()
+                        var description = snapshot.child("description").value.toString()
+                        var rent = snapshot.child("rent").value.toString()
+                        var rating = snapshot.child("rating").value.toString()
+                        Log.e("TAG", "onDataChange:name " + name)
+
+                        mDbRef.child("my_trip_plan").child(search).child(selectItemName).child(key)
+                            .child("save_data").child(auth.currentUser?.uid!!)
+                            .child(key).child("save").setValue(save)
+
+                        mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
+                            .child("place").child(key).setValue(
+                                SaveModelClass(
+                                    name,
+                                    image,
+                                    location,
+                                    description,
+                                    rating,
+                                    rent,
+                                    key,
+                                    save
+                                )
+                            )
+
+
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+
+                    }
+
+                })
+
+        })
+        tripBinding.rcvSuggestionItem.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        tripBinding.rcvSuggestionItem.adapter = tripAdapter
+
+        mDbRef.child("my_trip_plan").child(search).child(selectItemName)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    placeList.clear()
+                    for (postSnapshot in snapshot.children) {
+                        val currentUser =
+                            postSnapshot.getValue(ModelClass::class.java)
+                        currentUser?.let { placeList.add(it) }
+
+                    }
+                    tripAdapter.updateList(placeList)
+                    dialog.dismiss()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
+    }
+
+    private fun defaultActivityAdapter() {
+        var search: String = "surat"
+        var selectItemName: String = "activity"
         tripAdapter = TripAdapter(requireContext(), {
             var clickIntent = Intent(context, DataDisplayActivity::class.java)
             clickIntent.putExtra("search", search)
@@ -719,7 +706,10 @@ class MyTripPlanFragment : Fragment() {
 
                 tripBinding.txtCurrentLocation.text = city.toString()
 
-                Log.e("TAG", "Your current location is: ${location.latitude}, ${location.longitude}")
+                Log.e(
+                    "TAG",
+                    "Your current location is: ${location.latitude}, ${location.longitude}"
+                )
 
             } catch (e: IOException) {
                 e.printStackTrace()

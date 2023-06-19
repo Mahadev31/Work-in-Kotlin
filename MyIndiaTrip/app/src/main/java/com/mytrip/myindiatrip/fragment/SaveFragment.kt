@@ -1,6 +1,7 @@
 package com.mytrip.myindiatrip.fragment
 
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -21,9 +22,6 @@ import com.mytrip.myindiatrip.model.ModelClass
 
 class SaveFragment : Fragment() {
 
-
-//     val list= ArrayList<SaveModelClass>()
-
     lateinit var saveBinding: FragmentSaveBinding
 
     lateinit var mDbRef: DatabaseReference
@@ -43,12 +41,9 @@ class SaveFragment : Fragment() {
 
     private fun initView() {
 
-        saveBinding.tabLayout.addTab(saveBinding.tabLayout.newTab().setText("place"))  //tabLayout
-        saveBinding.tabLayout.addTab(saveBinding.tabLayout.newTab().setText("hotel"))//tabLayout
-        saveBinding.tabLayout.addTab(saveBinding.tabLayout.newTab().setText("activity"))//tabLayout
-
-
-        try {
+//        saveBinding.tabLayout.addTab(saveBinding.tabLayout.newTab().setText("place"))  //tabLayout
+//        saveBinding.tabLayout.addTab(saveBinding.tabLayout.newTab().setText("hotel"))//tabLayout
+//        saveBinding.tabLayout.addTab(saveBinding.tabLayout.newTab().setText("activity"))//tabLayout
 
 
             var search: String = "surat"
@@ -70,8 +65,6 @@ class SaveFragment : Fragment() {
                     .child("place").child(key).removeValue()
             })
 
-
-
             saveBinding.rcvSaveList.layoutManager = LinearLayoutManager(
                 requireContext(),
                 LinearLayoutManager.VERTICAL,
@@ -79,29 +72,33 @@ class SaveFragment : Fragment() {
             )
             saveBinding.rcvSaveList.adapter = adapter
 
+            if (auth.currentUser?.uid  != null){
             mDbRef.child("user").child(auth.currentUser?.uid!!).child("save_data")
                 .child("place")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
+
+
                         placeList.clear()
                         for (postSnapshot in snapshot.children) {
                             val currentUser =
                                 postSnapshot.getValue(ModelClass::class.java)
                             currentUser?.let { placeList.add(it) }
-
+                            saveBinding.txtNoSave.visibility=View.GONE
                         }
-                        adapter.updateList(placeList)
+                            adapter.updateList(placeList)
 
                     }
-
                     override fun onCancelled(error: DatabaseError) {
 
                     }
 
                 })
-        } catch (e: ArithmeticException) {
-            Toast.makeText(context, "" + e, Toast.LENGTH_SHORT).show()
-        }
+            }
+            else{
+                saveBinding.txtNoSave.text = "Make Sure Your Logged In "
+            }
+
 
     }
 }

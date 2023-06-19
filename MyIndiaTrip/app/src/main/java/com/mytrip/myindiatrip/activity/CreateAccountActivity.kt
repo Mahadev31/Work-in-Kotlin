@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.internal.ContextUtils.getActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -61,11 +62,7 @@ class CreateAccountActivity : AppCompatActivity() {
                 gallery_Launcher.launch(intent)
 
         })
-            binding.btnUploadImage.setOnClickListener(View.OnClickListener {
 
-//                uploadImage()
-
-        })
 
 
         binding.cdSignUp.setOnClickListener {
@@ -107,11 +104,13 @@ class CreateAccountActivity : AppCompatActivity() {
                     if (it.isSuccessful) {
                         Toast.makeText(this, "Account Created Successfully ", Toast.LENGTH_SHORT)
                             .show()
-                        this.supportFragmentManager.beginTransaction()
-                            .replace(com.mytrip.myindiatrip.R.id.container, UserLoginFragment())
-                            .commit()
+
 
                         addUserToDatabase(image,firstName, lastName, email, auth.currentUser?.uid!!)
+
+
+                      var i=Intent(this,MainActivity::class.java)
+                        startActivity(i)
 
 
                     }
@@ -122,20 +121,6 @@ class CreateAccountActivity : AppCompatActivity() {
             }
 
         }
-        binding.txtLoginPage.setOnClickListener {
-            this.supportFragmentManager.beginTransaction()
-                .replace(com.mytrip.myindiatrip.R.id.container, UserLoginFragment()).commit()
-        }
-    }
-
-
-
-
-    private fun addUserToDatabase(image:String,firstName: String, lastName: String, email: String, uid: String) {
-        mDbRef = FirebaseDatabase.getInstance().getReference()
-
-        mDbRef.child("user").child(uid).setValue(UserModelClass(image,firstName, lastName, email, uid))
-
 
     }
 
@@ -152,9 +137,11 @@ class CreateAccountActivity : AppCompatActivity() {
                 binding.imgUserDp.setImageURI(filePath)
 
                 uploadImage()
+
             }
         })
 
+    // UploadImage method
     private fun uploadImage() {
         if (filePath != null) {
 
@@ -204,6 +191,15 @@ class CreateAccountActivity : AppCompatActivity() {
                     )
                 }
         }
+    }
+
+
+    private fun addUserToDatabase(image:String,firstName: String, lastName: String, email: String, uid: String) {
+        mDbRef = FirebaseDatabase.getInstance().getReference()
+
+        mDbRef.child("user").child(uid).setValue(UserModelClass(image,firstName, lastName, email, uid))
+
+
     }
 }
 

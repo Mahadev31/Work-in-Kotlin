@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mytrip.myindiatrip.R
@@ -28,7 +29,7 @@ class HotelSearchAdapter(
         var txtHotelName: TextView = itemView.findViewById(R.id.txtHotelName)
         var txtHotelRent: TextView = itemView.findViewById(R.id.txtHotelRent)
         var txtHotelRating: TextView = itemView.findViewById(R.id.txtHotelRating)
-        var layPopular: RelativeLayout = itemView.findViewById(R.id.layPopular)
+        var cdView: CardView = itemView.findViewById(R.id.cdView)
         var imgSave: ImageView = itemView.findViewById(R.id.imgSave)
     }
 
@@ -51,7 +52,7 @@ class HotelSearchAdapter(
 
         Log.e("TAG", "onBindViewHolder: " + hotelList[position].image)
 
-        holder.layPopular.setOnClickListener {
+        holder.cdView.setOnClickListener {
             click.invoke(hotelList[position])
             notifyDataSetChanged()
         }

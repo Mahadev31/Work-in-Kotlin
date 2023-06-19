@@ -1,5 +1,6 @@
 package com.mytrip.myindiatrip.fragment
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
@@ -20,6 +21,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -87,6 +90,7 @@ class HomeFragment : Fragment() {
             var i = Intent(context, SearchActivity::class.java)
             startActivity(i)
         }
+
 
         navigationDrawer()
         autoVideoPlay()

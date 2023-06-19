@@ -53,10 +53,7 @@ class HomeScreenActivity : AppCompatActivity() {
     }
 
     private fun signOut() {
-        // Initialize firebase auth
-//        firebaseAuth = FirebaseAuth.getInstance()
-        // Firebase sign out
-//        firebaseAuth.signOut()
+
 
         // Google sign out
         homeScreenBinding.btnGoogleLogout.setOnClickListener {
