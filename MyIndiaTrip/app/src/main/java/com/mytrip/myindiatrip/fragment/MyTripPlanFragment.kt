@@ -159,32 +159,13 @@ class MyTripPlanFragment : Fragment() {
 
                     when (tab.position) {
                         0 -> {
-
-                            if (search == null) {
-
-                                defaultPlaceAdapter()
-                            }else{
-                                placeFun()
-                            }
-
-
+                            placeFun()
                         }
                         1 -> {
-//                            defaultHotelAdapter()
-                            if (search != null) {
-
-                                defaultHotelAdapter()
-                            }else{
-                                hotelFun()
-                            }
-
-
+                            hotelFun()
                         }
                         2 -> {
-//                            defaultActivityAdapter()
-                            if (search != null) {
-                                activityFun()
-                            }
+                            activityFun()
                         }
 
 
