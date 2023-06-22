@@ -120,4 +120,7 @@ dependencies {
 
 //Razor pay
     implementation 'com.razorpay:checkout:1.6.26'
+
+    // Google admob
+    implementation 'com.google.android.gms:play-services-ads:22.1.0'
 }
