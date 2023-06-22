@@ -44,7 +44,7 @@ open class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-intiView()
+        intiView()
         permision()
     }
 
@@ -54,7 +54,7 @@ intiView()
         val adRequest = AdRequest.Builder().build()
         binding.adView.loadAd(adRequest)
 
-        binding.adView.adListener = object: AdListener() {
+        binding.adView.adListener = object : AdListener() {
             override fun onAdClicked() {
                 // Code to be executed when the user clicks on an ad.
             }
@@ -64,7 +64,7 @@ intiView()
                 // to the app after tapping on an ad.
             }
 
-            override fun onAdFailedToLoad(adError : LoadAdError) {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
                 // Code to be executed when an ad request fails.
             }
 
@@ -85,6 +85,7 @@ intiView()
     }
 
 
+
     private fun permision() {
         if (checkPermission()) {
 
@@ -97,13 +98,16 @@ intiView()
     }
 
     private fun checkPermission(): Boolean {
-        val result = ContextCompat.checkSelfPermission(this,
+        val result = ContextCompat.checkSelfPermission(
+            this,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
         )
-        val result1 = ContextCompat.checkSelfPermission(this,
+        val result1 = ContextCompat.checkSelfPermission(
+            this,
             Manifest.permission.READ_EXTERNAL_STORAGE
         )
-        val result2 = ContextCompat.checkSelfPermission(this,
+        val result2 = ContextCompat.checkSelfPermission(
+            this,
             Manifest.permission.CAMERA
         )
         return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED
@@ -135,15 +139,15 @@ intiView()
                 val location = grantResults[2] == PackageManager.PERMISSION_GRANTED
                 val coarswLocation = grantResults[3] == PackageManager.PERMISSION_GRANTED
 
-                if (writeExternalStorage && readExternalStorage && location  && coarswLocation)
+                if (writeExternalStorage && readExternalStorage && location && coarswLocation)
                     Toast.makeText(
-                      this,
+                        this,
                         "Permission Granted",
                         Toast.LENGTH_LONG
                     ).show()
                 else {
                     Toast.makeText(
-                       this,
+                        this,
                         "Permission Denied",
                         Toast.LENGTH_LONG
                     ).show()
@@ -217,28 +221,29 @@ intiView()
         binding.chipNavigation.setItemSelected(R.id.home_bottom)
         supportFragmentManager.beginTransaction().replace(R.id.container, HomeFragment())
             .commit()
-        binding.chipNavigation.setOnItemSelectedListener{
+        binding.chipNavigation.setOnItemSelectedListener {
 
-                when (it) {
-                    R.id.home_bottom -> {
-                        fragment = HomeFragment()
+            when (it) {
+                R.id.home_bottom -> {
+                    fragment = HomeFragment()
 
-                        callFragment(fragment)
-                    }  R.id.myTrip_bottom -> {
+                    callFragment(fragment)
+                }
+                R.id.myTrip_bottom -> {
                     fragment = MyTripPlanFragment()
                     callFragment(fragment)
                 }
-                    R.id.save_bottom -> {
-                        fragment = SaveFragment()
-                        callFragment(fragment)
-                    }
-                    R.id.profile_bottom -> {
-                        fragment = ProfileFragment()
-                        callFragment(fragment)
-                    }
+                R.id.save_bottom -> {
+                    fragment = SaveFragment()
+                    callFragment(fragment)
                 }
-
+                R.id.profile_bottom -> {
+                    fragment = ProfileFragment()
+                    callFragment(fragment)
+                }
             }
+
+        }
 
 
     }
@@ -252,7 +257,8 @@ intiView()
         transaction.addToBackStack(null)
         transaction.commit()
     }
-    private var doubleBackToExitPressedOnce: Boolean=false
+
+    private var doubleBackToExitPressedOnce: Boolean = false
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed()
@@ -262,7 +268,9 @@ intiView()
         this.doubleBackToExitPressedOnce = true
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
 
-        Handler(Looper.getMainLooper()).postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+        Handler(Looper.getMainLooper()).postDelayed(Runnable {
+            doubleBackToExitPressedOnce = false
+        }, 2000)
     }
 
 
