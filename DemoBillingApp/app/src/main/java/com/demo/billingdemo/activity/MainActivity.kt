@@ -1,10 +1,9 @@
-package com.demo.billingdemo
+package com.demo.billingdemo.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
+import com.demo.billingdemo.R
 import com.demo.billingdemo.databinding.ActivityMainBinding
 import com.demo.billingdemo.fragment.HomeFragment
 import com.demo.billingdemo.fragment.InvoiceFragment
