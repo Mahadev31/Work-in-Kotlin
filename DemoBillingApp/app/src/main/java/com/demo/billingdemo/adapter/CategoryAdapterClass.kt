@@ -1,5 +1,6 @@
 package com.demo.billingdemo.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.demo.billingdemo.CategoryModelClass
 import com.demo.billingdemo.R
+import com.demo.billingdemo.SqliteDatabaseHelper
 
-class CategoryAdapterClass(var click: (CategoryModelClass) -> Unit)//create invoke
+class CategoryAdapterClass(context: Context,var click: (CategoryModelClass) -> Unit)//create invoke
     : RecyclerView.Adapter<CategoryAdapterClass.MyViewHolder>() {
     var list = ArrayList<CategoryModelClass>()  //create model class array list
+     var db= SqliteDatabaseHelper(context)
 
     class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         var itemName: TextView = v.findViewById(R.id.txtItem)  //id binding
@@ -36,5 +39,20 @@ class CategoryAdapterClass(var click: (CategoryModelClass) -> Unit)//create invo
     fun update(list: ArrayList<CategoryModelClass>) {
         this.list = list  //list set in  array list
         notifyDataSetChanged()  //set changer
+    }
+
+    fun removeItem(position: Int) {
+        db.deleteRecord(list[position].id)
+        list.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun restoreItem(item: CategoryModelClass, position: Int) {
+        list.add(position, item)
+        notifyItemInserted(position)
+    }
+
+    fun getData(): ArrayList<CategoryModelClass> {
+        return list
     }
 }

@@ -1,18 +1,21 @@
 package com.demo.billingdemo.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.demo.billingdemo.CategoryModelClass
 import com.demo.billingdemo.CustomerModelClass
 import com.demo.billingdemo.R
+import com.demo.billingdemo.SqliteDatabaseHelper
 
-class CustomerAdapterClass(var click: (CustomerModelClass) -> Unit)//create invoke
+class CustomerAdapterClass(context: Context,var click: (CustomerModelClass) -> Unit)//create invoke
     : RecyclerView.Adapter<CustomerAdapterClass.MyViewHolder>() {
     var list = ArrayList<CustomerModelClass>()  //create model class array list
-
+    var db= SqliteDatabaseHelper(context)
     class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         var companyName: TextView = v.findViewById(R.id.txtCompanyName)  //id binding
         var customerName: TextView = v.findViewById(R.id.txtCustomerName)//id binding
@@ -36,5 +39,20 @@ class CustomerAdapterClass(var click: (CustomerModelClass) -> Unit)//create invo
     fun update(list: ArrayList<CustomerModelClass>) {
         this.list = list  //list set in  array list
         notifyDataSetChanged()  //set changer
+    }
+
+    fun removeItem(position: Int) {
+        db.deleteCustomerData(list[position].id)
+        list.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun restoreItem(item: CustomerModelClass, position: Int) {
+        list.add(position, item)
+        notifyItemInserted(position)
+    }
+
+    fun getData(): ArrayList<CustomerModelClass> {
+        return list
     }
 }

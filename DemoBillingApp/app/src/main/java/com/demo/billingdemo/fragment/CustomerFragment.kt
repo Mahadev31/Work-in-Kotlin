@@ -12,12 +12,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.demo.billingdemo.*
 import com.demo.billingdemo.adapter.CustomerAdapterClass
 import com.demo.billingdemo.databinding.DialogCustomerAddBinding
 import com.demo.billingdemo.databinding.DialogCustomerUpdateBinding
 import com.demo.billingdemo.databinding.FragmentCustomerBinding
+import com.google.android.material.snackbar.Snackbar
 
 class CustomerFragment : Fragment() {
 
@@ -46,7 +49,7 @@ class CustomerFragment : Fragment() {
     }
 
     private fun initView() {
-
+        deleteData()
         customerBinding.imgAdd.setOnClickListener {  //data add
 
             val dialog = Dialog(requireContext())   //dialog set
@@ -86,7 +89,9 @@ class CustomerFragment : Fragment() {
     }
 
     private fun infoFunction() {   //set function
-        adapter = CustomerAdapterClass { click ->
+
+
+        adapter = CustomerAdapterClass(requireContext()) { click ->
 
             val updateDialog = Dialog(requireContext())   //dialog define
             val dialogBinding = DialogCustomerUpdateBinding.inflate(layoutInflater)
@@ -176,5 +181,29 @@ class CustomerFragment : Fragment() {
         dialog.show()
     }
 
+    private fun deleteData() {
+        val swipeToDeleteCallback: SwipeToDeleteCallback = object : SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
+                val position = viewHolder.adapterPosition
+                val item: CustomerModelClass = adapter.getData().get(position)
+                adapter.removeItem(position)
+                val snackbar = Snackbar
+                    .make(
+                        customerBinding.coordinatorLayout,
+                        "Customer was removed from the list.",
+                        Snackbar.LENGTH_LONG
+                    )
+                snackbar.setAction("UNDO") {
+                    adapter.restoreItem(item, position)
+                    customerBinding.rcvCustomer.scrollToPosition(position)
+                }
+                snackbar.setActionTextColor(Color.YELLOW)
+                snackbar.show()
+            }
+        }
 
+        val itemTouchhelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchhelper.attachToRecyclerView(   customerBinding.rcvCustomer)
+
+    }
 }

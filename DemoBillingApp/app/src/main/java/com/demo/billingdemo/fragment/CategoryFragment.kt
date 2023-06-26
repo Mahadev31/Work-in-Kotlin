@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -12,14 +11,17 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.demo.billingdemo.adapter.CategoryAdapterClass
+import androidx.recyclerview.widget.RecyclerView
 import com.demo.billingdemo.CategoryModelClass
 import com.demo.billingdemo.SqliteDatabaseHelper
+import com.demo.billingdemo.SwipeToDeleteCallback
+import com.demo.billingdemo.adapter.CategoryAdapterClass
 import com.demo.billingdemo.databinding.DialogCategoryAddBinding
 import com.demo.billingdemo.databinding.DialogCategoryUpdateBinding
-import com.demo.billingdemo.databinding.DialogCustomerAddBinding
 import com.demo.billingdemo.databinding.FragmentCategoryBinding
+import com.google.android.material.snackbar.Snackbar
 
 
 class CategoryFragment : Fragment() {
@@ -29,8 +31,8 @@ class CategoryFragment : Fragment() {
 
     lateinit var db: SqliteDatabaseHelper
 
-    companion object{
-        var categoryList= ArrayList<CategoryModelClass>()
+    companion object {
+        var categoryList = ArrayList<CategoryModelClass>()
     }
 
     override fun onCreateView(
@@ -50,6 +52,7 @@ class CategoryFragment : Fragment() {
 
     private fun initView() {
 
+        deleteData()
         categoryBinding.imgAdd.setOnClickListener {  //data add
 
             val dialog = Dialog(requireContext())   //dialog set
@@ -67,10 +70,10 @@ class CategoryFragment : Fragment() {
                     costPrice,
                     salePrice
                 )      //data store in sqlite database
-                categoryList.add(CategoryModelClass(id,itemName, costPrice, salePrice))
+                categoryList.add(CategoryModelClass(id, itemName, costPrice, salePrice))
                 Toast.makeText(context, "your data save", Toast.LENGTH_SHORT).show()
 
-               categoryList= db.displayCategory()    //data display
+                categoryList = db.displayCategory()    //data display
                 adapter.update(categoryList)  //list pass in adapter class in function
                 dialog.dismiss()
             }
@@ -88,8 +91,39 @@ class CategoryFragment : Fragment() {
 
     }
 
+    private fun deleteData() {
+        val swipeToDeleteCallback: SwipeToDeleteCallback = object : SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
+                val position = viewHolder.adapterPosition
+                val item: CategoryModelClass = adapter.getData().get(position)
+                adapter.removeItem(position)
+                val snackbar = Snackbar
+                    .make(
+                        categoryBinding.coordinatorLayout,
+                        "Item was removed from the list.",
+                        Snackbar.LENGTH_LONG
+                    )
+                snackbar.setAction("UNDO") {
+                    adapter.restoreItem(item, position)
+                    categoryBinding.rcvCategory.scrollToPosition(position)
+                }
+                snackbar.setActionTextColor(Color.YELLOW)
+                snackbar.show()
+            }
+        }
+
+        val itemTouchhelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchhelper.attachToRecyclerView(   categoryBinding.rcvCategory)
+
+    }
+
+
+
     private fun infoFunction() {   //set function
-        adapter = CategoryAdapterClass { click ->
+
+
+
+        adapter = CategoryAdapterClass(requireContext()) { click ->
 
             val updateDialog = Dialog(requireContext())   //dialog define
             val dialogBinding = DialogCategoryUpdateBinding.inflate(layoutInflater)
@@ -104,7 +138,7 @@ class CategoryFragment : Fragment() {
             dialogBinding.imgEdite.setOnClickListener {
 
 
-               updateFunction(click.id,click.itemName,click.costPrice,click.salePrice)
+                updateFunction(click.id, click.itemName, click.costPrice, click.salePrice)
                 updateDialog.dismiss()
             }
             updateDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))   //dialog box TRANSPARENT
@@ -120,7 +154,7 @@ class CategoryFragment : Fragment() {
         var manger = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         categoryBinding.rcvCategory.layoutManager = manger
         categoryBinding.rcvCategory.adapter = adapter
-        categoryList= db.displayCategory()    //data display
+        categoryList = db.displayCategory()    //data display
         adapter.update(categoryList)  //list pass in adapter class in function
 
 

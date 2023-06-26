@@ -139,5 +139,11 @@ class SqliteDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "Databa
 
     }
 
+    fun deleteCustomerData(idNumber: Int) {
+        val delete = writableDatabase
+        val deleteSql = "delete from customerTB where customer_ID='$idNumber'"
+        delete.execSQL(deleteSql)
+    }
+
 
 }
