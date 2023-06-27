@@ -13,8 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.demo.billingdemo.*
 import com.demo.billingdemo.adapter.CustomerSuggestionAdapter
@@ -36,6 +37,14 @@ class InvoiceFragment : Fragment() {
     var invoiceList = ArrayList<AddItemModelClass>()
 
     lateinit var adapter: InvoiceAdapter
+
+    var date: String? = null
+    var selectedShopName: String? = null
+
+    var itemName: String? = null
+    var qty: String? = null
+    var price: String? = null
+    var total: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,61 +58,81 @@ class InvoiceFragment : Fragment() {
         invoiceBinding.rcvBill.layoutManager = manager
         invoiceBinding.rcvBill.adapter = adapter
 
+
+        //static date Format
+        val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
+        val currentDateFormat: String = simpleDateFormat.format(Date())
+        date = invoiceBinding.txtDate.setText(currentDateFormat).toString()
+
         customer()
-        initView()
+        billItem()
+        printInvoice()
         return invoiceBinding.root
     }
 
-    private fun customer()  {
-            invoiceBinding.rcvItemSuggestion.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            invoiceBinding.rcvItemSuggestion.setHasFixedSize(true)
-            invoiceBinding.edtCName.doOnTextChanged { text, start, before, count ->
-                if (start < count || start > count) {
 
-                    invoiceBinding.rcvItemSuggestion.visibility = View.VISIBLE
-                    invoiceBinding.txtAddNewItem.visibility = View.VISIBLE
-                    invoiceBinding.txtAddNewItem.setOnClickListener {
-                   val     companyName = invoiceBinding.edtCName.text.toString()
-                        addNewCustomerFun(companyName)
+    private fun customer() {
+        invoiceBinding.rcvItemSuggestion.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        invoiceBinding.rcvItemSuggestion.setHasFixedSize(true)
+        invoiceBinding.edtCName.doOnTextChanged { text, start, before, count ->
+            if (start < count || start > count) {
 
-                    }
-                    db.displayCustomerData().forEach {
-                        if (it.customerName.startsWith(text.toString())) {
-                            val suggestionList = ArrayList<CustomerModelClass>()
-                            Log.e("suggestionItem: ", text.toString())
-                            suggestionList.add(it)
-                            invoiceBinding.rcvItemSuggestion.adapter =
-                                CustomerSuggestionAdapter(requireContext(), suggestionList) { customerName ->
-                                    invoiceBinding.edtCName.setText(customerName)
+                invoiceBinding.rcvItemSuggestion.visibility = View.VISIBLE
+                invoiceBinding.txtAddNewItem.visibility = View.VISIBLE
+                invoiceBinding.txtAddNewItem.setOnClickListener {
+                    val shopName = invoiceBinding.edtCName.text.toString()
+                    addNewCustomerFun(shopName)
+
+                }
+                db.displayCustomerData().forEach {
+                    if (it.shopName.startsWith(text.toString())) {
+                        val suggestionList = ArrayList<CustomerModelClass>()
+                        Log.e("suggestionItem: ", text.toString())
+                        suggestionList.add(it)
+                        invoiceBinding.rcvItemSuggestion.adapter =
+                            CustomerSuggestionAdapter(
+                                requireContext(),
+                                suggestionList
+                            ) { customerName ->
+
+                                selectedShopName =
+                                    invoiceBinding.edtCName.setText(customerName).toString()
 
 
-                                }
-                        }
+                            }
                     }
                 }
             }
         }
+    }
 
-    private fun addNewCustomerFun(company: String) {
+    private fun addNewCustomerFun(shopName: String) {
         val dialog = Dialog(requireContext())   //dialog set
         val dialogBinding = DialogCustomerAddBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)  //dialog in xml file set
 
-        dialogBinding.edtCompanyName.setText(company)
+        dialogBinding.edtShopName.setText(shopName)
 
         dialogBinding.btnSet.setOnClickListener {
             val id = 0
-            val companyName = dialogBinding.edtCompanyName.text.toString()   //variable define
-            val customerName = dialogBinding.edtCustomerName.text.toString()   //variable define
-            val mobileNumber = dialogBinding.edtMobileNumber.text.toString()   //variable define
+            val newShopName = dialogBinding.edtShopName.text.toString()   //variable define
+            val newCustomerName = dialogBinding.edtCustomerName.text.toString()   //variable define
+            val newMobileNumber = dialogBinding.edtMobileNumber.text.toString()   //variable define
 
             db.insertCustomerData(
-                companyName,
-                customerName,
-                mobileNumber
+                newShopName,
+                newCustomerName,
+                newMobileNumber
             )      //data store in sqlite database
-            CustomerFragment.customerList.add(CustomerModelClass(id, companyName, customerName, mobileNumber))
+            CustomerFragment.customerList.add(
+                CustomerModelClass(
+                    id,
+                    newShopName,
+                    newCustomerName,
+                    newMobileNumber
+                )
+            )
             Toast.makeText(context, "your data save", Toast.LENGTH_SHORT).show()
 
             dialog.dismiss()
@@ -120,11 +149,7 @@ class InvoiceFragment : Fragment() {
         dialog.show()
     }
 
-    private fun initView() {
-        //static date Format
-        val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy")
-        val currentDateFormat: String = simpleDateFormat.format(Date())
-        var date = invoiceBinding.txtDate.setText(currentDateFormat).toString()
+    private fun billItem() {
 
 
         invoiceBinding.rcvItemSuggestion.layoutManager =
@@ -245,14 +270,14 @@ class InvoiceFragment : Fragment() {
             invoiceBinding.rcvItemSuggestion.visibility = View.GONE
 
             var id = 0
-            var itemName = invoiceBinding.edtItemAdd.text.toString()
-            var qty = invoiceBinding.edtQtyAdd.text.toString()
-            var price = invoiceBinding.edtPriceAdd.text.toString()
-            var total = invoiceBinding.edtTotalAdd.text.toString()
+             itemName = invoiceBinding.edtItemAdd.text.toString()
+             qty = invoiceBinding.edtQtyAdd.text.toString()
+             price = invoiceBinding.edtPriceAdd.text.toString()
+             total = invoiceBinding.edtTotalAdd.text.toString()
 
-            db.insertInvoiceFun(itemName, qty, price, total)
+            db.insertInvoiceItemFun(itemName!!, qty!!, price!!, total!!)
 
-            invoiceList.add(AddItemModelClass(id, itemName, qty, price, total))
+            invoiceList.add(AddItemModelClass(id, itemName!!, qty!!, price!!, total!!))
 
             adapter.updateList(invoiceList)
 
@@ -309,5 +334,16 @@ class InvoiceFragment : Fragment() {
         dialog.show()
     }
 
+    private fun printInvoice() {
+        invoiceBinding.imgDone.setOnClickListener {
+            db.insertInvoiceData(date, selectedShopName)
+
+            val fragmentManager: FragmentManager?= fragmentManager
+            val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+            fragmentTransaction.replace(com.demo.billingdemo.R.id.frameView, DisplayInvoiceFragment())
+            fragmentTransaction.commit()
+        }
+
+    }
 
 }

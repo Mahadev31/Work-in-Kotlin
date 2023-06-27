@@ -39,13 +39,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="Company Name"
+                android:hint="Shop Name"
                 app:endIconMode="clear_text"
                 app:endIconTint="@color/colorPrimaryDark"
                 app:shapeAppearance="@style/Rounded">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtCompanyName"
+                    android:id="@+id/edtShopName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionNext"

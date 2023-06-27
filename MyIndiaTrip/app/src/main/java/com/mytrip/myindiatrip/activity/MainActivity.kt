@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -13,10 +14,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.mytrip.myindiatrip.R
 import com.mytrip.myindiatrip.databinding.ActivityMainBinding
 import com.mytrip.myindiatrip.fragment.HomeFragment
@@ -39,14 +39,21 @@ open class MainActivity : AppCompatActivity() {
     // No Internet Snackbar
     private var noInternetSnackbar: NoInternetSnackbar? = null
 
+    private var mInterstitialAd: InterstitialAd? = null
+    private final var TAG = "MainActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         intiView()
         permision()
+
     }
+
+
+
 
     private fun intiView() {
         MobileAds.initialize(this) {}

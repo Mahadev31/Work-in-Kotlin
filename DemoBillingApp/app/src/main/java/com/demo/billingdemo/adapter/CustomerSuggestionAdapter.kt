@@ -31,10 +31,10 @@ class CustomerSuggestionAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.txtCustomerSug.text = suggestionList[position].customerName
+        holder.txtCustomerSug.text = suggestionList[position].shopName
 
         holder.customerSugLayout.setOnClickListener {
-            onClick.invoke(suggestionList[position].customerName)
+            onClick.invoke(suggestionList[position].shopName)
         }
     }
 }

@@ -17,7 +17,7 @@ class CustomerAdapterClass(context: Context,var click: (CustomerModelClass) -> U
     var list = ArrayList<CustomerModelClass>()  //create model class array list
     var db= SqliteDatabaseHelper(context)
     class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        var companyName: TextView = v.findViewById(R.id.txtCompanyName)  //id binding
+        var shopName: TextView = v.findViewById(R.id.txtShopName)  //id binding
         var customerName: TextView = v.findViewById(R.id.txtCustomerName)//id binding
         var layoutCustomer: LinearLayout = v.findViewById(R.id.layoutCustomer)//id binding
     }
@@ -29,7 +29,7 @@ class CustomerAdapterClass(context: Context,var click: (CustomerModelClass) -> U
         return list.size  //set array list size
     }
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.companyName.text = list[position].companyName   //variable in set model class variable
+        holder.shopName.text = list[position].shopName   //variable in set model class variable
         holder.customerName.text = list[position].customerName   //variable in set model class variable
         holder.layoutCustomer.setOnClickListener {
 
@@ -49,6 +49,7 @@ class CustomerAdapterClass(context: Context,var click: (CustomerModelClass) -> U
 
     fun restoreItem(item: CustomerModelClass, position: Int) {
         list.add(position, item)
+        db.insertCustomerData(item.shopName,item.customerName,item.mobileNumber)
         notifyItemInserted(position)
     }
 

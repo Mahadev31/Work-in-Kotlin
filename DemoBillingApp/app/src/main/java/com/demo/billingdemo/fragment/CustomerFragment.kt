@@ -58,16 +58,16 @@ class CustomerFragment : Fragment() {
 
             dialogBinding.btnSet.setOnClickListener {
                 var id = 0
-                var companyName = dialogBinding.edtCompanyName.text.toString()   //variable define
+                var shopName = dialogBinding.edtShopName.text.toString()   //variable define
                 var customerName = dialogBinding.edtCustomerName.text.toString()   //variable define
                 var mobileNumber = dialogBinding.edtMobileNumber.text.toString()   //variable define
 
                 db.insertCustomerData(
-                    companyName,
+                    shopName,
                     customerName,
                     mobileNumber
                 )      //data store in sqlite database
-                customerList.add(CustomerModelClass(id, companyName, customerName, mobileNumber))
+                customerList.add(CustomerModelClass(id, shopName, customerName, mobileNumber))
                 Toast.makeText(context, "your data save", Toast.LENGTH_SHORT).show()
 
                 customerList = db.displayCustomerData()    //data display
@@ -99,13 +99,13 @@ class CustomerFragment : Fragment() {
 
             updateDialog.window?.setGravity(Gravity.BOTTOM)//dialog position set
 
-            dialogBinding.txtCompanyDialog.text = click.companyName   //text view in set value
+            dialogBinding.txtCompanyDialog.text = click.shopName   //text view in set value
             dialogBinding.txtCustomerNameDialog.text = click.customerName  //text view in set value
             dialogBinding.txtMobileDialog.text = click.mobileNumber  //text view in set value
 
             dialogBinding.imgEdite.setOnClickListener {
 
-                updateFunction(click.id, click.companyName, click.customerName, click.mobileNumber)
+                updateFunction(click.id, click.shopName, click.customerName, click.mobileNumber)
 
                 updateDialog.dismiss()
             }
@@ -141,7 +141,7 @@ class CustomerFragment : Fragment() {
         dialogBinding.txtTitle.text = "Update"
 
 
-        dialogBinding.edtCompanyName.setText(companyName) //variable define
+        dialogBinding.edtShopName.setText(companyName) //variable define
         dialogBinding.edtCustomerName.setText(customerName)   //variable define
         dialogBinding.edtMobileNumber.setText(mobileNumber) //variable define
 
@@ -149,7 +149,7 @@ class CustomerFragment : Fragment() {
         dialogBinding.btnSet.setOnClickListener {
 
             val newCompanyName =
-                dialogBinding.edtCompanyName.text.toString() //variable define
+                dialogBinding.edtShopName.text.toString() //variable define
             val newCustomerName =
                 dialogBinding.edtCustomerName.text.toString()   //variable define
             val newMobileNumber =

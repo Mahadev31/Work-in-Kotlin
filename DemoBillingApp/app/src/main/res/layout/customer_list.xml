@@ -28,7 +28,7 @@
             android:padding="@dimen/_5sdp">
 
             <TextView
-                android:id="@+id/txtCompanyName"
+                android:id="@+id/txtShopName"
                 android:layout_width="@dimen/_180sdp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_10sdp"

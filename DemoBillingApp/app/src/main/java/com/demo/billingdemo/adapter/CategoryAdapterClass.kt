@@ -49,6 +49,7 @@ class CategoryAdapterClass(context: Context,var click: (CategoryModelClass) -> U
 
     fun restoreItem(item: CategoryModelClass, position: Int) {
         list.add(position, item)
+        db.insertCategory(item.itemName,item.costPrice,item.salePrice)
         notifyItemInserted(position)
     }
 

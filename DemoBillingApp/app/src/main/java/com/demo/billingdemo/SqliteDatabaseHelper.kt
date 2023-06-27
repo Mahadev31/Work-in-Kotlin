@@ -7,19 +7,23 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 
 class SqliteDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "Database", null, 1) {
-
     var categoryList = ArrayList<CategoryModelClass>()
     var customerList = ArrayList<CustomerModelClass>()
+    var invoiceList = ArrayList<InvoiceModelClass>()
     override fun onCreate(db: SQLiteDatabase?) {
         var categoryTable =
             "create table categoryTB(category_ID integer Primary Key Autoincrement,itemName text,costPrice text,salePrice text)"
         db?.execSQL(categoryTable)
         var customerTable =
-            "create table customerTB(customer_ID integer Primary Key Autoincrement,companyName text,customerName text,mobileNumber text)"
+            "create table customerTB(customer_ID integer Primary Key Autoincrement,shopName text,customerName text,mobileNumber text)"
         db?.execSQL(customerTable)
 
+        var invoiceItemTable =
+            "create table invoiceItemTB(invoiceItem_ID integer Primary Key Autoincrement,itemName text,qty text,salePrice text,total text)"
+        db?.execSQL(invoiceItemTable)
+
         var invoiceTable =
-            "create table invoiceTB(invoice_ID integer Primary Key Autoincrement,itemName text,qty text,salePrice text,total text)"
+            "create table invoiceTB(invoiceID integer Primary Key Autoincrement,itemName text,qty text,salePrice text,total text)"
         db?.execSQL(invoiceTable)
     }
 
@@ -76,7 +80,7 @@ class SqliteDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "Databa
         delete.execSQL(deleteSql)
     }
 
-    fun insertInvoiceFun(itemName: String, qty: String, salePrice: String, total: String) {
+    fun insertInvoiceItemFun(itemName: String, qty: String, salePrice: String, total: String) {
         val db = writableDatabase
         val insertContent = ContentValues()
         insertContent.put("itemName", itemName)
@@ -84,21 +88,21 @@ class SqliteDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "Databa
         insertContent.put("salePrice", salePrice)
         insertContent.put("total", total)
 
-        db.insert("invoiceTB", null, insertContent)
+        db.insert("invoiceItemTB", null, insertContent)
 
         Log.e("TAG", "insertInvoiceFun:  $itemName  $qty  $salePrice  $total")
     }
 
-    fun insertCustomerData(companyName: String, customerName: String, mobileNumber: String) {
+    fun insertCustomerData(shopName: String, customerName: String, mobileNumber: String) {
         val db = writableDatabase
         val insertCustomer = ContentValues()
-        insertCustomer.put("companyName", companyName)
+        insertCustomer.put("shopName", shopName)
         insertCustomer.put("customerName", customerName)
         insertCustomer.put("mobileNumber", mobileNumber)
 
         db.insert("customerTB", null, insertCustomer)
 
-        Log.e("TAG", "insertCustomerData: $companyName  $customerName $mobileNumber")
+        Log.e("TAG", "insertCustomerData: $shopName  $customerName $mobileNumber")
     }
 
     fun displayCustomerData(): ArrayList<CustomerModelClass> {
@@ -110,11 +114,11 @@ class SqliteDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "Databa
         if (cursor.moveToFirst()) {
             do {
                 var id = cursor.getInt(0)
-                var companyName = cursor.getString(1)
+                var shopName = cursor.getString(1)
                 var customerName = cursor.getString(2)
                 var mobileNumber = cursor.getString(3)
 
-                var model = CustomerModelClass(id, companyName, customerName, mobileNumber)
+                var model = CustomerModelClass(id, shopName, customerName, mobileNumber)
 
                 customerList.add(model)
             } while (cursor.moveToNext())
@@ -126,14 +130,14 @@ class SqliteDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "Databa
     }
 
     fun updateCustomerData(
-        companyName: String,
+        shopName: String,
         customerName: String,
         mobileNumber: String,
         id: Int
     ) {
         var update = writableDatabase
         var updateSql =
-            "update customerTB set companyName='$companyName',customerName='$customerName',mobileNumber='$mobileNumber' where customer_ID='$id'"
+            "update customerTB set shopName='$shopName',customerName='$customerName',mobileNumber='$mobileNumber' where customer_ID='$id'"
         update.execSQL(updateSql)
 
 
@@ -145,5 +149,41 @@ class SqliteDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "Databa
         delete.execSQL(deleteSql)
     }
 
+    fun insertInvoiceData(
+        date: String?,
+        selectedShopName: String?
+    ) {
+        val db = writableDatabase
+        val insertCustomer = ContentValues()
+        insertCustomer.put("date", date)
+        insertCustomer.put("selectedShopName", selectedShopName)
+
+        db.insert("invoiceTB", null, insertCustomer)
+
+    }
+    fun displayInvoiceData(): ArrayList<InvoiceModelClass> {
+        invoiceList.clear()
+
+        var db = readableDatabase
+        var sql = "select * from invoiceTB"
+        var cursor = db.rawQuery(sql, null)
+        if (cursor.moveToFirst()) {
+            do {
+                var id = cursor.getInt(0)
+                var date = cursor.getString(1)
+                var shopName = cursor.getString(2)
+
+                var model = InvoiceModelClass(id, date, shopName)
+
+                invoiceList.add(model)
+            } while (cursor.moveToNext())
+        } else {
+            Log.e("displayCustomerData: ", "No data found")
+        }
+        return invoiceList
+
+    }
 
 }
+
+
