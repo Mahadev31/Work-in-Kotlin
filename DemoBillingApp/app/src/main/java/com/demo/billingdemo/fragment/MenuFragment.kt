@@ -32,6 +32,7 @@ lateinit var menuBinding: FragmentMenuBinding
             val fragmentManager: FragmentManager?= fragmentManager
             val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()
             fragmentTransaction.replace(com.demo.billingdemo.R.id.frameView, CategoryFragment())
+            fragmentTransaction.addToBackStack(null)
             fragmentTransaction.commit()
         }
 

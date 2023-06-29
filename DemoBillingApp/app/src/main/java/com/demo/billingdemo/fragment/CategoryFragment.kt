@@ -44,6 +44,9 @@ class CategoryFragment : Fragment() {
         db = SqliteDatabaseHelper(requireContext())
         infoFunction()   //define function
 
+        categoryBinding.imgBack.setOnClickListener {
+
+        }
         initView()
 
 
@@ -207,5 +210,7 @@ class CategoryFragment : Fragment() {
         )
         dialog.show()
     }
+
+
 
 }

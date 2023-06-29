@@ -1,11 +1,11 @@
 package com.demo.billingdemo.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.demo.billingdemo.R
 import com.demo.billingdemo.databinding.ActivityMainBinding
 import com.demo.billingdemo.fragment.HomeFragment
@@ -44,25 +44,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setCurrentFragment(fragment:Fragment)=
+    private fun setCurrentFragment(fragment: Fragment) =
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.frameView,fragment)
+            replace(R.id.frameView, fragment)
             commit()
         }
 
 
-    private var doubleBackToExitPressedOnce: Boolean = false
     override fun onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
+        val fm: android.app.FragmentManager? = fragmentManager
+        if (fm!!.backStackEntryCount > 0) {
+            Log.i("MainActivity", "popping backstack")
+            fm.popBackStack()
+        } else {
+            Log.i("MainActivity", "nothing on backstack, calling super")
+
             super.onBackPressed()
             return
+
         }
-
-        this.doubleBackToExitPressedOnce = true
-        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
-
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            doubleBackToExitPressedOnce = false
-        }, 2000)
     }
+
+
 }
