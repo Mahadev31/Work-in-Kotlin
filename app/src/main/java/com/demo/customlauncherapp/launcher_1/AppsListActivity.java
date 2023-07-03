@@ -27,6 +27,7 @@ public class AppsListActivity extends AppCompatActivity {
     private PackageManager manager;
     private List<AppDetail> apps;
     private ListView list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,54 +38,54 @@ public class AppsListActivity extends AppCompatActivity {
         addClickListener();
     }
 
-    private void loadApps(){
-        manager=getPackageManager();
-        apps=new ArrayList<AppDetail>();
-        Intent i=new Intent(Intent.ACTION_MAIN,null);
+    private void loadApps() {
+        manager = getPackageManager();
+        apps = new ArrayList<AppDetail>();
+        Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        List<ResolveInfo> availableActivities =manager.queryIntentActivities(i,0);
-        for (ResolveInfo ri:availableActivities){
-            AppDetail app=new AppDetail();
-            app.label=ri.loadLabel(manager);
-            app.name=ri.activityInfo.packageName;
-            app.icon=ri.activityInfo.loadIcon(manager);
+        List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
+        for (ResolveInfo ri : availableActivities) {
+            AppDetail app = new AppDetail();
+            app.label = ri.loadLabel(manager);
+            app.name = ri.activityInfo.packageName;
+            app.icon = ri.activityInfo.loadIcon(manager);
             apps.add(app);
         }
 
     }
 
-    private  void loadListView(){
-        list=(ListView) findViewById(R.id.apps_list);
-        ArrayAdapter<AppDetail>adapter =new ArrayAdapter<AppDetail>(this,R.layout.list_item,apps){
+    private void loadListView() {
+        list = (ListView) findViewById(R.id.apps_list);
+        ArrayAdapter<AppDetail> adapter = new ArrayAdapter<AppDetail>(this, R.layout.list_item, apps) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-                if (convertView==null){
-                    convertView =getLayoutInflater().inflate(R.layout.list_item,null);
+                if (convertView == null) {
+                    convertView = getLayoutInflater().inflate(R.layout.list_item, null);
                 }
-                ImageView appIcon=(ImageView)  convertView.findViewById(R.id.item_app_icon);
+                ImageView appIcon = (ImageView) convertView.findViewById(R.id.item_app_icon);
                 appIcon.setImageDrawable((Drawable) apps.get(position).icon);
 
-                TextView appLabel=(TextView) convertView.findViewById(R.id.item_app_label);
+                TextView appLabel = (TextView) convertView.findViewById(R.id.item_app_label);
                 appLabel.setText(apps.get(position).label);
 
-                TextView appName=(TextView) convertView.findViewById(R.id.item_app_name);
+                TextView appName = (TextView) convertView.findViewById(R.id.item_app_name);
                 appName.setText(apps.get(position).name);
 
-                return  convertView;
+                return convertView;
 
             }
         };
 
         list.setAdapter(adapter);
     }
-    private  void  addClickListener(){
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
+    private void addClickListener() {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?>parent,View view,int position,long id) {
-                Intent i=manager.getLaunchIntentForPackage(apps.get(position).name.toString());
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = manager.getLaunchIntentForPackage(apps.get(position).name.toString());
                 AppsListActivity.this.startActivity(i);
             }
         });
