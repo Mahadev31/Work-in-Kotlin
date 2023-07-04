@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.AppCli
 
     private RecyclerView recyclerView;
     private AppAdapter appAdapter;
-    private List<AppInfo> installedApps;
+    private List<AppInfo> installedAppsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +31,11 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.AppCli
     private void initView() {
         recyclerView =(RecyclerView) findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(this,3));
-        installedApps = getInstalledApps();
-        appAdapter = new AppAdapter(this,installedApps, this);
+        installedAppsList = getInstalledApps();
+        appAdapter = new AppAdapter(this, this);
         recyclerView.setAdapter(appAdapter);
+
+        appAdapter.update(installedAppsList);
     }
 
     private List<AppInfo> getInstalledApps() {

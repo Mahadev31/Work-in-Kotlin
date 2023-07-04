@@ -275,8 +275,8 @@ class InvoiceFragment : Fragment() {
              price = invoiceBinding.edtPriceAdd.text.toString()
              total = invoiceBinding.edtTotalAdd.text.toString()
 
-            db.insertInvoiceItemFun(itemName!!, qty!!, price!!, total!!)
-
+//            db.insertInvoiceItemFun(itemName!!, qty!!, price!!, total!!)
+            db.insertInvoiceData(date, selectedShopName, itemName!!, qty!!, price!!, total!!)
             invoiceList.add(AddItemModelClass(id, itemName!!, qty!!, price!!, total!!))
 
             adapter.updateList(invoiceList)
@@ -336,7 +336,7 @@ class InvoiceFragment : Fragment() {
 
     private fun printInvoice() {
         invoiceBinding.imgDone.setOnClickListener {
-            db.insertInvoiceData(date, selectedShopName)
+//            db.insertInvoiceData(date, selectedShopName)
 
             val fragmentManager: FragmentManager?= fragmentManager
             val fragmentTransaction: FragmentTransaction = fragmentManager!!.beginTransaction()

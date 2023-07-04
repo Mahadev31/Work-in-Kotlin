@@ -23,8 +23,9 @@ class SqliteDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "Databa
         db?.execSQL(invoiceItemTable)
 
         var invoiceTable =
-            "create table invoiceTB(invoiceID integer Primary Key Autoincrement,itemName text,qty text,salePrice text,total text)"
+            "create table invoiceTB(invoiceID integer Primary Key Autoincrement,date text,customerName TEXT,itemName text,qty text,salePrice text,total text)"
         db?.execSQL(invoiceTable)
+
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
@@ -151,15 +152,24 @@ class SqliteDatabaseHelper(context: Context) : SQLiteOpenHelper(context, "Databa
 
     fun insertInvoiceData(
         date: String?,
-        selectedShopName: String?
+        selectedShopName: String?,
+        itemName: String,
+        qty: String,
+        price: String,
+        total: String
     ) {
         val db = writableDatabase
         val insertCustomer = ContentValues()
         insertCustomer.put("date", date)
         insertCustomer.put("selectedShopName", selectedShopName)
+        insertCustomer.put("itemName", itemName)
+        insertCustomer.put("qty", qty)
+        insertCustomer.put("price", price)
+        insertCustomer.put("total", total)
 
         db.insert("invoiceTB", null, insertCustomer)
 
+        Log.e("TAG", "insertInvoiceData: $date  $selectedShopName  $itemName  $qty  $price  $total" , )
     }
     fun displayInvoiceData(): ArrayList<InvoiceModelClass> {
         invoiceList.clear()

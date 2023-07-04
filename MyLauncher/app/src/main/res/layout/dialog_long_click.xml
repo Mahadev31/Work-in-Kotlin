@@ -1,22 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        app:cardCornerRadius="@dimen/_10sdp">
+        android:layout_marginTop="@dimen/_10sdp"
+        app:cardCornerRadius="@dimen/_20sdp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_200sdp"
             android:orientation="vertical"
-            android:padding="@dimen/_10sdp">
+            android:padding="@dimen/_5sdp">
+
+<!--            App Detials-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imgApp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_margin="@dimen/_5sdp" />
+
+                <TextView
+                    android:id="@+id/txtAppName"
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    tools:text="App Name" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="cancel"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_13ssp"
+                    android:id="@+id/txtCancel"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linAppInfo"
@@ -25,7 +57,7 @@
                 android:gravity="center">
 
                 <TextView
-                    android:layout_width="@dimen/_100sdp"
+                    android:layout_width="@dimen/_200sdp"
                     android:layout_height="wrap_content"
                     android:text="App Info"
                     android:textSize="@dimen/_15ssp"
@@ -40,7 +72,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_2sdp"
+                android:layout_height="@dimen/_1sdp"
                 android:layout_margin="@dimen/_10sdp"
                 android:background="#9F9D9D" />
 
@@ -51,7 +83,7 @@
                 android:gravity="center">
 
                 <TextView
-                    android:layout_width="@dimen/_100sdp"
+                    android:layout_width="@dimen/_200sdp"
                     android:layout_height="wrap_content"
                     android:text="Uninstall app"
                     android:textSize="@dimen/_15ssp"
