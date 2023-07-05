@@ -1,6 +1,7 @@
 package com.demo.mylauncher;
 
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -72,13 +73,38 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AppViewHolder> {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_long_click);
 
+        TextView txtCancel = dialog.findViewById(R.id.txtCancel);
+        txtCancel.setOnClickListener(c->{
+            dialog.dismiss();
+        });
 
-        LinearLayout layout = (LinearLayout) dialog.findViewById(R.id.linUninstallApp);
         ImageView appImage = dialog.findViewById(R.id.imgApp);
         appImage.setImageDrawable(appList.get(position).getIcon());
 
         TextView appName = dialog.findViewById(R.id.txtAppName);
         appName.setText(appList.get(position).getAppName());
+
+        LinearLayout linAppInfo = dialog.findViewById(R.id.linAppInfo);
+        linAppInfo.setOnClickListener(a->{
+
+            try {
+                //Open the specific App Info page:
+                Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.setData(Uri.parse("package:" + appList.get(position).getPackageName()));
+                context.startActivity(intent);
+
+            } catch ( ActivityNotFoundException e ) {
+                //e.printStackTrace();
+
+                //Open the generic Apps page:
+                Intent intent = new Intent(android.provider.Settings.ACTION_MANAGE_APPLICATIONS_SETTINGS);
+                context.startActivity(intent);
+
+            }
+            dialog.dismiss();
+
+        });
+
 
         LinearLayout linUninstallApp = dialog.findViewById(R.id.linUninstallApp);
         linUninstallApp.setOnClickListener(new View.OnClickListener() {

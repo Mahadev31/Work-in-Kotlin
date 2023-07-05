@@ -7,5 +7,13 @@
     <string name="menu_about">About</string>
     <string name="menu_about_desc">About app Launcher</string>
 
+    <!-- Strings used for fragments for navigation -->
+
+
+
+    <string name="red">Red</string>
+    <string name="blue">Blue</string>
+    <string name="green">Green</string>
+
 
 </resources>
