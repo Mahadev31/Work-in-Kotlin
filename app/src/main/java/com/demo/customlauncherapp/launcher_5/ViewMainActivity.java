@@ -18,7 +18,11 @@ import java.util.List;
 
 public class ViewMainActivity extends AppCompatActivity {
 
-    private List<AppInfo> installedAppsList;
+    private List<AppEntry> installedAppsList;
+    ViewPager viewPager;
+
+    CustomPagerAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,12 +32,15 @@ public class ViewMainActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new CustomPagerAdapter(this,installedAppsList));
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        installedAppsList=getInstalledApps();
+        adapter = new CustomPagerAdapter(this, installedAppsList);
+        viewPager.setAdapter(adapter);
 
     }
-    private List<AppInfo> getInstalledApps() {
-        List<AppInfo> apps = new ArrayList<>();
+
+    private List<AppEntry> getInstalledApps() {
+        List<AppEntry> apps = new ArrayList<>();
         PackageManager packageManager = getPackageManager();
         Intent intent = new Intent(Intent.ACTION_MAIN, null);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -43,7 +50,7 @@ public class ViewMainActivity extends AppCompatActivity {
             String appName = resolveInfo.loadLabel(packageManager).toString();
             String packageName = resolveInfo.activityInfo.packageName;
             Drawable icon = resolveInfo.loadIcon(packageManager);
-            apps.add(new AppInfo(appName, packageName, icon));
+            apps.add(new AppEntry(appName, packageName, icon));
         }
 
         return apps;

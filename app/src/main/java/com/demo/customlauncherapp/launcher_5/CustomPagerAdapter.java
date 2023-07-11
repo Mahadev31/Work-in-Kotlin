@@ -24,9 +24,9 @@ public class CustomPagerAdapter extends PagerAdapter {
     private static final int COLS = 4;
 
     private Context mContext;
-    private List<AppInfo> mData;
+    private List<AppEntry> mData;
 
-    public CustomPagerAdapter(Context context, List<AppInfo> data) {
+    public CustomPagerAdapter(Context context, List<AppEntry> data) {
         mContext = context;
         mData = data;
     }
@@ -76,7 +76,7 @@ public class CustomPagerAdapter extends PagerAdapter {
 
                 if (pos < end) {
 
-                    AppInfo item = mData.get(pos);
+                    AppEntry item = mData.get(pos);
 
                     View vItem = inflater.inflate(R.layout.item_app, null,
                             false);
@@ -84,15 +84,28 @@ public class CustomPagerAdapter extends PagerAdapter {
                     ImageView image = (ImageView) vItem.findViewById(R.id.appIcon);
                     image.setImageDrawable(item.getIcon());
 
+                    TextView appName=vItem.findViewById(R.id.appName);
+                    appName.setText(item.getAppName());
+
                     row.addView(vItem);
                 } else {
                     TextView vPlaceHolder = new TextView(mContext);
                     vPlaceHolder.setText(" ");
                     row.addView(vPlaceHolder);
                 }
+
             }
+            table.addView(row);
         }
+
+        container.addView(table);
+
         return table;
+
     }
 
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView((View) object);
+    }
 }

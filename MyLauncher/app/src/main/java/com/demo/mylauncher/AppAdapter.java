@@ -61,14 +61,14 @@ public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AppViewHolder> {
             public boolean onLongClick(View view) {
 
 
-                dialogFunction(appList, position);
+                dialogFunction( position);
                 return false;
             }
         });
     }
 
 
-    private void dialogFunction(List<AppInfo> appList, int position) {
+    private void dialogFunction( int position) {
         Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_long_click);

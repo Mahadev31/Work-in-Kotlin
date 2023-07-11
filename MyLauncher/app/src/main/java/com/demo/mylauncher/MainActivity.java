@@ -9,15 +9,19 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
+
+import com.github.fajaragungpramana.dotsindicator.DotsIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements AppAdapter.AppClickListener {
+public class MainActivity extends AppCompatActivity  {
 
-    private RecyclerView recyclerView;
-    private AppAdapter appAdapter;
-    private List<AppInfo> installedAppsList;
+
+    private List<AppInfo> appsList;
+    ViewPager viewPager;
+    CustomPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +33,17 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.AppCli
     }
 
     private void initView() {
-        recyclerView =(RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,3));
-        installedAppsList = getInstalledApps();
-        appAdapter = new AppAdapter(this, this);
-        recyclerView.setAdapter(appAdapter);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        appsList=getInstalledApps();
+        adapter = new CustomPagerAdapter(this);
 
-        appAdapter.update(installedAppsList);
+        adapter.updateList(appsList);
+        viewPager.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        DotsIndicator dotsIndicator = findViewById(R.id.dots_indicator);
+        dotsIndicator.setViewPager(viewPager);
+
+
     }
 
     private List<AppInfo> getInstalledApps() {
@@ -55,13 +63,5 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.AppCli
         return apps;
     }
 
-    @Override
-    public void onAppClick(AppInfo appInfo) {
-        // Handle the app launch here.
-        PackageManager packageManager = getPackageManager();
-        Intent launchIntent = packageManager.getLaunchIntentForPackage(appInfo.getPackageName());
-        if (launchIntent != null) {
-            startActivity(launchIntent);
-        }
-    }
+
 }

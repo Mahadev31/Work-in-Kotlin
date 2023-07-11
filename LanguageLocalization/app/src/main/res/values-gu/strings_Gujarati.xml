@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Language Localization</string>
+
+    <string name="language">ગુજરાતી</string>
+    <string name="Description">ગુજરાતી ભાષા સૌથી લોકપ્રિય ભાષા છે</string>
+</resources>
