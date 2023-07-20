@@ -108,7 +108,7 @@ class AddScreenActivty : AppCompatActivity() {
                 Toast.makeText(this, "Please Enter valid Amount", Toast.LENGTH_SHORT).show()
             } else if (note.isEmpty()) {
                 Toast.makeText(this, "Please Enter Note", Toast.LENGTH_SHORT).show()
-            }  else {
+            } else {
 
                 if (addScreenBinding.rgGroup.checkedRadioButtonId == -1) {
 
@@ -127,7 +127,15 @@ class AddScreenActivty : AppCompatActivity() {
                 Log.e("TAG", "select button: " + addScreenBinding.imgDone.text.toString())
                 if (flag == 1) {
 
-                    dbS.updateRecord(amount,selectedCategory,selectedDateValue,selectedMode, note,page,id_number )
+                    dbS.updateRecord(
+                        amount,
+                        selectedCategory,
+                        selectedDateValue,
+                        selectedMode,
+                        note,
+                        page,
+                        id_number
+                    )
 
 
                 } else {
@@ -209,42 +217,25 @@ class AddScreenActivty : AppCompatActivity() {
         val currentDateFormat: String = simpleDateFormat.format(Date())
         addScreenBinding.txtDate.text = currentDateFormat
 
-
-
-
         selectedDateValue = currentDateFormat
 
-        //Dynamic date Format
-        var cal: Calendar = Calendar.getInstance()
-        // create an OnDateSetListener
-        val dateSetListener = object : DatePickerDialog.OnDateSetListener {
-            override fun onDateSet(
-                view: DatePicker, year: Int, monthOfYear: Int,
-                dayOfMonth: Int
-            ) {
-                cal.set(Calendar.YEAR, year)
-                cal.set(Calendar.MONTH, monthOfYear)
-                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+//        //Dynamic date Format
 
-                val myFormat = "dd/MM/yyyy" // mention the format you need
-                val sdf = SimpleDateFormat(myFormat, Locale.US)
-                addScreenBinding.txtDate.text = sdf.format(cal.getTime())
-            }
+        addScreenBinding.txtDate.setOnClickListener {
+            var cal: Calendar = Calendar.getInstance()
+            val year = cal.get(Calendar.YEAR)
+            val month = cal.get(Calendar.MONTH)
+            val day = cal.get(Calendar.DAY_OF_MONTH)
+
+            val datePickerDialog = DatePickerDialog(this, { view, year, monthOfYear, dayOfMonth ->
+                addScreenBinding.txtDate.text =
+                    (dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year)
+                selectedDateValue = addScreenBinding.txtDate.text.toString()
+
+                Log.e("TAG", "dataAndTime: "+selectedDateValue )
+            }, year, month, day)
+            datePickerDialog.show()
         }
-        // when you click on the button, show DatePickerDialog that is set with OnDateSetListener
-        addScreenBinding.txtDate.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(view: View) {
-                DatePickerDialog(
-                    this@AddScreenActivty,
-                    dateSetListener,
-                    // set DatePickerDialog to point to today's date when it loads up
-                    cal.get(Calendar.YEAR),
-                    cal.get(Calendar.MONTH),
-                    cal.get(Calendar.DAY_OF_MONTH)
-                ).show()
-            }
-        })
-        selectedDateValue = currentDateFormat
 
 //static time Format
         val simpleTimeFormat = SimpleDateFormat("HH:mm ")
