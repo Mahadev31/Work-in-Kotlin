@@ -5,6 +5,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -18,7 +21,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity  {
 
-
+//Reminder Notes:- context menu implement this app
     private List<AppInfo> appsList;
     ViewPager viewPager;
     CustomPagerAdapter adapter;
@@ -44,7 +47,10 @@ public class MainActivity extends AppCompatActivity  {
         dotsIndicator.setViewPager(viewPager);
 
 
+
     }
+
+
 
     private List<AppInfo> getInstalledApps() {
         List<AppInfo> apps = new ArrayList<>();

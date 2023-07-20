@@ -209,6 +209,9 @@ class AddScreenActivty : AppCompatActivity() {
         val currentDateFormat: String = simpleDateFormat.format(Date())
         addScreenBinding.txtDate.text = currentDateFormat
 
+
+
+
         selectedDateValue = currentDateFormat
 
         //Dynamic date Format

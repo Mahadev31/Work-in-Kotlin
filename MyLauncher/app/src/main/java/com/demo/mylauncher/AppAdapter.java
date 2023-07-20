@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+
+// not use this adapter
 public class AppAdapter extends RecyclerView.Adapter<AppAdapter.AppViewHolder> {
 
     private List<AppInfo> appList;
