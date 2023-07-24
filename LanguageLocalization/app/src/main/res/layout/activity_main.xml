@@ -7,6 +7,26 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/language"
+        android:id="@+id/txtShowLanguage"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_15ssp"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_20sdp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Description"
+        android:id="@+id/txtShowDescription"
+        android:textStyle="bold"
+        android:textSize="@dimen/_15ssp"
+        android:textColor="@color/black"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/_20sdp"/>
     <Button
         android:id="@+id/btnLanguage"
         android:layout_width="wrap_content"
