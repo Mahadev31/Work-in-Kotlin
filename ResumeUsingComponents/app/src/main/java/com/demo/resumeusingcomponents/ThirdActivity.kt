@@ -11,10 +11,10 @@ class ThirdActivity : AppCompatActivity() {
     lateinit var thirdBinding: ActivityThirdBinding
 
     companion object {
-        var skill = StringBuilder()
+        var skills:String?=null
 
     }
-
+    var skill = StringBuilder()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         thirdBinding = ActivityThirdBinding.inflate(layoutInflater)
@@ -27,7 +27,7 @@ class ThirdActivity : AppCompatActivity() {
         thirdBinding.btnSubmit.setOnClickListener {
 
             if (thirdBinding.chkC.isChecked) {
-                skill.append(thirdBinding.chkC.text.toString() + "," + "  ")
+                skill.append(thirdBinding.chkC.text.toString() + ",")
             }
             if (thirdBinding.chkCPlush.isChecked) {
                 skill.append(thirdBinding.chkCPlush.text.toString() + ",")
@@ -51,9 +51,9 @@ class ThirdActivity : AppCompatActivity() {
                 skill.append(thirdBinding.chkWab.text.toString() + ",")
             }
             if (thirdBinding.chkFlutter.isChecked) {
-                skill.append(thirdBinding.chkFlutter.text.toString() + ",")
+                skill.append(thirdBinding.chkFlutter.text.toString())
             }
-
+            skills=skill.toString()
             if (!thirdBinding.chkC.isChecked && !thirdBinding.chkCPlush.isChecked && !thirdBinding.chkJava.isChecked && !thirdBinding.chkKotlin.isChecked && !thirdBinding.chkSQLite.isChecked && !thirdBinding.chkAndroid.isChecked && !thirdBinding.chkWab.isChecked && !thirdBinding.chkFlutter.isChecked && !thirdBinding.chkFigma.isChecked) {
                 Toast.makeText(this, "Hobby is not selected", Toast.LENGTH_SHORT).show()
             } else {
@@ -61,5 +61,7 @@ class ThirdActivity : AppCompatActivity() {
                 startActivity(i)
             }
         }
+
+
     }
 }

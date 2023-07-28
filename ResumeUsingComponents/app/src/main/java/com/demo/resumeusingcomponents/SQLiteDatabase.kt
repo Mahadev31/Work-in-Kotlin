@@ -8,7 +8,7 @@ import android.util.Log
 
 class SQLiteDatabase(context: Context):SQLiteOpenHelper(context,"Database",null,1) {
     override fun onCreate(db: SQLiteDatabase?) {
-        var userTable="create table userTb(userId integer PRIMARY KEY AUTOINCREMENT ,firstName text,lastName text,mobileNumber text,address text,dd text,mm text,yy text,gender text,email text, password text)"
+        var userTable="create table userTb(userId integer PRIMARY KEY AUTOINCREMENT ,firstName text,lastName text,mobileNumber text,address text,dd text,mm text,yy text,gender text,email text, password text, skills text)"
         db?.execSQL(userTable)
     }
 
@@ -26,7 +26,8 @@ class SQLiteDatabase(context: Context):SQLiteOpenHelper(context,"Database",null,
         yy: String?,
         gender: String,
         email: String?,
-        password: String?
+        password: String?,
+        skills: String?
     ) {
 
         val db=writableDatabase
@@ -34,17 +35,18 @@ class SQLiteDatabase(context: Context):SQLiteOpenHelper(context,"Database",null,
 
         c.put("firstName",firstName)
         c.put("lastName",lastName)
-        c.put("firstName",mobileNumber)
-        c.put("firstName",address)
-        c.put("firstName",dd)
-        c.put("firstName",mm)
-        c.put("firstName",yy)
-        c.put("firstName",gender)
-        c.put("firstName",email)
-        c.put("firstName",password)
+        c.put("mobileNumber",mobileNumber)
+        c.put("address",address)
+        c.put("dd",dd)
+        c.put("mm",mm)
+        c.put("yy",yy)
+        c.put("gender",gender)
+        c.put("email",email)
+        c.put("password",password)
+        c.put("skills",skills)
 
         Log.e("TAG",
-            "insertDatabase: $firstName  $lastName  $mobileNumber  $address  $dd $mm $yy  $gender  $email  $password"
+            "insertDatabase: $firstName  $lastName  $mobileNumber  $address  $dd $mm $yy  $gender  $email  $password  $skills"
         )
         db.insert("userTb",null,c)
 

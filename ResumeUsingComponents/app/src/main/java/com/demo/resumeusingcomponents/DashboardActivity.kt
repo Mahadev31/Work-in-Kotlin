@@ -32,7 +32,7 @@ class DashboardActivity : AppCompatActivity() {
 
         dashboardBinding.txtEmail.text = SecondActivity.email
 
-        dashboardBinding.txtSkill.text = ThirdActivity.skill
+        dashboardBinding.txtSkill.text = ThirdActivity.skills
 
         db.insertDatabase(
             MainActivity.firstName,
@@ -44,7 +44,8 @@ class DashboardActivity : AppCompatActivity() {
             MainActivity.yy,
             MainActivity.gender!!,
             SecondActivity.email,
-            SecondActivity.password
+            SecondActivity.password,
+            ThirdActivity.skills
         )
 
     }
