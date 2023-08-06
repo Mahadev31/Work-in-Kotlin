@@ -1,7 +1,8 @@
-package com.demo.resumeusingcomponents
+package com.demo.resumeusingcomponents.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputFilter
 import android.util.Patterns
 import android.widget.RadioButton
 import android.widget.Toast
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
 
             if (selectedId != -1) {
-                gender = rb.text.toString()
+                gender = rb.text as String?
             }
             if (firstName!!.isEmpty()) {
                 Toast.makeText(this, "First Name is Empty", Toast.LENGTH_SHORT).show()

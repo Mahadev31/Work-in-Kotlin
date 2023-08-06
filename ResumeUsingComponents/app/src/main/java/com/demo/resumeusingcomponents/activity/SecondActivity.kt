@@ -1,9 +1,8 @@
-package com.demo.resumeusingcomponents
+package com.demo.resumeusingcomponents.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import com.demo.resumeusingcomponents.databinding.ActivitySecondBinding
@@ -28,9 +27,9 @@ class SecondActivity : AppCompatActivity() {
     private fun initView() {
         secondBinding.btnNext.setOnClickListener {
 
-            email=secondBinding.edtEmail.text.toString()
-            password=secondBinding.edtPassword.text.toString()
-            confirm_password=secondBinding.edtConfirmPassword.text.toString()
+            email =secondBinding.edtEmail.text.toString()
+            password =secondBinding.edtPassword.text.toString()
+            confirm_password =secondBinding.edtConfirmPassword.text.toString()
 
             if (email!!.isEmpty()) {
                 Toast.makeText(this, "Email  is Empty", Toast.LENGTH_SHORT).show()

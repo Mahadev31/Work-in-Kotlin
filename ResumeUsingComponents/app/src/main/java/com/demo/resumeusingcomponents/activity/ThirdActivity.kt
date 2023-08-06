@@ -1,15 +1,16 @@
-package com.demo.resumeusingcomponents
+package com.demo.resumeusingcomponents.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.demo.resumeusingcomponents.databinding.ActivityThirdBinding
+import com.demo.resumeusingcomponents.sqlite.SQLiteDatabase
 
 class ThirdActivity : AppCompatActivity() {
 
     lateinit var thirdBinding: ActivityThirdBinding
-
+    lateinit var db: SQLiteDatabase
     companion object {
         var skills:String?=null
 
@@ -19,7 +20,7 @@ class ThirdActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         thirdBinding = ActivityThirdBinding.inflate(layoutInflater)
         setContentView(thirdBinding.root)
-
+        db = SQLiteDatabase(this)
         initView()
     }
 
@@ -53,12 +54,26 @@ class ThirdActivity : AppCompatActivity() {
             if (thirdBinding.chkFlutter.isChecked) {
                 skill.append(thirdBinding.chkFlutter.text.toString())
             }
-            skills=skill.toString()
+            skills =skill.toString()
             if (!thirdBinding.chkC.isChecked && !thirdBinding.chkCPlush.isChecked && !thirdBinding.chkJava.isChecked && !thirdBinding.chkKotlin.isChecked && !thirdBinding.chkSQLite.isChecked && !thirdBinding.chkAndroid.isChecked && !thirdBinding.chkWab.isChecked && !thirdBinding.chkFlutter.isChecked && !thirdBinding.chkFigma.isChecked) {
                 Toast.makeText(this, "Hobby is not selected", Toast.LENGTH_SHORT).show()
             } else {
                 var i = Intent(this, DashboardActivity::class.java)
+                i.putExtra("email", SecondActivity.email)
                 startActivity(i)
+                db.insertDatabase(
+                    MainActivity.firstName,
+                    MainActivity.lastName,
+                    MainActivity.mobileNumber,
+                    MainActivity.address,
+                    MainActivity.dd,
+                    MainActivity.mm,
+                    MainActivity.yy,
+                    MainActivity.gender.toString(),
+                    SecondActivity.email,
+                    SecondActivity.password,
+                    ThirdActivity.skills
+                )
             }
         }
 

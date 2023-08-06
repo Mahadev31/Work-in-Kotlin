@@ -1,12 +1,11 @@
-package com.demo.resumeusingcomponents
+package com.demo.resumeusingcomponents.activity
 
 import android.content.Intent
-import android.database.Cursor
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.demo.resumeusingcomponents.databinding.ActivityLoginBinding
+import com.demo.resumeusingcomponents.sqlite.SQLiteDatabase
 
 class LoginActivity : AppCompatActivity() {
 
@@ -28,21 +27,22 @@ class LoginActivity : AppCompatActivity() {
             var emailCheck = loginBinding.edtEmail.text.toString()
             var passwordCheck = loginBinding.edtPassword.text.toString()
 
-            var checkUser = db.displayDatabase(emailCheck,passwordCheck)
+            var checkUser = db.checkUserDatabase(emailCheck, passwordCheck)
 
-            if (checkUser== true) {
-//                val i = Intent(this, DashboardActivity::class.java)
-//                i.putExtra("email", emailCheck)
-//                loginBinding.edtEmail.setText("")
-//                loginBinding.edtPassword.setText("")
-//                startActivity(i)
+            if (checkUser == true) {
+                val i = Intent(this, DashboardActivity::class.java)
+                i.putExtra("email", emailCheck)
+                loginBinding.edtEmail.setText("")
+                loginBinding.edtPassword.setText("")
+                startActivity(i)
                 Toast.makeText(this, "Login Successfully", Toast.LENGTH_SHORT).show()
             } else {
-                val builder = AlertDialog.Builder(this)
-                builder.setCancelable(true)
-                builder.setTitle("Wrong Credential")
-                builder.setMessage("Wrong Credential")
-                builder.show()
+//                val builder = AlertDialog.Builder(this)
+//                builder.setCancelable(true)
+//                builder.setTitle("Wrong Credential")
+//                builder.setMessage("Wrong Credential")
+//                builder.show()
+                Toast.makeText(this, "invalid userName", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -52,7 +52,6 @@ class LoginActivity : AppCompatActivity() {
             startActivity(i)
         }
     }
-
 
 
 }
