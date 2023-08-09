@@ -48,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginBinding.linSignUp.setOnClickListener {
-            val i = Intent(this, MainActivity::class.java)
+            val i = Intent(this, FirstActivity::class.java)
             startActivity(i)
         }
     }

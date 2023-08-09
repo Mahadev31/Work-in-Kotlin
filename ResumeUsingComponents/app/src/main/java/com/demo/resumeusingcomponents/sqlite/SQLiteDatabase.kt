@@ -122,9 +122,18 @@ class SQLiteDatabase(context: Context) : SQLiteOpenHelper(context, "Database", n
         return list
     }
 
+    fun updateResumeData(
+        id,firstName ,lastName ,mobileNumber ,address ,dd ,mm ,yy ,gender ,email , password , skills
+    ) {
+        var update=writableDatabase
+        var updateSql="update userTb set firstName='$firstName',lastName='$lastName',mobileNumber='$mobileNumber',address='$address',dd='$dd',mm='$mm',yy='$yy',gender='$gender',skills='$skills'  where userId='$id'"
+        update.execSQL(updateSql)
+
+        Log.e("updateResumeData", "id: "+id )
+    }
     fun deleteData(id: Int) {
         var db = writableDatabase
-        var delete = "delete from resumeTb where resume_Id='$id' "
+        var delete = "delete from userTb where userId='$id' "
         db.execSQL(delete)
     }
 

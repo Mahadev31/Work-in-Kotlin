@@ -2,16 +2,15 @@ package com.demo.resumeusingcomponents.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputFilter
 import android.util.Patterns
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.demo.resumeusingcomponents.databinding.ActivityMainBinding
+import com.demo.resumeusingcomponents.databinding.ActivityFirstBinding
 
 
-class MainActivity : AppCompatActivity() {
-    lateinit var mainBinding: ActivityMainBinding
+class FirstActivity : AppCompatActivity() {
+    lateinit var mainBinding:ActivityFirstBinding
 
     companion object {
         var firstName: String? = null
@@ -26,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainBinding = ActivityMainBinding.inflate(layoutInflater)
+        mainBinding = ActivityFirstBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
         initView()

@@ -60,7 +60,7 @@ class MainAdapterClass(var list: ArrayList<ModelClass>,
             delet.invoke(list[position].id)
         }
     }
-//
+
     fun updateList(list: ArrayList<ModelClass>) {
         this.list = ArrayList()
         this.list.addAll(list)

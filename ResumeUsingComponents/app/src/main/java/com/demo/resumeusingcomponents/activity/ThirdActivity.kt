@@ -62,14 +62,14 @@ class ThirdActivity : AppCompatActivity() {
                 i.putExtra("email", SecondActivity.email)
                 startActivity(i)
                 db.insertDatabase(
-                    MainActivity.firstName,
-                    MainActivity.lastName,
-                    MainActivity.mobileNumber,
-                    MainActivity.address,
-                    MainActivity.dd,
-                    MainActivity.mm,
-                    MainActivity.yy,
-                    MainActivity.gender.toString(),
+                    FirstActivity.firstName,
+                    FirstActivity.lastName,
+                    FirstActivity.mobileNumber,
+                    FirstActivity.address,
+                    FirstActivity.dd,
+                    FirstActivity.mm,
+                    FirstActivity.yy,
+                    FirstActivity.gender.toString(),
                     SecondActivity.email,
                     SecondActivity.password,
                     ThirdActivity.skills
@@ -80,3 +80,4 @@ class ThirdActivity : AppCompatActivity() {
 
     }
 }
+
