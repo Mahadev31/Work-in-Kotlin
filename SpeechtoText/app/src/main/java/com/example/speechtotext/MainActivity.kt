@@ -1,37 +1,40 @@
 package com.example.speechtotext
 
+import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.speech.RecognizerIntent
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.speechtotext.databinding.ActivityMainBinding
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class MainActivity : AppCompatActivity() {
 
-    private var iv_mic: ImageView? = null
-    private var tv_Speech_to_text: TextView? = null
+    lateinit var mainBinding: ActivityMainBinding
+
     private val REQUEST_CODE_SPEECH_INPUT = 1
+    var mp: MediaPlayer? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        mainBinding=ActivityMainBinding.inflate(layoutInflater)
+        setContentView(mainBinding.root)
 
         initView()
 
     }
 
     private fun initView() {
-        iv_mic = findViewById(R.id.iv_mic)
-        tv_Speech_to_text = findViewById(R.id.tv_speech_to_text)
 
-        iv_mic?.setOnClickListener { it: View? ->
+
+       mainBinding.imgMic.setOnClickListener {
 
             intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(
@@ -61,11 +64,36 @@ class MainActivity : AppCompatActivity() {
             if (resultCode == RESULT_OK && data != null) {
                 var result: ArrayList<String> = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS
-                ) as ArrayList<String>;
-                tv_Speech_to_text?.setText(
-                    Objects.requireNonNull(result).get(0)
-                );
+                ) as ArrayList<String>
+            mainBinding.tvSpeechToText.text = Objects.requireNonNull(result)[0]
+
+                if (mainBinding.tvSpeechToText.text=="silent") {
+                    vibratorFun()
+                }else if (mainBinding.tvSpeechToText.text=="vibration"){
+                    vibratorFun()
+                }else if (mainBinding.tvSpeechToText.text=="sound"){
+                    mp = MediaPlayer.create(this, R.raw.dog)
+                    mp!!.start()
+                }else if (mainBinding.tvSpeechToText.text=="play sound"){
+                    mp = MediaPlayer.create(this, R.raw.movie)
+                    mp!!.start()
+                }else{
+                    Toast.makeText(this, "Not Match", Toast.LENGTH_SHORT).show()
+                }
+
             }
+        }
+    }
+
+    private fun vibratorFun() {
+        var vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator!!.vibrate(
+                VibrationEffect.createOneShot(1000, VibrationEffect.PARCELABLE_WRITE_RETURN_VALUE)
+            )
+        } else {
+            //deprecated in API 26
+            vibrator!!.vibrate(1000)
         }
     }
 }

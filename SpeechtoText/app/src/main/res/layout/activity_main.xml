@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <ImageView
-        android:id="@+id/iv_mic"
+        android:id="@+id/imgMic"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentTop="true"
@@ -30,9 +30,9 @@
         android:textSize="30sp"
         android:padding="10dp"
         android:text="tap_mic_and_speek"
-        app:layout_constraintEnd_toEndOf="@+id/iv_mic"
+        app:layout_constraintEnd_toEndOf="@+id/imgMic"
         app:layout_constraintHorizontal_bias="0.489"
-        app:layout_constraintStart_toStartOf="@+id/iv_mic"
-        app:layout_constraintTop_toBottomOf="@+id/iv_mic" />
+        app:layout_constraintStart_toStartOf="@+id/imgMic"
+        app:layout_constraintTop_toBottomOf="@+id/imgMic" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
